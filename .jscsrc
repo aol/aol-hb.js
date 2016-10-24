@@ -1,0 +1,151 @@
+{
+  "excludeFiles": [
+    "one-creative/CoreLib/curl/**",
+    "one-creative/CoreLib/common/com/aolplatforms/util/DOM.js",
+    "one-creative/Modules/vendor/**",
+    "one-creative/Modules/MobileInlineVideoPlayer/src/vidible/**",
+    "one-creative/RichMediaLib/protobuf/ProtoBuf.noparse.js",
+    "one-publishers-api/DAC/**",
+    "polyfills/**",
+
+    "**/e2e/views/**/config.js",
+
+    // Remove these after refactoring
+    "config/**",
+    "one-creative/adConfig/**",
+    "one-creative/AdInspector/**",
+    "one-creative/common/**",
+    "one-creative/CoreLib/ADTECH/**",
+    "one-creative/Modules/AdChoicesIcon/**",
+    "one-creative/Modules/AdSync/**",
+    "one-creative/Modules/EngadgetAPI/**",
+    "one-creative/Modules/EventInspector/**",
+    "one-creative/Modules/Mailer/**",
+    "one-creative/Modules/ShopLocalAPI/**",
+    "one-creative/Modules/TwitterAPI/**",
+    "one-creative/Modules/Video/**",
+    "one-creative/Modules/videoPlayer/**",
+    "one-creative/Modules/VideoTracking/**",
+    "one-creative/Modules/YouTube/**",
+    "one-creative/RichMediaLib/**",
+    "one-creative/platform/**",
+    "one-publishers-api/PubTag/src/DACMods.js",
+    "one-publishers-api/PubTag/src/PubTag.js",
+    "test/*",
+    "test/!(unit)/**"
+  ],
+
+  "disallowEmptyBlocks": {
+    "allExcept": ["comments"]
+  },
+  "disallowKeywords": ["with"],
+  "disallowKeywordsInComments": ["FIXME"],
+  "disallowKeywordsOnNewLine": ["else"],
+  "disallowMultipleLineBreaks": true,
+  "disallowMultipleLineStrings": true,
+  "disallowMultipleSpaces": {
+    "allowEOLComments": true
+  },
+  "disallowMultipleVarDecl": true,
+  "disallowNewlineBeforeBlockStatements": true,
+  "disallowQuotedKeysInObjects": true,
+  "disallowSpaceAfterObjectKeys": true,
+  "disallowSpaceAfterPrefixUnaryOperators": true,
+  "disallowSpaceBeforeComma": true,
+  "disallowSpaceBeforePostfixUnaryOperators": true,
+  "disallowSpaceBeforeSemicolon": true,
+  "disallowSpacesInCallExpression": true,
+  "disallowSpacesInFunction": {
+    "beforeOpeningRoundBrace": true
+  },
+  "disallowSpacesInsideBrackets": true,
+  "disallowSpacesInsideObjectBrackets": true,
+  "disallowSpacesInsideParentheses": true,
+  "disallowTrailingComma": true,
+  "disallowTrailingWhitespace": true,
+  "disallowYodaConditions": true,
+
+  "maximumLineLength": 100,
+
+  "requireAnonymousFunctions": {
+    "allExcept": ["declarations"]
+  },
+  "requireBlocksOnNewline": 0,
+  "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
+  "requireCapitalizedComments": {
+    "allExcept": ["jshint", "globals", "falls"]
+  },
+  "requireCapitalizedConstructors": true,
+  "requireCommaBeforeLineBreak": true,
+  "requireCurlyBraces": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
+  ],
+  "requireDotNotation": true,
+  "requireLineBreakAfterVariableAssignment": true,
+  "requireLineFeedAtFileEnd": true,
+  "requireOperatorBeforeLineBreak": true,
+  "requirePaddingNewLinesAfterUseStrict": true,
+  "requireParenthesesAroundIIFE": true,
+  "requireSemicolons": true,
+  "requireSpaceAfterBinaryOperators": true,
+  "requireSpaceAfterKeywords": [
+    "do",
+    "for",
+    "if",
+    "else",
+    "switch",
+    "case",
+    "try",
+    "catch",
+    "void",
+    "while",
+    "with",
+    "return",
+    "typeof"
+  ],
+  "requireSpaceAfterLineComment": true,
+  "requireSpaceBeforeBinaryOperators": true,
+  "requireSpaceBeforeBlockStatements": true,
+  "requireSpaceBeforeKeywords": [
+    "else",
+    "while",
+    "catch"
+  ],
+  "requireSpaceBeforeObjectValues": true,
+  "requireSpaceBetweenArguments": true,
+  "requireSpacesInConditionalExpression": true,
+  "requireSpacesInFunction": {
+    "beforeOpeningCurlyBrace": true
+  },
+  "requireSpacesInForStatement": true,
+
+  "safeContextKeyword": "self",
+  "validateIndentation": 2,
+  "validateLineBreaks": "LF",
+  "validateQuoteMarks": "'",
+
+  "jsDoc": {
+    "checkAnnotations": {
+      "preset": "jsdoc3",
+      "extra": {
+        "engineer": "some"
+      }
+    },
+    "checkParamNames": true,
+    "requireParamTypes": true,
+    "checkRedundantParams": true,
+    "checkReturnTypes": true,
+    "checkRedundantReturns": true,
+    "requireReturnTypes": true,
+    "checkTypes": "strictNativeCase",
+    "requireNewlineAfterDescription": true
+    // TODO(marian.rusnak): not reliable yet, try later.
+    //"requireDescriptionCompleteSentence": true
+  }
+}
