@@ -1,1 +1,5 @@
-console.log('1234')
+const obj = {};
+const jshint = require('gulp-jshint');
+
+console.log(obj + jshint);
+

@@ -1,38 +1,6 @@
 {
   "excludeFiles": [
-    "one-creative/CoreLib/curl/**",
-    "one-creative/CoreLib/common/com/aolplatforms/util/DOM.js",
-    "one-creative/Modules/vendor/**",
-    "one-creative/Modules/MobileInlineVideoPlayer/src/vidible/**",
-    "one-creative/RichMediaLib/protobuf/ProtoBuf.noparse.js",
-    "one-publishers-api/DAC/**",
-    "polyfills/**",
 
-    "**/e2e/views/**/config.js",
-
-    // Remove these after refactoring
-    "config/**",
-    "one-creative/adConfig/**",
-    "one-creative/AdInspector/**",
-    "one-creative/common/**",
-    "one-creative/CoreLib/ADTECH/**",
-    "one-creative/Modules/AdChoicesIcon/**",
-    "one-creative/Modules/AdSync/**",
-    "one-creative/Modules/EngadgetAPI/**",
-    "one-creative/Modules/EventInspector/**",
-    "one-creative/Modules/Mailer/**",
-    "one-creative/Modules/ShopLocalAPI/**",
-    "one-creative/Modules/TwitterAPI/**",
-    "one-creative/Modules/Video/**",
-    "one-creative/Modules/videoPlayer/**",
-    "one-creative/Modules/VideoTracking/**",
-    "one-creative/Modules/YouTube/**",
-    "one-creative/RichMediaLib/**",
-    "one-creative/platform/**",
-    "one-publishers-api/PubTag/src/DACMods.js",
-    "one-publishers-api/PubTag/src/PubTag.js",
-    "test/*",
-    "test/!(unit)/**"
   ],
 
   "disallowEmptyBlocks": {
