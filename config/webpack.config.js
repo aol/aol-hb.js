@@ -1,6 +1,8 @@
+const config = require('./config');
+
 module.exports = {
   output: {
-    filename: 'project.js'
+    filename: config.outputFileName
   },
 
   module: {
