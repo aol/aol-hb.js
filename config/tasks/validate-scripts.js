@@ -5,6 +5,7 @@ const jshint = require('gulp-jshint');
 
 const scriptPaths = [
   'src/**/*.js',
+  'tests/**/*.js',
   'config/**/*.js',
   '*.js'
 ];

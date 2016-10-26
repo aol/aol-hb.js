@@ -1,3 +1,6 @@
 const obj = {};
+var utils = require('./utils');
 
-console.log(obj + '-test output');
+console.log(utils.getAppName());
+
+console.log('object:' + obj);

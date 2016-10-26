@@ -11,6 +11,11 @@ module.exports = function(config) {
 
     colors: true,
 
-    port: 9876
+    port: 9876,
+
+    // Add webpack as preprocessor
+    preprocessors: {
+      'tests/unit/*_test.js': ['webpack']
+    }
   });
 };
