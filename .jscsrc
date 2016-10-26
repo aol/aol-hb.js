@@ -113,7 +113,5 @@
     "requireReturnTypes": true,
     "checkTypes": "strictNativeCase",
     "requireNewlineAfterDescription": true
-    // TODO(marian.rusnak): not reliable yet, try later.
-    //"requireDescriptionCompleteSentence": true
   }
 }
