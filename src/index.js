@@ -1,6 +1,4 @@
-const obj = {};
-var utils = require('./utils');
+const utils = require('src/utils');
+var utils2 = require('./utils');
 
-console.log(utils.getAppName());
-
-console.log('object:' + obj);
+console.log('object:' + (utils === utils2).toString());

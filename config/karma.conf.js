@@ -1,3 +1,5 @@
+const webpackConfig = require('./webpack.config');
+
 module.exports = function(config) {
   config.set({
     basePath: '../',
@@ -16,6 +18,8 @@ module.exports = function(config) {
     // Add webpack as preprocessor
     preprocessors: {
       'tests/unit/*_test.js': ['webpack']
-    }
+    },
+
+    webpack: webpackConfig
   });
 };
