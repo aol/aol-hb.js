@@ -7,10 +7,10 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai-sinon'],
 
     files: [
-      'tests/unit/*_test.js'
+      'tests/unit/*Test.js'
     ],
 
-    browsers: karmaBrowsersResolver(),
+    browsers: karmaBrowsersResolver.resolve(),
 
     colors: true,
 
@@ -18,7 +18,7 @@ module.exports = function(config) {
 
     // Add webpack as preprocessor
     preprocessors: {
-      'tests/unit/*_test.js': ['webpack']
+      'tests/unit/*Test.js': ['webpack']
     },
 
     customLaunchers: {

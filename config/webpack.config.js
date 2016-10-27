@@ -8,7 +8,7 @@ module.exports = {
 
   resolve: {
     root: [path.resolve('./')],
-    modulesDirectories: ['node_modules', 'src']
+    modulesDirectories: ['node_modules', 'src', 'config']
   },
 
   module: {
