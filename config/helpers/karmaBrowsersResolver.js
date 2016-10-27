@@ -1,3 +1,3 @@
 module.exports = function() {
-  return process.env.TRAVIS ? ['Chrome_travis_ci'] : ['Chrome'];
+  return process.env.TRAVIS ? ['CHROME_TRAVIS_CI'] : ['Chrome'];
 };

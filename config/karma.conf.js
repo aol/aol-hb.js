@@ -21,6 +21,13 @@ module.exports = function(config) {
       'tests/unit/*_test.js': ['webpack']
     },
 
+    customLaunchers: {
+      CHROME_TRAVIS_CI: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+
     webpack: webpackConfig
   });
 };
