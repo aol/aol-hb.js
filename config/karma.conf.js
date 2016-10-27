@@ -1,4 +1,5 @@
 const webpackConfig = require('./webpack.config');
+const karmaBrowsersResolver = require('./helpers/karmaBrowsersResolver');
 
 module.exports = function(config) {
   config.set({
@@ -9,7 +10,7 @@ module.exports = function(config) {
       'tests/unit/*_test.js'
     ],
 
-    browsers: ['Chrome'],
+    browsers: karmaBrowsersResolver(),
 
     colors: true,
 
