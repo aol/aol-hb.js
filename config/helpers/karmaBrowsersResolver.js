@@ -1,8 +1,8 @@
 var resolver = {
-  resolve: () => {
+  resolve: function() {
     return !resolver.isTravisEnvironment() ? ['Chrome'] : ['CHROME_TRAVIS_CI'];
   },
-  isTravisEnvironment: () => {
+  isTravisEnvironment: function() {
     return process.env.TRAVIS;
   }
 };
