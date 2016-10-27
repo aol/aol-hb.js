@@ -25,6 +25,7 @@
          
     After that build results will be placed in /build directory
     
+<a name="RunUnitTests"></a>    
 ## Run unit tests
 
     To run unit tests type in the terminal
