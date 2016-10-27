@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/vzhukovsky/pub-api.svg?branch=master)](https://travis-ci.org/vzhukovsky/pub-api)
+
+
 # Pub api wrapper
 
 
@@ -11,7 +14,7 @@
 
 ## Install
 
-    $ Clone the repository
+    $ clone the repository
     $ cd pub-api
     $ npm install
     
