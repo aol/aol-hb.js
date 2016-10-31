@@ -9,6 +9,7 @@
 - [Install](#Install)
 - [Build](#Build)
 - [Run unit tests](#RunUnitTests)
+- [Run e2e tests](#RunE2eTests)
 
 <a name="Install"></a>
 
@@ -35,3 +36,11 @@
     
         $ gulp tests-unit
             
+<a name="RunE2eTests"></a>    
+## Run e2e tests
+    Preconditions: 
+    - Selenium server with chromedriver should be started;
+
+    To run e2e tests type in the terminal
+    
+        $ gulp tests-e2e
