@@ -23,24 +23,24 @@
 
 ## Build
 
-    To build the project type in the terminal
+  To build the project type in the terminal:
     
-        $ gulp build
+      $ gulp build
          
-    After that build results will be placed in /build directory
+  After that build results will be placed in /build directory
     
 <a name="RunUnitTests"></a>    
 ## Run unit tests
 
-    To run unit tests type in the terminal
+  To run unit tests type in the terminal:
     
-        $ gulp tests-unit
+      $ gulp tests-unit
             
 <a name="RunE2eTests"></a>    
 ## Run e2e tests
-    Preconditions: 
-    - Selenium server with chromedriver should be started;
+   Preconditions: 
+   - Selenium server with chrome driver should be started;
 
-    To run e2e tests type in the terminal
+   To run e2e tests type in the terminal:
     
-        $ gulp tests-e2e
+      $ gulp tests-e2e
