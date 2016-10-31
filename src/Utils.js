@@ -1,5 +1,5 @@
 module.exports = {
-  getAppName: function() {
+  getAppName: () => {
     return 'pub-api';
   }
 };
