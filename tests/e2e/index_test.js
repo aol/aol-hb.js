@@ -5,5 +5,7 @@ module.exports = {
       .waitForElementVisible('body', 5000)
       .waitForElementVisible('#test', 5000)
       .expect.element('#test').text.to.equal('pub-api');
+
+    browser.end()
   }
 };
