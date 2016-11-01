@@ -24,4 +24,4 @@ gulp.task('jscs', () => {
     .pipe(jscs.reporter('fail'));
 });
 
-gulp.task('validate-scripts', ['jshint', 'jscs']);
+gulp.task('lint', ['jshint', 'jscs']);

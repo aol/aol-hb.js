@@ -5,7 +5,7 @@ const webpack = require('webpack-stream');
 const webpackConfig = require('../webpack.config');
 const config = require('../config');
 
-gulp.task('build', ['clean', 'validate-scripts'], () => {
+gulp.task('build', ['clean', 'lint'], () => {
   return gulp.src(config.appEntryPoint)
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest(config.buildDirectory))

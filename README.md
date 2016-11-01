@@ -32,7 +32,7 @@ After that build results will be placed in /build directory
 
 To run unit tests type in the terminal:
     
-      $ gulp tests-unit
+      $ gulp test-unit
             
 <a name="RunE2eTests"></a>    
 ## Run e2e tests
@@ -42,4 +42,4 @@ Preconditions:
 
 To run e2e tests type in the terminal:
     
-      $ gulp tests-e2e
+      $ gulp test-e2e
