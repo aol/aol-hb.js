@@ -13,3 +13,5 @@ gulp.task('build', ['clean', 'lint'], () => {
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(config.buildDirectory));
 });
+
+gulp.task('build-ci', ['build', 'test-unit', 'test-e2e']);

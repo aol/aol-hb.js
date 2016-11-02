@@ -13,4 +13,4 @@ before_install:
   - "java -jar selenium-server-standalone-2.53.1.jar > /dev/null &"
 
 script:
-  - gulp test-e2e
+  - gulp build-ci
