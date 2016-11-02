@@ -10,4 +10,4 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 script:
-  - gulp test-unit
+  - gulp test-e2e
