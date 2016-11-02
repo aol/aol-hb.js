@@ -10,5 +10,4 @@ module.exports = (function(settings) {
     path.resolve('./node_modules/phantomjs/bin/phantomjs');
 
   return settings;
-
 })(require('./nightwatch.json'));
