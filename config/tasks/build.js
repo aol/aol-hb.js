@@ -14,4 +14,4 @@ gulp.task('build', ['clean', 'lint'], () => {
     .pipe(gulp.dest(config.buildDirectory));
 });
 
-gulp.task('build-ci', ['build', 'test-unit', 'test-e2e']);
+gulp.task('build-ci', ['build', 'test-unit', 'test-e2e-ci']);
