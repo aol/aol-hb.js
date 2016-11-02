@@ -5,7 +5,7 @@ const mustacheExpress = require('mustache-express');
 const serverConfig = require('../e2e/server.config');
 const config = require('../config');
 
-gulp.task('test-e2e-server', ['build'], () => {
+gulp.task('test-e2e-server', ['build', 'test-e2e-config'], () => {
   var app = express();
   var defaultViewHandler = (req, res) => {
     var view = req.params.view;

@@ -5,5 +5,7 @@ module.exports = {
   appEntryPoint: path.resolve('./src/Index.js'),
   outputFileName: 'pub-api.js',
   karmaConfigFilePath: path.resolve('./config/karma.conf.js'),
-  e2eTestViewsDirectory: path.resolve('./tests/e2e/views')
+  e2eTestViewsDirectory: path.resolve('./tests/e2e/views'),
+  tempFilesDir: path.resolve('./temp/'),
+  nightWatchConfigPath: path.resolve('./temp/') + '/' + 'nightwatch.json'
 };
