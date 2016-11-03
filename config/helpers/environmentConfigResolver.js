@@ -1,11 +1,11 @@
 var resolver = {
-  resolveKarmaBrowsers: function() {
+  resolveKarmaBrowsers: () => {
     return resolver.isTravisEnvironment() ? ['CHROME_TRAVIS_CI'] : ['Chrome'];
   },
-  resolveNightWatchConfig: function() {
+  resolveNightWatchConfig: () => {
     return 'nightwatch.' + (resolver.isTravisEnvironment() ? 'config.travis' : 'config.default');
   },
-  isTravisEnvironment: function() {
+  isTravisEnvironment: () => {
     return process.env.TRAVIS;
   }
 };
