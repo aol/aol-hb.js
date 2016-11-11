@@ -7,7 +7,11 @@ module.exports = {
   },
 
   resolve: {
-    root: [path.resolve('./')],
+    root: [
+      path.resolve('./'),
+      path.resolve('./src'),
+      path.resolve('./node_modules')
+    ],
     modulesDirectories: ['node_modules', 'src', 'config']
   },
 
