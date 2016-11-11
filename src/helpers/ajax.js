@@ -4,6 +4,7 @@
  * @param {string} url requested url
  * @param {string} method request method
  * @param {Object} data in the request body
+ * @param {Function} onSuccess success result callback
  */
 
 export function sendRequest(url, method, data, onSuccess) {
