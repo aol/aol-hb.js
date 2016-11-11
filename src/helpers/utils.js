@@ -1,6 +1,6 @@
 let utils = {
   getAppName: () => {
-    return 'pub-api';
+    return 'aol-hb';
   }
 };
 
