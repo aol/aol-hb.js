@@ -6,18 +6,16 @@
  * @param {Object} data in the request body
  */
 
-export function sendRequest(url, method, data) {
-  return new Promise((resolve) => {
-    let xhr = new XMLHttpRequest();
+export function sendRequest(url, method, data, onSuccess) {
+  let xhr = new XMLHttpRequest();
 
-    xhr.open(method, url);
+  xhr.open(method, url);
 
-    xhr.onload = () => {
-      resolve(url, method, data);
-    };
+  xhr.onload = () => {
+    onSuccess();
+  };
 
-    xhr.send();
-  });
+  xhr.send();
 }
 
 export function sendGetRequest(url) {
