@@ -1,6 +1,6 @@
-describe('Utils tests', () => {
-  var utils = require('src/Utils');
+import utils from 'src/helpers/utils';
 
+describe('Utils tests', () => {
   it('Get app name method test', () => {
     expect(utils.getAppName()).to.equal('pub-api');
   });

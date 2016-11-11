@@ -1,11 +1,12 @@
 const gulp = require('gulp');
 const express = require('express');
 const path = require('path');
+const openPage = require('opn');
 const mustacheExpress = require('mustache-express');
 const serverConfig = require('../e2e/server.config');
 const config = require('../config');
 
-gulp.task('test-e2e-server', ['build', 'test-e2e-config'], () => {
+var createServer = () => {
   var app = express();
   var defaultViewHandler = (req, res) => {
     var view = req.params.view;
@@ -20,6 +21,15 @@ gulp.task('test-e2e-server', ['build', 'test-e2e-config'], () => {
   app.use('/project', (req, res) => {
     res.sendFile(path.resolve(config.buildDirectory + '/' + config.outputFileName));
   });
-
   app.listen(serverConfig.port);
+};
+
+gulp.task('test-e2e-server', ['build', 'test-e2e-config'], () => {
+  createServer();
+});
+
+gulp.task('test-e2e-manual', ['build'], () => {
+  createServer();
+
+  openPage(serverConfig.defaultPage);
 });
