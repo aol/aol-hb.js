@@ -7,11 +7,7 @@ module.exports = {
   },
 
   resolve: {
-    root: [
-      path.resolve('./'),
-      path.resolve('./src'),
-      path.resolve('./node_modules')
-    ],
+    root: [path.resolve('./')],
     modulesDirectories: ['node_modules', 'src', 'config']
   },
 
@@ -19,7 +15,10 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        include: /(src|tests)/,
+        include: [
+          path.resolve('./src'),
+          path.resolve('./tests')
+        ],
         exclude: /(node_modules|bower_components)/,
         loader: 'babel',
         query: {
