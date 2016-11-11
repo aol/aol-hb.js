@@ -2,7 +2,7 @@ var path = require('path');
 
 module.exports = {
   buildDirectory: path.resolve('./build'),
-  appEntryPoint: path.resolve('./src/index.js'),
+  appEntryPoint: path.resolve('./src/aol-hb.js'),
   outputFileName: 'aol-hb.js',
   karmaConfigFilePath: path.resolve('./config/karma.conf.js'),
   e2eTestViewsDirectory: path.resolve('./tests/e2e/views'),

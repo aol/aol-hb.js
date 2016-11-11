@@ -13,7 +13,9 @@ export function sendRequest(url, method, data, onSuccess) {
   xhr.open(method, url);
 
   xhr.onload = () => {
-    onSuccess();
+    if (onSuccess) {
+      onSuccess();
+    }
   };
 
   xhr.send();
