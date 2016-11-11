@@ -12,9 +12,13 @@ var runTests = () => {
     process.exit();
   };
 
+  var e2eTestsErrorHandler = () => {
+    process.exit(1);
+  };
+
   stream.on('end', terminateE2eServer);
 
-  stream.on('error', terminateE2eServer);
+  stream.on('error', e2eTestsErrorHandler);
 
   return stream;
 };
