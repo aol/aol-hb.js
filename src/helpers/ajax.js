@@ -4,23 +4,22 @@
  * @param {string} url requested url
  * @param {string} method request method
  * @param {Object} data in the request body
- * @param {Function} onSuccess success result callback
+ * @param {Function} successCallback success result callback
  */
 
-export function sendRequest(url, method, data, onSuccess) {
+export function sendRequest(url, method, data, successCallback) {
   let xhr = new XMLHttpRequest();
-
-  xhr.open(method, url);
-
-  xhr.onload = () => {
-    if (onSuccess) {
-      onSuccess();
+  let responseHandler = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE && successCallback) {
+      successCallback(xhr.responseText);
     }
   };
 
+  xhr.open(method, url);
+  xhr.onreadystatechange = responseHandler;
   xhr.send();
 }
 
-export function sendGetRequest(url) {
-  return sendRequest(url, 'GET');
+export function sendGetRequest(url, successCallback) {
+  return sendRequest(url, 'GET', null, successCallback);
 }
