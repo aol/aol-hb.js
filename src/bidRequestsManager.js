@@ -11,15 +11,11 @@ export default class BidRequestManager {
 
   sendBidRequests() {
     let self = this;
-    let url = utils.formatTemplateString`${'protocol'}://${'hostName'}/pubapi/3.0/${'network'}/
-      ${'placement'}/0/-1/ADTECH;cmd=bid;cors=yes;
-      v=2;alias=${'alias'};${'bidFloorPrice'};`;
-    let hostName = self.resolveHostName();
 
     this.placementsConfigs.forEach((config) => {
-      sendGetRequest(url({
+      sendGetRequest(self.formatBidRequestUrl({
         protocol: utils.resolveHttpProtocol(document.location.protocol),
-        hostName: hostName,
+        hostName: self.resolveHostName(),
         network: this.bidRequestConfig.network,
         placement: parseInt(config.placement),
         alias: config.alias,
@@ -28,6 +24,14 @@ export default class BidRequestManager {
         self.handleBidRequestResponse(config, bidResponse);
       });
     });
+  }
+
+  formatBidRequestUrl(options) {
+    let url = utils.formatTemplateString`${'protocol'}://${'hostName'}/pubapi/3.0/${'network'}/
+      ${'placement'}/0/-1/ADTECH;cmd=bid;cors=yes;
+      v=2;alias=${'alias'};${'bidFloorPrice'}`;
+
+    return url(options);
   }
 
   handleBidRequestResponse(placementConfig, bidResponse) {
@@ -54,7 +58,7 @@ export default class BidRequestManager {
   }
 
   resolveBidFloorPrice(floorPrice) {
-    return floorPrice ? `bidfloor=${floorPrice.toString()}` : '';
+    return floorPrice ? `bidfloor=${floorPrice.toString()};` : '';
   }
 
   resolveHostName() {
