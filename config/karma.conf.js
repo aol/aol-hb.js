@@ -16,9 +16,12 @@ module.exports = function(config) {
 
     port: 9876,
 
+    reporters: ['progress', 'coverage'],
+
     // Add webpack as preprocessor
     preprocessors: {
-      'tests/unit/*Test.js': ['webpack']
+      'tests/unit/*Test.js': ['webpack'],
+      'src/**/*.js': ['webpack', 'coverage']
     },
 
     customLaunchers: {
