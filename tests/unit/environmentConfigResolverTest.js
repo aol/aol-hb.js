@@ -1,4 +1,4 @@
-describe('Environment config helper test', () => {
+describe('Environment config helper tests', () => {
   var environmentResolver = require('config/helpers/environmentConfigResolver');
 
   it('Resolve karma browsers test', () => {

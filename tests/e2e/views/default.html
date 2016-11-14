@@ -3,7 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <script src="/project"></script>
-  <script>window.aolhb.init();</script>
+  <script>
+    var bidRequestConfig = {
+      region: 'US',
+      network: '9599.1',
+      onBidResponse: function() {
+      }
+    };
+
+    var placementsConfigs = [{
+      placement: 3675022,
+      alias: '728x90atf',
+      adContainerId: 'div-gpt-ad-1438955597722-1',
+      bidFloorPrice: '0.1'
+    }, {
+      placement: 3675026,
+      alias: '300x250atf',
+      adContainerId: 'div-gpt-ad-1438955597722-0'
+    }];
+
+
+    window.aolhb.init(bidRequestConfig, placementsConfigs);
+  </script>
 </head>
 <body>
   <div id="test">Text inside DIV</div>
