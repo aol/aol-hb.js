@@ -5,8 +5,7 @@ import utils from './helpers/utils';
  * The class contains logic for processing bid
  * requests and handling bid responses.
  */
-
-export default class BidRequestManager {
+export default class BidsManager {
   constructor(bidRequestConfig, placementsConfigs) {
     this.bidRequestConfig = bidRequestConfig;
     this.placementsConfigs = placementsConfigs;
@@ -15,6 +14,9 @@ export default class BidRequestManager {
     this.bidResponses = [];
   }
 
+  /**
+   * The method sends bid request for each placement from placementsConfigs.
+   */
   sendBidRequests() {
     let self = this;
 
@@ -43,13 +45,11 @@ export default class BidRequestManager {
   handleBidRequestResponse(placementConfig, response) {
     let externalBidRequestHandler = this.bidRequestConfig.onBidResponse;
 
-    if (externalBidRequestHandler) {
-      let responseJson = JSON.parse(response);
-      var bidResponse = this.createBidResponse(responseJson, placementConfig);
+    let responseJson = JSON.parse(response);
+    var bidResponse = this.createBidResponse(responseJson, placementConfig);
 
-      if (bidResponse) {
-        externalBidRequestHandler(bidResponse);
-      }
+    if (bidResponse && externalBidRequestHandler) {
+      externalBidRequestHandler(bidResponse);
     }
   }
 

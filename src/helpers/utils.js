@@ -29,7 +29,6 @@ let utils = {
    * @param {string} documentProtocol document.location.protocol value
    * @returns {string} protocol type
    */
-
   resolveHttpProtocol: (documentProtocol) => {
     return (documentProtocol === 'https:') ? 'https' : 'http';
   }

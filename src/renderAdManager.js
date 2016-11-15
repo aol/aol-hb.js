@@ -2,7 +2,6 @@
  * The class contains logic for rendering ad(based on bid response config).
  */
 export default class RenderAdManager {
-
   constructor(bidResponse, document) {
     this.bidResponse = bidResponse;
     this.document = document;
@@ -44,7 +43,6 @@ export default class RenderAdManager {
 
   populateIframeContent(iframe) {
     var html = '<head><\/head><body><style>body,html{margin:0;padding:0;}</style>' +
-      '<script>var inFiF=inDapIF=true;<\/script>' +
       this.bidResponse.ad + '<\/body>';
 
     iframe.contentWindow.document.open();

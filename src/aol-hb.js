@@ -1,10 +1,10 @@
-import BidRequestManager from 'bidRequestsManager';
+import BidsManager from 'bidsManager';
 import RenderAdManager from 'renderAdManager';
 
 let globalContext = window.aolhb = {};
 
 globalContext.init = (bidRequestConfig, placementsConfigs) => {
-  var manager = new BidRequestManager(bidRequestConfig, placementsConfigs);
+  var manager = new BidsManager(bidRequestConfig, placementsConfigs);
   manager.sendBidRequests();
 
   globalContext.renderAd = (alias) => {

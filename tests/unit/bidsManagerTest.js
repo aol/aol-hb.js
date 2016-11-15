@@ -1,26 +1,29 @@
-import BidRequestManager from 'src/bidRequestsManager';
+import BidsManager from 'src/bidsManager';
 import * as ajax from 'src/helpers/ajax';
 
 describe('Bid request module tests', () => {
+
+  let manager;
+
+  beforeEach(() => {
+    manager = new BidsManager({}, []);
+  });
+
   it('Resolve http protocol method test', () => {
-    let bidRequestManager = new BidRequestManager({}, []);
+    manager.bidRequestConfig.region = null;
+    expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
 
-    bidRequestManager.bidRequestConfig.region = null;
-    expect(bidRequestManager.resolveHostName()).to.equal('adserver.adtechus.com');
+    manager.bidRequestConfig.region = 'EU';
+    expect(manager.resolveHostName()).to.equal('adserver.adtech.de');
 
-    bidRequestManager.bidRequestConfig.region = 'EU';
-    expect(bidRequestManager.resolveHostName()).to.equal('adserver.adtech.de');
+    manager.bidRequestConfig.region = 'Asia';
+    expect(manager.resolveHostName()).to.equal('adserver.adtechjp.com');
 
-    bidRequestManager.bidRequestConfig.region = 'Asia';
-    expect(bidRequestManager.resolveHostName()).to.equal('adserver.adtechjp.com');
-
-    bidRequestManager.bidRequestConfig.region = 'US';
-    expect(bidRequestManager.resolveHostName()).to.equal('adserver.adtechus.com');
+    manager.bidRequestConfig.region = 'US';
+    expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
   });
 
   it('Format bid request url method test', () => {
-    let manager = new BidRequestManager({}, []);
-
     let bidRequestUrl = manager.formatBidRequestUrl({
       protocol: 'https',
       hostName: 'test.com',
@@ -47,15 +50,12 @@ describe('Bid request module tests', () => {
   });
 
   it('Resolve bid floor price method test', () => {
-    let manager = new BidRequestManager({}, []);
-
     expect(manager.resolveBidFloorPrice()).to.equal('');
     expect(manager.resolveBidFloorPrice(0)).to.equal('');
     expect(manager.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');
   });
 
   it('Send bid requests method test', () => {
-    let manager = new BidRequestManager({}, []);
     let sendGetRequestStub = sinon.stub(ajax, 'sendGetRequest');
     let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl');
 
@@ -68,8 +68,6 @@ describe('Bid request module tests', () => {
   });
 
   it('Get bid data method test', () => {
-    let manager = new BidRequestManager({}, []);
-
     let bidResponse = {};
     expect(manager.getBidData(bidResponse)).to.be.undefined;
 
@@ -105,8 +103,6 @@ describe('Bid request module tests', () => {
   });
 
   it('Get Pixels method test', () => {
-    let manager = new BidRequestManager({}, []);
-
     let bidResponse = {};
     expect(manager.getPixels(bidResponse)).to.be.undefined;
 
@@ -124,7 +120,6 @@ describe('Bid request module tests', () => {
   });
 
   it('Get CPM method test', () => {
-    let manager = new BidRequestManager({}, []);
     let bidData = {
       price: 5
     };
@@ -142,8 +137,6 @@ describe('Bid request module tests', () => {
   });
 
   it('Format Ad method test', () => {
-    let manager = new BidRequestManager({}, []);
-
     expect(manager.formatAd('ad-content', null)).to.equal('ad-content');
     expect(manager.formatAd('ad-content', '/pixes-content')).to.equal('ad-content/pixes-content');
   });
