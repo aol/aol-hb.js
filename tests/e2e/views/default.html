@@ -75,6 +75,22 @@
   </script>
 
   <script>
+    var postMessageApiKey = 'adtech_pub_page::';
+
+    window.addEventListener('message', function (msg) {
+      var data = msg.data;
+
+      if (data.match && data.match(postMessageApiKey)) {
+        var key = data.split(postMessageApiKey)[1];
+
+        window.aolhb.renderAd(key);
+      }
+
+    });
+
+  </script>
+
+  <script>
     /**
      * Handles each bid response that is returned.
      *

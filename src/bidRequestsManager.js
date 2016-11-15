@@ -1,12 +1,18 @@
 import {sendGetRequest} from './helpers/ajax';
 import utils from './helpers/utils';
 
+/***
+ * The class contains logic for processing bid
+ * requests and handling bid responses.
+ */
+
 export default class BidRequestManager {
   constructor(bidRequestConfig, placementsConfigs) {
     this.bidRequestConfig = bidRequestConfig;
     this.placementsConfigs = placementsConfigs;
     this.BIDDER_CODE = 'aolbid';
     this.ALIAS_KEY = 'mpalias';
+    this.bidResponses = [];
   }
 
   sendBidRequests() {
@@ -34,26 +40,15 @@ export default class BidRequestManager {
     return url(options);
   }
 
-  handleBidRequestResponse(placementConfig, bidResponse) {
+  handleBidRequestResponse(placementConfig, response) {
     let externalBidRequestHandler = this.bidRequestConfig.onBidResponse;
 
     if (externalBidRequestHandler) {
-      let responseJson = JSON.parse(bidResponse);
-      let bidData = this.getBidData(responseJson);
-      let pixels = this.getPixels(responseJson);
+      let responseJson = JSON.parse(response);
+      var bidResponse = this.createBidResponse(responseJson, placementConfig);
 
-      if (bidData) {
-        externalBidRequestHandler({
-          cpm: this.getCPM(bidData),
-          ad: this.formatAd(bidData.adm, pixels),
-          adContainerId: placementConfig.adContainerId,
-          width: bidData.w,
-          height: bidData.h,
-          creativeId: bidData.crid,
-          bidderCode: this.BIDDER_CODE,
-          aliasKey: this.ALIAS_KEY,
-          alias: placementConfig.alias
-        });
+      if (bidResponse) {
+        externalBidRequestHandler(bidResponse);
       }
     }
   }
@@ -98,5 +93,34 @@ export default class BidRequestManager {
     }
 
     return ad;
+  }
+
+  createBidResponse(bidResponseJson, placementConfig) {
+    let bidData = this.getBidData(bidResponseJson);
+    let pixels = this.getPixels(bidResponseJson);
+
+    if (bidData) {
+      var bidResponse = {
+        cpm: this.getCPM(bidData),
+        ad: this.formatAd(bidData.adm, pixels),
+        adContainerId: placementConfig.adContainerId,
+        width: bidData.w,
+        height: bidData.h,
+        creativeId: bidData.crid,
+        bidderCode: this.BIDDER_CODE,
+        aliasKey: this.ALIAS_KEY,
+        alias: placementConfig.alias
+      };
+
+      this.bidResponses.push(bidResponse);
+
+      return bidResponse;
+    }
+  }
+
+  getBidResponseByAlias(alias) {
+    return this.bidResponses.find((item) => {
+      return item.alias === alias;
+    });
   }
 }
