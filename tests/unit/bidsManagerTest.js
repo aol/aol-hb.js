@@ -140,4 +140,43 @@ describe('Bid request module tests', () => {
     expect(manager.formatAd('ad-content', null)).to.equal('ad-content');
     expect(manager.formatAd('ad-content', '/pixes-content')).to.equal('ad-content/pixes-content');
   });
+
+  it('Handle bid request response method test', () => {
+    let createBidResponseStub = sinon.stub(manager, 'createBidResponse');
+    let parseJsonStub = sinon.stub(manager, 'parseJson');
+    let bidResponseHandlerSpy = sinon.spy();
+
+    manager.bidRequestConfig.onBidResponse = null;
+    manager.handleBidRequestResponse();
+    expect(createBidResponseStub.called).to.be.true;
+    expect(parseJsonStub.called).to.be.true;
+    expect(bidResponseHandlerSpy.called).to.be.false;
+
+    manager.bidRequestConfig.onBidResponse = bidResponseHandlerSpy;
+    manager.handleBidRequestResponse();
+    expect(createBidResponseStub.called).to.be.true;
+    expect(parseJsonStub.called).to.be.true;
+    expect(bidResponseHandlerSpy.called).to.be.false;
+
+    manager.bidRequestConfig.onBidResponse = bidResponseHandlerSpy;
+    createBidResponseStub.returns(true);
+    manager.handleBidRequestResponse();
+    expect(createBidResponseStub.called).to.be.true;
+    expect(parseJsonStub.called).to.be.true;
+    expect(bidResponseHandlerSpy.called).to.be.true;
+
+    createBidResponseStub.reset();
+    parseJsonStub.reset();
+  });
+
+  it('Create bid response method test', () => {
+    let formatBidResponseStub = sinon.stub(manager, 'formatBidResponse').returns(false);
+    expect(manager.bidResponses).to.be.empty;
+    manager.createBidResponse();
+
+    formatBidResponseStub.returns({key: 'some-value'});
+    manager.createBidResponse();
+    // Test that bid response was added in the bid responses array.
+    expect(manager.bidResponses[0]).to.deep.equal({key: 'some-value'});
+  });
 });

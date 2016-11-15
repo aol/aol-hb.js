@@ -15,7 +15,7 @@ export default class BidsManager {
   }
 
   /**
-   * The method sends bid request for each placement from placementsConfigs.
+   *  Send bid request for each placement from placementsConfigs.
    */
   sendBidRequests() {
     let self = this;
@@ -45,12 +45,16 @@ export default class BidsManager {
   handleBidRequestResponse(placementConfig, response) {
     let externalBidRequestHandler = this.bidRequestConfig.onBidResponse;
 
-    let responseJson = JSON.parse(response);
+    let responseJson = this.parseJson(response);
     var bidResponse = this.createBidResponse(responseJson, placementConfig);
 
     if (bidResponse && externalBidRequestHandler) {
       externalBidRequestHandler(bidResponse);
     }
+  }
+
+  parseJson(text) {
+    return JSON.parse(text);
   }
 
   resolveBidFloorPrice(floorPrice) {
@@ -96,11 +100,21 @@ export default class BidsManager {
   }
 
   createBidResponse(bidResponseJson, placementConfig) {
+    var bidResponse = this.formatBidResponse(bidResponseJson, placementConfig);
+
+    if (bidResponse) {
+      this.bidResponses.push(bidResponse);
+
+      return bidResponse;
+    }
+  }
+
+  formatBidResponse(bidResponseJson, placementConfig) {
     let bidData = this.getBidData(bidResponseJson);
     let pixels = this.getPixels(bidResponseJson);
 
     if (bidData) {
-      var bidResponse = {
+      return {
         cpm: this.getCPM(bidData),
         ad: this.formatAd(bidData.adm, pixels),
         adContainerId: placementConfig.adContainerId,
@@ -111,10 +125,6 @@ export default class BidsManager {
         aliasKey: this.ALIAS_KEY,
         alias: placementConfig.alias
       };
-
-      this.bidResponses.push(bidResponse);
-
-      return bidResponse;
     }
   }
 
