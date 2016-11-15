@@ -9,7 +9,7 @@ describe('Bid request module tests', () => {
     manager = new BidsManager({}, []);
   });
 
-  it('Resolve http protocol method test', () => {
+  it('Resolve host name method test', () => {
     manager.bidRequestConfig.region = null;
     expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
 
