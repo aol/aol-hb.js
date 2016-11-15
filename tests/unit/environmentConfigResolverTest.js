@@ -1,8 +1,12 @@
 describe('Environment config helper tests', () => {
-  var environmentResolver = require('config/helpers/environmentConfigResolver');
+  let environmentResolver = require('config/helpers/environmentConfigResolver');
+
+  afterEach(() => {
+    delete process.env.TRAVIS;
+  });
 
   it('Resolve karma browsers test', () => {
-    var isTravisMethodStub = sinon.stub(environmentResolver, 'isTravisEnvironment').returns(false);
+    let isTravisMethodStub = sinon.stub(environmentResolver, 'isTravisEnvironment').returns(false);
     expect(environmentResolver.resolveKarmaBrowsers()).to.deep.equal(['Chrome']);
 
     isTravisMethodStub.returns(true);
@@ -12,12 +16,20 @@ describe('Environment config helper tests', () => {
   });
 
   it('Resolve nightwatch config test', () => {
-    var isTravisMethodStub = sinon.stub(environmentResolver, 'isTravisEnvironment').returns(false);
+    let isTravisMethodStub = sinon.stub(environmentResolver, 'isTravisEnvironment').returns(false);
     expect(environmentResolver.resolveNightWatchConfig()).to.equal('nightwatch.config.default');
 
     isTravisMethodStub.returns(true);
     expect(environmentResolver.resolveNightWatchConfig()).to.equal('nightwatch.config.travis');
 
     isTravisMethodStub.restore();
+  });
+
+  it('Is travis environment method test', () => {
+    process.env.TRAVIS = false;
+    expect(environmentResolver.isTravisEnvironment()).to.be.false;
+
+    process.env.TRAVIS = true;
+    expect(environmentResolver.isTravisEnvironment()).to.be.true;
   });
 });

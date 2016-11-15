@@ -25,13 +25,6 @@ module.exports = {
           presets: ['es2015']
         }
       }
-    ],
-    postLoaders: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules)|(tests)|(build)/,
-        loader: 'istanbul-instrumenter'
-      }
     ]
   }
 };

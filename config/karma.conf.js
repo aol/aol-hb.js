@@ -1,6 +1,14 @@
 const webpackConfig = require('./webpack.config');
 const environmentResolver = require('./helpers/environmentConfigResolver');
 
+webpackConfig.module.postLoaders = [
+  {
+    test: /\.js$/,
+    exclude: /(node_modules)|(tests)|(build)/,
+    loader: 'istanbul-instrumenter'
+  }
+];
+
 module.exports = function(config) {
   config.set({
     basePath: '../',
@@ -21,7 +29,7 @@ module.exports = function(config) {
     // Add webpack as preprocessor
     preprocessors: {
       'tests/unit/*Test.js': ['webpack'],
-      'src/**/*.js': ['webpack', 'coverage']
+      'src/**/*.js': ['coverage']
     },
 
     customLaunchers: {

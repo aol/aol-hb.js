@@ -40,11 +40,12 @@ export default class BidRequestManager {
     if (externalBidRequestHandler) {
       let responseJson = JSON.parse(bidResponse);
       let bidData = this.getBidData(responseJson);
+      let pixels = this.getPixels(responseJson);
 
       if (bidData) {
         externalBidRequestHandler({
-          cpm: this.getCpm(bidData),
-          ad: this.getAd(bidData),
+          cpm: this.getCPM(bidData),
+          ad: this.formatAd(bidData.adm, pixels),
           adContainerId: placementConfig.adContainerId,
           width: bidData.w,
           height: bidData.h,
@@ -67,33 +68,33 @@ export default class BidRequestManager {
       US: 'adserver.adtechus.com',
       Asia: 'adserver.adtechjp.com'
     };
+
     return SERVER_MAP[this.bidRequestConfig.region] || SERVER_MAP.US;
   }
 
   getBidData(bidResponse) {
-    let bidData;
-
     try {
-      bidData = bidResponse.seatbid[0].bid[0];
-
-      return bidData;
+      return bidResponse.seatbid[0].bid[0];
     } catch (error) {
       return;
     }
   }
 
-  getCpm(bidData) {
-    if (bidData.ext && bidData.ext.encp) {
-      return bidData.ext.encp;
-    } else {
-      return bidData.price;
+  getPixels(bidResponse) {
+    try {
+      return bidResponse.ext.pixels;
+    } catch (error) {
+      return;
     }
   }
 
-  getAd(bidData) {
-    let ad = bidData.adm;
-    if (bidData.ext && bidData.ext.pixels) {
-      ad += bidData.ext.pixels;
+  getCPM(bidData) {
+    return bidData.ext && bidData.ext.encp ? bidData.ext.encp : bidData.price;
+  }
+
+  formatAd(ad, pixels) {
+    if (pixels) {
+      ad += pixels;
     }
 
     return ad;
