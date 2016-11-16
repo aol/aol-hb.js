@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vzhukovsky/pub-api.svg?branch=master)](https://travis-ci.org/vzhukovsky/pub-api)
 
 
-# Pub api wrapper
+# AOL Header Bidding API
 
 
 **Table of Contents**
