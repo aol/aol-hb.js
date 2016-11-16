@@ -38,7 +38,9 @@ export default class RenderAdManager {
   insertElement(iframe) {
     var element = this.document.getElementById(this.bidResponse.adContainerId);
 
-    element.appendChild(iframe);
+    if (element) {
+      element.appendChild(iframe);
+    }
   }
 
   populateIframeContent(iframe) {

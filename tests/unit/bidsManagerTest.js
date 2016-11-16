@@ -179,4 +179,19 @@ describe('Bid request module tests', () => {
     // Test that bid response was added in the bid responses array.
     expect(manager.bidResponses[0]).to.deep.equal({key: 'some-value'});
   });
+
+  it('Get bid response by alias method test', () => {
+    manager.bidResponses = [
+      {alias: 'alias1', name: 'name1'},
+      {alias: 'alias2', name: 'name2'},
+      {alias: 'alias3', name: 'name3'}
+    ];
+
+    expect(manager.getBidResponseByAlias('')).to.equal.undefined;
+    expect(manager.getBidResponseByAlias('alias')).to.equal.undefined;
+    expect(manager.getBidResponseByAlias('alias1')).to.deep.equal(manager.bidResponses[0]);
+    expect(manager.getBidResponseByAlias('alias3')).to.deep.equal(manager.bidResponses[2]);
+    expect(manager.getBidResponseByAlias('alias2')).to.deep.equal(manager.bidResponses[1]);
+    expect(manager.getBidResponseByAlias(143)).to.equal.undefined;
+  });
 });

@@ -129,7 +129,7 @@ export default class BidsManager {
   }
 
   getBidResponseByAlias(alias) {
-    return this.bidResponses.find((item) => {
+    return utils.find(this.bidResponses, (item) => {
       return item.alias === alias;
     });
   }
