@@ -19,7 +19,12 @@ describe('Utils helper tests', () => {
                                   ${secondPart}`;
 
     let templateStringTrimmed = utils.trimTemplateStringResult(multiLineTemplateString);
-
     expect(templateStringTrimmed).to.equal(firstPart + '/' + secondPart);
+
+    templateStringTrimmed = utils.trimTemplateStringResult(null);
+    expect(templateStringTrimmed).to.equal(null);
+
+    templateStringTrimmed = utils.trimTemplateStringResult(undefined);
+    expect(templateStringTrimmed).to.equal(null);
   });
 });

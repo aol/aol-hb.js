@@ -180,6 +180,38 @@ describe('Bid request module tests', () => {
     expect(manager.bidResponses[0]).to.deep.equal({key: 'some-value'});
   });
 
+  it('Format bid response method test', () => {
+    let getBidDataStub = sinon.stub(manager, 'getBidData');
+    sinon.stub(manager, 'getPixels');
+    sinon.stub(manager, 'getCPM').returns('cpm-stubbed');
+    sinon.stub(manager, 'formatAd').returns('ad-formatted');
+
+    expect(manager.formatBidResponse()).to.equal(undefined);
+
+    let bidResponse = {
+      w: 'ad-width',
+      h: 'ad-height',
+      crid: 'creative-id'
+    };
+    let placementConfig = {
+      adContainerId: 'ad-container-id',
+      alias: 'placement-alias'
+    };
+    getBidDataStub.withArgs(bidResponse).returns(bidResponse);
+    let formattedBidResponse = manager.formatBidResponse(bidResponse, placementConfig);
+    expect(formattedBidResponse).to.deep.equal({
+      cpm: 'cpm-stubbed',
+      ad: 'ad-formatted',
+      adContainerId: 'ad-container-id',
+      width: 'ad-width',
+      height: 'ad-height',
+      creativeId: 'creative-id',
+      bidderCode: manager.BIDDER_CODE,
+      aliasKey: manager.ALIAS_KEY,
+      alias: 'placement-alias'
+    });
+  });
+
   it('Get bid response by alias method test', () => {
     manager.bidResponses = [
       {alias: 'alias1', name: 'name1'},

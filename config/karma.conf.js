@@ -24,7 +24,7 @@ module.exports = function(config) {
 
     port: 9876,
 
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress', 'coverage', 'mocha'],
 
     // Add webpack as preprocessor
     preprocessors: {
@@ -39,6 +39,10 @@ module.exports = function(config) {
       }
     },
 
-    webpack: webpackConfig
+    webpack: webpackConfig,
+
+    mochaReporter: {
+      showDiff: true
+    }
   });
 };
