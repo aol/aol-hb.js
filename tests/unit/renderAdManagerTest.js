@@ -58,4 +58,30 @@ describe('Render ad module tests', () => {
     // If element is found call insert
     expect(appendChildSpy.withArgs('element-for-insert').calledOnce).to.be.true;
   });
+
+  it('Prepare ad for iframe method test', () => {
+    let subject = getSubject();
+
+    expect(subject.prepareAdForIframe()).to.equal(undefined);
+
+    let adContent = '<some-ad-content/>';
+    let expectedIframeContent = '<head><\/head><body><style></style>' + adContent + '<\/body>';
+    expect(subject.prepareAdForIframe(adContent)).to.equal(expectedIframeContent);
+  });
+
+  it('Render method test', () => {
+    let subject = getSubject();
+    let createAdFrameStub = sinon.stub(subject, 'createAdFrame');
+    let insertElementStub = sinon.stub(subject, 'insertElement');
+    let populateIframeContentStub = sinon.stub(subject, 'populateIframeContent');
+
+    subject.render();
+    expect(insertElementStub.calledOnce).to.be.false;
+    expect(populateIframeContentStub.calledOnce).to.be.false;
+
+    createAdFrameStub.returns({});
+    subject.render();
+    expect(insertElementStub.calledOnce).to.be.true;
+    expect(populateIframeContentStub.calledOnce).to.be.true;
+  });
 });

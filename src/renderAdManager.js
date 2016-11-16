@@ -43,12 +43,19 @@ export default class RenderAdManager {
     }
   }
 
-  populateIframeContent(iframe) {
-    var html = '<head><\/head><body><style>body,html{margin:0;padding:0;}</style>' +
-      this.bidResponse.ad + '<\/body>';
+  prepareAdForIframe(adContent) {
+    if (adContent) {
+      return '<head><\/head><body><style></style>' + adContent + '<\/body>';
+    }
+  }
 
-    iframe.contentWindow.document.open();
-    iframe.contentWindow.document.write(html);
-    iframe.contentWindow.document.close();
+  populateIframeContent(iframe) {
+    var iframeContent = this.prepareAdForIframe(this.bidResponse.ad);
+
+    if (iframeContent) {
+      iframe.contentWindow.document.open();
+      iframe.contentWindow.document.write(iframeContent);
+      iframe.contentWindow.document.close();
+    }
   }
 }
