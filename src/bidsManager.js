@@ -41,16 +41,12 @@ class BidsManager {
   handleBidRequestResponse(placementConfig, response) {
     let externalBidRequestHandler = this.bidRequestConfig.onBidResponse;
 
-    let responseJson = this.parseJson(response);
+    let responseJson = JSON.parse(response);
     let bidResponse = this.createBidResponse(responseJson, placementConfig);
 
     if (bidResponse && externalBidRequestHandler) {
       externalBidRequestHandler(bidResponse);
     }
-  }
-
-  parseJson(text) {
-    return JSON.parse(text);
   }
 
   resolveBidFloorPrice(floorPrice) {

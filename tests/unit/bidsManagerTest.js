@@ -143,7 +143,7 @@ describe('BidsManager', () => {
 
   it('Handle bid request response method test', () => {
     let createBidResponseStub = sinon.stub(manager, 'createBidResponse');
-    let parseJsonStub = sinon.stub(manager, 'parseJson');
+    let parseJsonStub = sinon.stub(window.JSON, 'parse');
     let bidResponseHandlerSpy = sinon.spy();
 
     manager.bidRequestConfig.onBidResponse = null;
