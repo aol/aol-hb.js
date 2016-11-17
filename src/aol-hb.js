@@ -4,14 +4,14 @@ import RenderAdManager from 'renderAdManager';
 let globalContext = window.aolhb = {};
 
 globalContext.init = (bidRequestConfig, placementsConfigs) => {
-  var manager = new BidsManager(bidRequestConfig, placementsConfigs);
+  let manager = new BidsManager(bidRequestConfig, placementsConfigs);
   manager.sendBidRequests();
 
   globalContext.renderAd = (alias) => {
-    var bidResponseConfig = manager.getBidResponseByAlias(alias);
+    let bidResponseConfig = manager.getBidResponseByAlias(alias);
 
     if (bidResponseConfig) {
-      var renderAdManager = new RenderAdManager(bidResponseConfig, document);
+      let renderAdManager = new RenderAdManager(bidResponseConfig, document);
 
       renderAdManager.render();
     }

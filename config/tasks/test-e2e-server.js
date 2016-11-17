@@ -6,10 +6,10 @@ const mustacheExpress = require('mustache-express');
 const serverConfig = require('../e2e/server.config');
 const config = require('../config');
 
-var createServer = () => {
-  var app = express();
-  var defaultViewHandler = (req, res) => {
-    var view = req.params.view;
+let createServer = () => {
+  let app = express();
+  let defaultViewHandler = (req, res) => {
+    let view = req.params.view;
 
     res.render(config.e2eTestViewsDirectory + '/' + view);
   };

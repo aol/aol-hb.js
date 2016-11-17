@@ -1,4 +1,4 @@
-var config = {
+const config = {
   port: 9487,
   hostName: 'localhost'
 };

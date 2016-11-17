@@ -1,4 +1,4 @@
-var resolver = {
+const resolver = {
   resolveKarmaBrowsers: function() {
     return resolver.isTravisEnvironment() ? ['CHROME_TRAVIS_CI'] : ['Chrome'];
   },

@@ -8,7 +8,7 @@ export default class RenderAdManager {
   }
 
   render() {
-    var iframe = this.createAdFrame();
+    let iframe = this.createAdFrame();
 
     if (iframe) {
       this.insertElement(iframe);
@@ -17,9 +17,8 @@ export default class RenderAdManager {
   }
 
   createAdFrame() {
-    var iframe = this.document.createElement('iframe');
+    let iframe = this.document.createElement('iframe');
 
-    iframe.seamless = 'seamless';
     iframe.id = 'adtpub-frame-' + this.bidResponse.adContainerId;
     iframe.name = iframe.id;
     iframe.style.border = '0px';
@@ -36,7 +35,7 @@ export default class RenderAdManager {
   }
 
   insertElement(iframe) {
-    var element = this.document.getElementById(this.bidResponse.adContainerId);
+    let element = this.document.getElementById(this.bidResponse.adContainerId);
 
     if (element) {
       element.appendChild(iframe);
@@ -45,12 +44,12 @@ export default class RenderAdManager {
 
   prepareAdForIframe(adContent) {
     if (adContent) {
-      return '<head><\/head><body><style></style>' + adContent + '<\/body>';
+      return `<head><\/head><body><style></style>${adContent}<\/body>`;
     }
   }
 
   populateIframeContent(iframe) {
-    var iframeContent = this.prepareAdForIframe(this.bidResponse.ad);
+    let iframeContent = this.prepareAdForIframe(this.bidResponse.ad);
 
     if (iframeContent) {
       iframe.contentWindow.document.open();

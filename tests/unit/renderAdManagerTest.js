@@ -1,8 +1,8 @@
 import RenderAdManager from 'src/renderAdManager';
 
-describe('Render ad module tests', () => {
+describe('RenderAdManager', () => {
   let getSubject = (bidResponse) => {
-    var document = {
+    let document = {
       createElement: () => {},
       getElementById: () => {}
     };

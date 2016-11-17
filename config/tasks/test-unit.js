@@ -1,5 +1,5 @@
-var gulp = require('gulp');
-var Server = require('karma').Server;
+const gulp = require('gulp');
+const Server = require('karma').Server;
 const config = require('../config');
 
 gulp.task('test-unit', ['build'], (done) => {

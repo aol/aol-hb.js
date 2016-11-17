@@ -44,5 +44,8 @@
     "sinon-chai": "^2.8.0",
     "webpack": "^1.13.2",
     "webpack-stream": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=6.1.0"
   }
 }

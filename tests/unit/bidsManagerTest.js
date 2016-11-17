@@ -1,7 +1,7 @@
 import BidsManager from 'src/bidsManager';
 import * as ajax from 'src/helpers/ajax';
 
-describe('Bid request module tests', () => {
+describe('BidsManager', () => {
 
   let manager;
 

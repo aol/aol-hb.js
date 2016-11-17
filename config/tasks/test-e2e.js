@@ -2,17 +2,17 @@ const gulp = require('gulp');
 const nightwatch = require('gulp-nightwatch');
 const config = require('../config');
 
-var runTests = () => {
-  var stream = gulp.src('')
+let runTests = () => {
+  let stream = gulp.src('')
     .pipe(nightwatch({
       configFile: config.nightWatchConfigPath
     }));
 
-  var terminateE2eServer = () => {
+  let terminateE2eServer = () => {
     process.exit();
   };
 
-  var e2eTestsErrorHandler = () => {
+  let e2eTestsErrorHandler = () => {
     process.exit(1);
   };
 

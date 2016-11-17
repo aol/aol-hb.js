@@ -46,7 +46,7 @@ export default class BidsManager {
     let externalBidRequestHandler = this.bidRequestConfig.onBidResponse;
 
     let responseJson = this.parseJson(response);
-    var bidResponse = this.createBidResponse(responseJson, placementConfig);
+    let bidResponse = this.createBidResponse(responseJson, placementConfig);
 
     if (bidResponse && externalBidRequestHandler) {
       externalBidRequestHandler(bidResponse);
@@ -100,7 +100,7 @@ export default class BidsManager {
   }
 
   createBidResponse(bidResponseJson, placementConfig) {
-    var bidResponse = this.formatBidResponse(bidResponseJson, placementConfig);
+    let bidResponse = this.formatBidResponse(bidResponseJson, placementConfig);
 
     if (bidResponse) {
       this.bidResponses.push(bidResponse);
