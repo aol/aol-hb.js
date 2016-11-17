@@ -115,7 +115,7 @@ class BidsManager {
   }
 
   getBidResponseByAlias(alias) {
-    return utils.find(this.bidResponses, (item) => {
+    return this.bidResponses.find((item) => {
       return item.alias === alias;
     });
   }

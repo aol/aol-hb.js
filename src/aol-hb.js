@@ -1,3 +1,4 @@
+import 'helpers/polyfills';
 import BidsManager from 'bidsManager';
 import RenderAdManager from 'renderAdManager';
 

@@ -31,21 +31,6 @@ let utils = {
    */
   resolveHttpProtocol: (documentProtocol) => {
     return (documentProtocol === 'https:') ? 'https' : 'http';
-  },
-
-  /**
-   * Find an item in the array on condition.
-   *
-   * @param {Array} items array of items
-   * @param {Function} callback callback that is provide condition
-   * @returns {*} found element
-   */
-  find: function(items, callback) {
-    for (let i = 0; i < items.length; i++) {
-      if (callback(items[i], i)) {
-        return items[i];
-      }
-    }
   }
 };
 
