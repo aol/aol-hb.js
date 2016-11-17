@@ -16,18 +16,16 @@ class BidsManager {
    *  Send bid request for each placement from placementsConfigs.
    */
   sendBidRequests() {
-    let self = this;
-
     this.placementsConfigs.forEach((config) => {
-      sendGetRequest(self.formatBidRequestUrl({
+      sendGetRequest(this.formatBidRequestUrl({
         protocol: utils.resolveHttpProtocol(document.location.protocol),
-        hostName: self.resolveHostName(),
+        hostName: this.resolveHostName(),
         network: this.bidRequestConfig.network,
         placement: parseInt(config.placement),
         alias: config.alias,
-        bidFloorPrice: self.resolveBidFloorPrice(config.bidFloorPrice)
+        bidFloorPrice: this.resolveBidFloorPrice(config.bidFloorPrice)
       }), (bidResponse) => {
-        self.handleBidRequestResponse(config, bidResponse);
+        this.handleBidRequestResponse(config, bidResponse);
       });
     });
   }
