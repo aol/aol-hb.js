@@ -206,8 +206,8 @@ describe('BidsManager', () => {
       width: 'ad-width',
       height: 'ad-height',
       creativeId: 'creative-id',
-      bidderCode: manager.BIDDER_CODE,
-      aliasKey: manager.ALIAS_KEY,
+      bidderCode: BidsManager.BIDDER_CODE,
+      aliasKey: BidsManager.ALIAS_KEY,
       alias: 'placement-alias'
     });
   });

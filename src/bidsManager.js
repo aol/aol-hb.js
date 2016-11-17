@@ -5,12 +5,10 @@ import utils from './helpers/utils';
  * The class contains logic for processing bid
  * requests and handling bid responses.
  */
-export default class BidsManager {
+class BidsManager {
   constructor(bidRequestConfig, placementsConfigs) {
     this.bidRequestConfig = bidRequestConfig;
     this.placementsConfigs = placementsConfigs;
-    this.BIDDER_CODE = 'aolbid';
-    this.ALIAS_KEY = 'mpalias';
     this.bidResponses = [];
   }
 
@@ -62,13 +60,7 @@ export default class BidsManager {
   }
 
   resolveHostName() {
-    const SERVER_MAP = {
-      EU: 'adserver.adtech.de',
-      US: 'adserver.adtechus.com',
-      Asia: 'adserver.adtechjp.com'
-    };
-
-    return SERVER_MAP[this.bidRequestConfig.region] || SERVER_MAP.US;
+    return BidsManager.SERVER_MAP[this.bidRequestConfig.region] || BidsManager.SERVER_MAP.US;
   }
 
   getBidData(bidResponse) {
@@ -121,8 +113,8 @@ export default class BidsManager {
         width: bidData.w,
         height: bidData.h,
         creativeId: bidData.crid,
-        bidderCode: this.BIDDER_CODE,
-        aliasKey: this.ALIAS_KEY,
+        bidderCode: BidsManager.BIDDER_CODE,
+        aliasKey: BidsManager.ALIAS_KEY,
         alias: placementConfig.alias
       };
     }
@@ -134,3 +126,13 @@ export default class BidsManager {
     });
   }
 }
+
+BidsManager.SERVER_MAP = {
+  EU: 'adserver.adtech.de',
+  US: 'adserver.adtechus.com',
+  Asia: 'adserver.adtechjp.com'
+};
+BidsManager.BIDDER_CODE = 'aolbid';
+BidsManager.ALIAS_KEY = 'mpalias';
+
+export default BidsManager;
