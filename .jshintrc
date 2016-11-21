@@ -73,16 +73,6 @@
 
   // Custom Globals
   "globals"       : {
-    // Project
-    "com": true,
-    "ONE": true,
-    "ADTECH": true,
-    "ADTECHCurl": true,
-    "ADTECHDefine": true,
-    "manifest": true,
-    "adtechAdTargetIframeQueue": true,
-    "adtechAdTargetDivQueue": true,
-
     // 3rd party
     "sinon": true,
     "assert": true,
