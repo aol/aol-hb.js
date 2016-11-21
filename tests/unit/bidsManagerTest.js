@@ -3,9 +3,28 @@ import utils from 'src/helpers/utils';
 import * as ajax from 'src/helpers/ajax';
 
 describe('BidsManager', () => {
-  let getBidsManager = () => {
-    return new BidsManager({}, []);
+  let getBidsManager = (bidRequestConfig) => {
+    return new BidsManager(bidRequestConfig || {}, []);
   };
+
+  describe('constructor()', () => {
+    it('Should set default prams for bidderKey and aliasKey', () => {
+      let manager = getBidsManager();
+
+      expect(manager.bidderKey).to.equal('aolbid');
+      expect(manager.aliasKey).to.equal('mpalias');
+    });
+
+    it('Should override bidderKey and aliasKey by values from placementConfig', () => {
+      let manager = getBidsManager({
+        bidderKey: 'overridden-bidder-key',
+        aliasKey: 'overridden-alias-key'
+      });
+
+      expect(manager.bidderKey).to.equal('overridden-bidder-key');
+      expect(manager.aliasKey).to.equal('overridden-alias-key');
+    });
+  });
 
   describe('resolveHostName()', () => {
     it('Should resolve host based on region param', () => {
@@ -67,12 +86,24 @@ describe('BidsManager', () => {
     });
   });
 
-  it('Resolve bid floor price method test', () => {
-    let manager = getBidsManager();
+  describe('resolveBidFloorPrice()', () => {
+    it('Should be empty string when floor price is not defined', () => {
+      let manager = getBidsManager();
 
-    expect(manager.resolveBidFloorPrice()).to.equal('');
-    expect(manager.resolveBidFloorPrice(0)).to.equal('');
-    expect(manager.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');
+      expect(manager.resolveBidFloorPrice()).to.equal('');
+    });
+
+    it('Should be empty string when floor price equals to 0', () => {
+      let manager = getBidsManager();
+
+      expect(manager.resolveBidFloorPrice(0)).to.equal('');
+    });
+
+    it('Should be formatter when floor price is defied', () => {
+      let manager = getBidsManager();
+
+      expect(manager.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');
+    });
   });
 
   it('Send bid requests method test', () => {
@@ -142,29 +173,43 @@ describe('BidsManager', () => {
     expect(manager.getPixels(bidResponse)).to.equal(bidResponse.ext.pixels);
   });
 
-  it('Get CPM method test', () => {
-    let manager = getBidsManager();
-    let bidData = {
-      price: 5
-    };
+  describe('getCPM()', () => {
+    it('Should use price field as cpm when encp is not defined', () => {
+      let manager = getBidsManager();
+      let bidData = {
+        price: 5
+      };
 
-    expect(manager.getCPM(bidData)).to.equal(bidData.price);
+      expect(manager.getCPM(bidData)).to.equal(bidData.price);
 
-    bidData.ext = {};
-    expect(manager.getCPM(bidData)).to.equal(bidData.price);
+      bidData.ext = {};
+      expect(manager.getCPM(bidData)).to.equal(bidData.price);
+    });
 
-    // If encp is defined it is used instead price field
-    bidData.ext = {
-      encp: 10
-    };
-    expect(manager.getCPM(bidData)).to.equal(bidData.ext.encp);
+    it('Should use encp field as cpm', () => {
+      let manager = getBidsManager();
+      let bidData = {
+        ext: {
+          encp: 10
+        }
+      };
+
+      expect(manager.getCPM(bidData)).to.equal(bidData.ext.encp);
+    });
   });
 
-  it('Format Ad method test', () => {
-    let manager = getBidsManager();
+  describe('formatAd()', () => {
+    it('Should format ad without pixels', () => {
+      let manager = getBidsManager();
 
-    expect(manager.formatAd('ad-content', null)).to.equal('ad-content');
-    expect(manager.formatAd('ad-content', '/pixes-content')).to.equal('ad-content/pixes-content');
+      expect(manager.formatAd('ad-content', null)).to.equal('ad-content');
+    });
+
+    it('Should format ad with pixels', () => {
+      let manager = getBidsManager();
+
+      expect(manager.formatAd('ad-content', '/pixes-content')).to.equal('ad-content/pixes-content');
+    });
   });
 
   describe('handleBidRequestResponse()', () => {
@@ -220,53 +265,62 @@ describe('BidsManager', () => {
     });
   });
 
-  it('Format bid response method test', () => {
-    let manager = getBidsManager();
-    let getBidDataStub = sinon.stub(manager, 'getBidData');
-    sinon.stub(manager, 'getPixels');
-    sinon.stub(manager, 'getCPM').returns('cpm-stubbed');
-    sinon.stub(manager, 'formatAd').returns('ad-formatted');
+  describe('formatBidResponse()', () => {
+    it('Should be undefined when no bid data returned', () => {
+      let manager = getBidsManager();
+      sinon.stub(manager, 'getBidData');
+      sinon.stub(manager, 'getPixels');
 
-    expect(manager.formatBidResponse()).to.equal(undefined);
+      expect(manager.formatBidResponse()).to.equal(undefined);
+    });
 
-    let bidResponse = {
-      w: 'ad-width',
-      h: 'ad-height',
-      crid: 'creative-id'
-    };
-    let placementConfig = {
-      adContainerId: 'ad-container-id',
-      alias: 'placement-alias'
-    };
-    getBidDataStub.withArgs(bidResponse).returns(bidResponse);
-    let formattedBidResponse = manager.formatBidResponse(bidResponse, placementConfig);
-    expect(formattedBidResponse).to.deep.equal({
-      cpm: 'cpm-stubbed',
-      ad: 'ad-formatted',
-      adContainerId: 'ad-container-id',
-      width: 'ad-width',
-      height: 'ad-height',
-      creativeId: 'creative-id',
-      bidderCode: BidsManager.BIDDER_CODE,
-      aliasKey: BidsManager.ALIAS_KEY,
-      alias: 'placement-alias'
+    it('Should return formatted bid response object', () => {
+      let manager = getBidsManager();
+      let bidResponse = {
+        w: 'ad-width',
+        h: 'ad-height',
+        crid: 'creative-id'
+      };
+      let placementConfig = {
+        adContainerId: 'ad-container-id',
+        alias: 'placement-alias'
+      };
+      sinon.stub(manager, 'getPixels');
+      sinon.stub(manager, 'getCPM').returns('cpm-stubbed');
+      sinon.stub(manager, 'formatAd').returns('ad-formatted');
+      sinon.stub(manager, 'getBidData').withArgs(bidResponse).returns(bidResponse);
+
+      let formattedBidResponse = manager.formatBidResponse(bidResponse, placementConfig);
+      expect(formattedBidResponse).to.deep.equal({
+        cpm: 'cpm-stubbed',
+        ad: 'ad-formatted',
+        adContainerId: 'ad-container-id',
+        width: 'ad-width',
+        height: 'ad-height',
+        creativeId: 'creative-id',
+        bidderCode: manager.bidderKey,
+        aliasKey: manager.aliasKey,
+        alias: 'placement-alias'
+      });
     });
   });
 
-  it('Get bid response by alias method test', () => {
-    let manager = getBidsManager();
-    manager.bidResponses = [
-      {alias: 'alias1', name: 'name1'},
-      {alias: 'alias2', name: 'name2'},
-      {alias: 'alias3', name: 'name3'}
-    ];
+  describe('getBidResponseByAlias()', () => {
+    it('Should return bid response object based on alias', () => {
+      let manager = getBidsManager();
+      manager.bidResponses = [
+        {alias: 'alias1', name: 'name1'},
+        {alias: 'alias2', name: 'name2'},
+        {alias: 'alias3', name: 'name3'}
+      ];
 
-    expect(manager.getBidResponseByAlias('')).to.equal.undefined;
-    expect(manager.getBidResponseByAlias('alias')).to.equal.undefined;
-    expect(manager.getBidResponseByAlias('alias1')).to.deep.equal(manager.bidResponses[0]);
-    expect(manager.getBidResponseByAlias('alias3')).to.deep.equal(manager.bidResponses[2]);
-    expect(manager.getBidResponseByAlias('alias2')).to.deep.equal(manager.bidResponses[1]);
-    expect(manager.getBidResponseByAlias(143)).to.equal.undefined;
+      expect(manager.getBidResponseByAlias('')).to.equal.undefined;
+      expect(manager.getBidResponseByAlias('alias')).to.equal.undefined;
+      expect(manager.getBidResponseByAlias('alias1')).to.deep.equal(manager.bidResponses[0]);
+      expect(manager.getBidResponseByAlias('alias3')).to.deep.equal(manager.bidResponses[2]);
+      expect(manager.getBidResponseByAlias('alias2')).to.deep.equal(manager.bidResponses[1]);
+      expect(manager.getBidResponseByAlias(143)).to.equal.undefined;
+    });
   });
 
   describe('addBidNewResponse()', () => {
@@ -287,6 +341,30 @@ describe('BidsManager', () => {
       manager.addBidNewResponse('bidResponseObject');
 
       expect(manager.bidResponses).to.deep.equal(['bidResponseObject']);
+    });
+  });
+
+  describe('getPlacementConfigByAlias()', () => {
+    it('Should return placement config based on alias', () => {
+      let manager = getBidsManager();
+      manager.placementsConfigs = [
+        {alias: 'alias1', name: 'name1'},
+        {alias: 'alias2', name: 'name2'},
+        {alias: 'alias3', name: 'name3'}
+      ];
+
+      expect(manager.getPlacementConfigByAlias(undefined)).to.equal.undefined;
+      expect(manager.getPlacementConfigByAlias('')).to.equal.undefined;
+      expect(manager.getPlacementConfigByAlias('alias')).to.equal.undefined;
+      expect(manager.getPlacementConfigByAlias(143)).to.equal.undefined;
+
+      expect(manager.getPlacementConfigByAlias('alias1')).
+        to.deep.equal(manager.placementsConfigs[0]);
+      expect(manager.getPlacementConfigByAlias('alias3')).
+        to.deep.equal(manager.placementsConfigs[2]);
+      expect(manager.getPlacementConfigByAlias('alias2')).
+        to.deep.equal(manager.placementsConfigs[1]);
+
     });
   });
 });

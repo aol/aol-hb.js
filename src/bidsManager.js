@@ -9,6 +9,8 @@ class BidsManager {
   constructor(bidRequestConfig, placementsConfigs) {
     this.bidRequestConfig = bidRequestConfig;
     this.placementsConfigs = placementsConfigs;
+    this.bidderKey = bidRequestConfig.bidderKey || 'aolbid';
+    this.aliasKey = bidRequestConfig.aliasKey || 'mpalias';
     this.bidResponses = [];
   }
 
@@ -27,7 +29,7 @@ class BidsManager {
    * Refresh specific ad by its alias.
    */
   refreshAd(alias) {
-    let placementConfig = this.getPlacementConfig(alias);
+    let placementConfig = this.getPlacementConfigByAlias(alias);
 
     if (placementConfig) {
       sendGetRequest(this.formatBidRequestUrl(placementConfig), (bidResponse) => {
@@ -100,12 +102,6 @@ class BidsManager {
     return ad;
   }
 
-  getPlacementConfig(alias) {
-    return this.placementsConfigs.find((item) => {
-      return item.alias === alias;
-    });
-  }
-
   getBidResponseByAlias(alias) {
     return this.bidResponses.find((item) => {
       return item.alias === alias;
@@ -148,11 +144,17 @@ class BidsManager {
         width: bidData.w,
         height: bidData.h,
         creativeId: bidData.crid,
-        bidderCode: BidsManager.BIDDER_CODE,
-        aliasKey: BidsManager.ALIAS_KEY,
+        bidderCode: this.bidderKey,
+        aliasKey: this.aliasKey,
         alias: placementConfig.alias
       };
     }
+  }
+
+  getPlacementConfigByAlias(alias) {
+    return this.placementsConfigs.find((item) => {
+      return item.alias === alias;
+    });
   }
 }
 
@@ -161,8 +163,5 @@ BidsManager.SERVER_MAP = {
   US: 'adserver.adtechus.com',
   Asia: 'adserver.adtechjp.com'
 };
-
-BidsManager.BIDDER_CODE = 'aolbid';
-BidsManager.ALIAS_KEY = 'mpalias';
 
 export default BidsManager;
