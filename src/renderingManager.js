@@ -1,7 +1,7 @@
 /***
  * The class contains logic for rendering ad(based on bid response config).
  */
-export default class RenderAdManager {
+export default class RenderingManager {
   constructor(bidResponse, document) {
     this.bidResponse = bidResponse;
     this.document = document;

@@ -120,7 +120,7 @@ class BidsManager {
 
   addNewBidResponse(bidResponse) {
     if (bidResponse) {
-      var existingBidResponse = this.getBidResponseByAlias(bidResponse.alias);
+      let existingBidResponse = this.getBidResponseByAlias(bidResponse.alias);
 
       if (existingBidResponse) {
         let bidResponseIndex = this.bidResponses.indexOf(existingBidResponse);

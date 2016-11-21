@@ -1,6 +1,6 @@
 import 'helpers/polyfills';
 import BidsManager from 'bidsManager';
-import RenderAdManager from 'renderAdManager';
+import RenderingManager from 'renderingManager';
 
 let globalContext = window.aolhb = {};
 
@@ -12,9 +12,9 @@ globalContext.init = (bidRequestConfig, placementsConfigs) => {
     let bidResponseConfig = manager.getBidResponseByAlias(alias);
 
     if (bidResponseConfig) {
-      let renderAdManager = new RenderAdManager(bidResponseConfig, document);
+      let renderingManager = new RenderingManager(bidResponseConfig, document);
 
-      renderAdManager.render();
+      renderingManager.render();
     }
   };
 
