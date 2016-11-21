@@ -17,4 +17,8 @@ globalContext.init = (bidRequestConfig, placementsConfigs) => {
       renderAdManager.render();
     }
   };
+
+  globalContext.refreshAd = (alias) => {
+    manager.refreshAd(alias);
+  };
 };
