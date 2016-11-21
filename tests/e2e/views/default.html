@@ -117,7 +117,10 @@
       network: '9599.1',
       onBidResponse: bidResponseHandler,
       bidderKey: 'aolbid',
-      aliasKey: 'mpalias'
+      aliasKey: 'mpalias',
+      onAllBidResponses: function () {
+        console.log('onAllBidResponses');
+      }
     };
 
     var placementsConfigs = [{

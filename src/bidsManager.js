@@ -21,6 +21,7 @@ class BidsManager {
     this.placementsConfigs.forEach((config) => {
       sendGetRequest(this.formatBidRequestUrl(config), (bidResponse) => {
         this.handleBidRequestResponse(config, bidResponse);
+        this.checkBidResponsesState();
       });
     });
   }
@@ -66,6 +67,15 @@ class BidsManager {
     }
   }
 
+  checkBidResponsesState() {
+    let allBidResponsesReturned = this.placementsConfigs.length === this.bidResponses.length;
+    let allBidResponsesHandler = this.bidRequestConfig.onAllBidResponses;
+
+    if (allBidResponsesReturned && allBidResponsesHandler) {
+      allBidResponsesHandler();
+    }
+  }
+
   resolveBidFloorPrice(floorPrice) {
     return floorPrice ? `bidfloor=${floorPrice.toString()};` : '';
   }
@@ -108,7 +118,7 @@ class BidsManager {
     });
   }
 
-  addBidNewResponse(bidResponse) {
+  addNewBidResponse(bidResponse) {
     if (bidResponse) {
       var existingBidResponse = this.getBidResponseByAlias(bidResponse.alias);
 
@@ -126,7 +136,7 @@ class BidsManager {
     let bidResponse = this.formatBidResponse(bidResponseJson, placementConfig);
 
     if (bidResponse) {
-      this.addBidNewResponse(bidResponse);
+      this.addNewBidResponse(bidResponse);
 
       return bidResponse;
     }

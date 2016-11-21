@@ -8,7 +8,7 @@ describe('BidsManager', () => {
   };
 
   describe('constructor()', () => {
-    it('Should set default prams for bidderKey and aliasKey', () => {
+    it('Should set default values for bidderKey and aliasKey', () => {
       let manager = getBidsManager();
 
       expect(manager.bidderKey).to.equal('aolbid');
@@ -257,7 +257,7 @@ describe('BidsManager', () => {
       sinon.stub(manager, 'formatBidResponse').returns({
         bidResponseProperty: 'some-value'
       });
-      sinon.stub(manager, 'addBidNewResponse');
+      sinon.stub(manager, 'addNewBidResponse');
 
       expect(manager.createBidResponse()).to.deep.equal({
         bidResponseProperty: 'some-value'
@@ -323,12 +323,12 @@ describe('BidsManager', () => {
     });
   });
 
-  describe('addBidNewResponse()', () => {
+  describe('addNewBidResponse()', () => {
     it('Should add new bid response in the array ', () => {
       let manager = getBidsManager();
       sinon.stub(manager, 'getBidResponseByAlias').returns(false);
 
-      manager.addBidNewResponse('bidResponseObject');
+      manager.addNewBidResponse('bidResponseObject');
 
       expect(manager.bidResponses).to.deep.equal(['bidResponseObject']);
     });
@@ -338,7 +338,7 @@ describe('BidsManager', () => {
       sinon.stub(manager, 'getBidResponseByAlias').returns('existingBidResponse');
       manager.bidResponses = ['existingBidResponse'];
 
-      manager.addBidNewResponse('bidResponseObject');
+      manager.addNewBidResponse('bidResponseObject');
 
       expect(manager.bidResponses).to.deep.equal(['bidResponseObject']);
     });
@@ -365,6 +365,32 @@ describe('BidsManager', () => {
       expect(manager.getPlacementConfigByAlias('alias2')).
         to.deep.equal(manager.placementsConfigs[1]);
 
+    });
+  });
+
+  describe('checkBidResponsesState()', () => {
+    it('Should not call onAllBidResponse handler when no responses are returned', () => {
+      let manager = getBidsManager();
+      manager.placementsConfigs = [1, 2, 3];
+      manager.bidResponses = [1, 2, 3, 4];
+      let onAllBidResponsesSpy = sinon.spy();
+      manager.bidRequestConfig.onAllBidResponses = onAllBidResponsesSpy;
+
+      manager.checkBidResponsesState();
+
+      expect(onAllBidResponsesSpy.called).to.be.false;
+    });
+
+    it('Should call onAllBidResponse handler when all responses are returned', () => {
+      let manager = getBidsManager();
+      manager.placementsConfigs = [1, 2, 3];
+      manager.bidResponses = [1, 2, 3];
+      let onAllBidResponsesSpy = sinon.spy();
+      manager.bidRequestConfig.onAllBidResponses = onAllBidResponsesSpy;
+
+      manager.checkBidResponsesState();
+
+      expect(onAllBidResponsesSpy.calledOnce).to.be.true;
     });
   });
 });
