@@ -1,61 +1,82 @@
 import BidsManager from 'src/bidsManager';
+import utils from 'src/helpers/utils';
 import * as ajax from 'src/helpers/ajax';
 
 describe('BidsManager', () => {
+  let getBidsManager = () => {
+    return new BidsManager({}, []);
+  };
 
-  let manager;
+  describe('resolveHostName()', () => {
+    it('Should resolve host based on region param', () => {
+      let manager = getBidsManager();
+      manager.bidRequestConfig.region = null;
+      expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
 
-  beforeEach(() => {
-    manager = new BidsManager({}, []);
+      manager.bidRequestConfig.region = 'EU';
+      expect(manager.resolveHostName()).to.equal('adserver.adtech.de');
+
+      manager.bidRequestConfig.region = 'Asia';
+      expect(manager.resolveHostName()).to.equal('adserver.adtechjp.com');
+
+      manager.bidRequestConfig.region = 'US';
+      expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
+    });
   });
 
-  it('Resolve host name method test', () => {
-    manager.bidRequestConfig.region = null;
-    expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
+  describe('formatBidRequestUrl()', () => {
+    let resolveHttpProtocolStub;
 
-    manager.bidRequestConfig.region = 'EU';
-    expect(manager.resolveHostName()).to.equal('adserver.adtech.de');
-
-    manager.bidRequestConfig.region = 'Asia';
-    expect(manager.resolveHostName()).to.equal('adserver.adtechjp.com');
-
-    manager.bidRequestConfig.region = 'US';
-    expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
-  });
-
-  it('Format bid request url method test', () => {
-    let bidRequestUrl = manager.formatBidRequestUrl({
-      protocol: 'https',
-      hostName: 'test.com',
-      network: '5404.10',
-      placement: 'placement-id',
-      alias: '54'
+    before(() => {
+      resolveHttpProtocolStub = sinon.stub(utils, 'resolveHttpProtocol').returns('https');
     });
-    let expectedUrl = 'https://test.com/pubapi/3.0/5404.10/placement-id/0/-1/ADTECH;' +
-      'cmd=bid;cors=yes;v=2;alias=54;';
-    expect(bidRequestUrl).to.equal(expectedUrl);
 
-    // Format url with specified bid floor price option
-    bidRequestUrl = manager.formatBidRequestUrl({
-      protocol: 'https',
-      hostName: 'test.com',
-      network: '5404.10',
-      placement: 'placement-id',
-      alias: '54',
-      bidFloorPrice: 'bid-floor-price'
+    after(() => {
+      resolveHttpProtocolStub.restore();
     });
-    expectedUrl = 'https://test.com/pubapi/3.0/5404.10/placement-id/0/-1/ADTECH;' +
-      'cmd=bid;cors=yes;v=2;alias=54;bid-floor-price';
-    expect(bidRequestUrl).to.equal(expectedUrl);
+
+    it('Should resolve bid request url', () => {
+      let manager = getBidsManager();
+      sinon.stub(manager, 'resolveHostName').returns('test.com');
+      manager.bidRequestConfig.network = '5404.10';
+      let bidRequestUrl = manager.formatBidRequestUrl({
+        protocol: 'https',
+        placement: '15',
+        alias: '54'
+      });
+
+      let expectedUrl = 'https://test.com/pubapi/3.0/5404.10/15/0/-1/ADTECH;' +
+        'cmd=bid;cors=yes;v=2;alias=54;';
+      expect(bidRequestUrl).to.equal(expectedUrl);
+    });
+
+    it('Should resolve bid request url with specified bidFloorPrice', () => {
+      let manager = getBidsManager();
+      sinon.stub(manager, 'resolveHostName').returns('test2.com');
+      sinon.stub(manager, 'resolveBidFloorPrice').returns('bid-floor-price');
+      manager.bidRequestConfig.network = '5404.10';
+      let bidRequestUrl = manager.formatBidRequestUrl({
+        placement: '15',
+        alias: '54',
+        bidFloorPrice: 'bid-floor-price'
+      });
+
+      let expectedUrl = 'https://test2.com/pubapi/3.0/5404.10/15/0/-1/ADTECH;' +
+        'cmd=bid;cors=yes;v=2;alias=54;bid-floor-price';
+      expect(bidRequestUrl).to.equal(expectedUrl);
+    });
   });
 
   it('Resolve bid floor price method test', () => {
+    let manager = getBidsManager();
+
     expect(manager.resolveBidFloorPrice()).to.equal('');
     expect(manager.resolveBidFloorPrice(0)).to.equal('');
     expect(manager.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');
   });
 
   it('Send bid requests method test', () => {
+    let manager = getBidsManager();
     let sendGetRequestStub = sinon.stub(ajax, 'sendGetRequest');
     let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl');
 
@@ -68,6 +89,7 @@ describe('BidsManager', () => {
   });
 
   it('Get bid data method test', () => {
+    let manager = getBidsManager();
     let bidResponse = {};
     expect(manager.getBidData(bidResponse)).to.be.undefined;
 
@@ -103,6 +125,7 @@ describe('BidsManager', () => {
   });
 
   it('Get Pixels method test', () => {
+    let manager = getBidsManager();
     let bidResponse = {};
     expect(manager.getPixels(bidResponse)).to.be.undefined;
 
@@ -120,6 +143,7 @@ describe('BidsManager', () => {
   });
 
   it('Get CPM method test', () => {
+    let manager = getBidsManager();
     let bidData = {
       price: 5
     };
@@ -137,50 +161,67 @@ describe('BidsManager', () => {
   });
 
   it('Format Ad method test', () => {
+    let manager = getBidsManager();
+
     expect(manager.formatAd('ad-content', null)).to.equal('ad-content');
     expect(manager.formatAd('ad-content', '/pixes-content')).to.equal('ad-content/pixes-content');
   });
 
-  it('Handle bid request response method test', () => {
-    let createBidResponseStub = sinon.stub(manager, 'createBidResponse');
-    let parseJsonStub = sinon.stub(window.JSON, 'parse');
-    let bidResponseHandlerSpy = sinon.spy();
+  describe('handleBidRequestResponse()', () => {
+    let jsonParseStub = null;
+    before(()=> {
+      jsonParseStub = sinon.stub(window.JSON, 'parse');
+    });
 
-    manager.bidRequestConfig.onBidResponse = null;
-    manager.handleBidRequestResponse();
-    expect(createBidResponseStub.called).to.be.true;
-    expect(parseJsonStub.called).to.be.true;
-    expect(bidResponseHandlerSpy.called).to.be.false;
+    after(() => {
+      jsonParseStub.reset();
+    });
 
-    manager.bidRequestConfig.onBidResponse = bidResponseHandlerSpy;
-    manager.handleBidRequestResponse();
-    expect(createBidResponseStub.called).to.be.true;
-    expect(parseJsonStub.called).to.be.true;
-    expect(bidResponseHandlerSpy.called).to.be.false;
+    it('Should not call externalBidRequestHandler when cannot create bid response', () => {
+      let manager = getBidsManager();
+      let bidResponseHandlerSpy = sinon.spy();
+      let createBidResponseStub = sinon.stub(manager, 'createBidResponse').returns(false);
+      manager.bidRequestConfig.onBidResponse = bidResponseHandlerSpy;
 
-    manager.bidRequestConfig.onBidResponse = bidResponseHandlerSpy;
-    createBidResponseStub.returns(true);
-    manager.handleBidRequestResponse();
-    expect(createBidResponseStub.called).to.be.true;
-    expect(parseJsonStub.called).to.be.true;
-    expect(bidResponseHandlerSpy.called).to.be.true;
+      manager.handleBidRequestResponse();
+      expect(createBidResponseStub.calledOnce).to.be.true;
+      expect(bidResponseHandlerSpy.calledOnce).to.be.false;
+    });
 
-    createBidResponseStub.reset();
-    parseJsonStub.reset();
+    it('Should call externalBidRequestHandler when it is specified', () => {
+      let manager = getBidsManager();
+      let bidResponseHandlerSpy = sinon.spy();
+      let createBidResponseStub = sinon.stub(manager, 'createBidResponse').returns(true);
+      manager.bidRequestConfig.onBidResponse = bidResponseHandlerSpy;
+
+      manager.handleBidRequestResponse();
+      expect(createBidResponseStub.calledOnce).to.be.true;
+      expect(bidResponseHandlerSpy.calledOnce).to.be.true;
+    });
   });
 
-  it('Create bid response method test', () => {
-    let formatBidResponseStub = sinon.stub(manager, 'formatBidResponse').returns(false);
-    expect(manager.bidResponses).to.be.empty;
-    manager.createBidResponse();
+  describe('createBidResponse()', () => {
+    it('Should be undefined when cannot format bid response', () => {
+      let manager = getBidsManager();
+      sinon.stub(manager, 'formatBidResponse').returns(false);
+      expect(manager.createBidResponse()).to.be.undefined;
+    });
 
-    formatBidResponseStub.returns({key: 'some-value'});
-    manager.createBidResponse();
-    // Test that bid response was added in the bid responses array.
-    expect(manager.bidResponses[0]).to.deep.equal({key: 'some-value'});
+    it('Should add new bid response and return added item', () => {
+      let manager = getBidsManager();
+      sinon.stub(manager, 'formatBidResponse').returns({
+        bidResponseProperty: 'some-value'
+      });
+      sinon.stub(manager, 'addBidNewResponse');
+
+      expect(manager.createBidResponse()).to.deep.equal({
+        bidResponseProperty: 'some-value'
+      });
+    });
   });
 
   it('Format bid response method test', () => {
+    let manager = getBidsManager();
     let getBidDataStub = sinon.stub(manager, 'getBidData');
     sinon.stub(manager, 'getPixels');
     sinon.stub(manager, 'getCPM').returns('cpm-stubbed');
@@ -213,6 +254,7 @@ describe('BidsManager', () => {
   });
 
   it('Get bid response by alias method test', () => {
+    let manager = getBidsManager();
     manager.bidResponses = [
       {alias: 'alias1', name: 'name1'},
       {alias: 'alias2', name: 'name2'},
@@ -225,5 +267,26 @@ describe('BidsManager', () => {
     expect(manager.getBidResponseByAlias('alias3')).to.deep.equal(manager.bidResponses[2]);
     expect(manager.getBidResponseByAlias('alias2')).to.deep.equal(manager.bidResponses[1]);
     expect(manager.getBidResponseByAlias(143)).to.equal.undefined;
+  });
+
+  describe('addBidNewResponse()', () => {
+    it('Should add new bid response in the array ', () => {
+      let manager = getBidsManager();
+      sinon.stub(manager, 'getBidResponseByAlias').returns(false);
+
+      manager.addBidNewResponse('bidResponseObject');
+
+      expect(manager.bidResponses).to.deep.equal(['bidResponseObject']);
+    });
+
+    it('Should replace existing bid response object in the array ', () => {
+      let manager = getBidsManager();
+      sinon.stub(manager, 'getBidResponseByAlias').returns('existingBidResponse');
+      manager.bidResponses = ['existingBidResponse'];
+
+      manager.addBidNewResponse('bidResponseObject');
+
+      expect(manager.bidResponses).to.deep.equal(['bidResponseObject']);
+    });
   });
 });

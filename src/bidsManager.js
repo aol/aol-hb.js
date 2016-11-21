@@ -17,23 +17,38 @@ class BidsManager {
    */
   sendBidRequests() {
     this.placementsConfigs.forEach((config) => {
-      sendGetRequest(this.formatBidRequestUrl({
-        protocol: utils.resolveHttpProtocol(document.location.protocol),
-        hostName: this.resolveHostName(),
-        network: this.bidRequestConfig.network,
-        placement: parseInt(config.placement),
-        alias: config.alias,
-        bidFloorPrice: this.resolveBidFloorPrice(config.bidFloorPrice)
-      }), (bidResponse) => {
+      sendGetRequest(this.formatBidRequestUrl(config), (bidResponse) => {
         this.handleBidRequestResponse(config, bidResponse);
       });
     });
   }
 
-  formatBidRequestUrl(options) {
+  /***
+   * Refresh specific ad by its alias.
+   */
+  refreshAd(alias) {
+    let placementConfig = this.getPlacementConfig(alias);
+
+    if (placementConfig) {
+      sendGetRequest(this.formatBidRequestUrl(placementConfig), (bidResponse) => {
+        this.handleBidRequestResponse(placementConfig, bidResponse);
+      });
+    }
+  }
+
+  formatBidRequestUrl(placementConfig) {
     let url = utils.formatTemplateString`${'protocol'}://${'hostName'}/pubapi/3.0/${'network'}/
       ${'placement'}/0/-1/ADTECH;cmd=bid;cors=yes;
       v=2;alias=${'alias'};${'bidFloorPrice'}`;
+
+    let options = {
+      protocol: utils.resolveHttpProtocol(document.location.protocol),
+      hostName: this.resolveHostName(),
+      network: this.bidRequestConfig.network,
+      placement: parseInt(placementConfig.placement),
+      alias: placementConfig.alias,
+      bidFloorPrice: this.resolveBidFloorPrice(placementConfig.bidFloorPrice)
+    };
 
     return url(options);
   }
@@ -85,11 +100,37 @@ class BidsManager {
     return ad;
   }
 
+  getPlacementConfig(alias) {
+    return this.placementsConfigs.find((item) => {
+      return item.alias === alias;
+    });
+  }
+
+  getBidResponseByAlias(alias) {
+    return this.bidResponses.find((item) => {
+      return item.alias === alias;
+    });
+  }
+
+  addBidNewResponse(bidResponse) {
+    if (bidResponse) {
+      var existingBidResponse = this.getBidResponseByAlias(bidResponse.alias);
+
+      if (existingBidResponse) {
+        let bidResponseIndex = this.bidResponses.indexOf(existingBidResponse);
+
+        this.bidResponses[bidResponseIndex] = bidResponse;
+      } else {
+        this.bidResponses.push(bidResponse);
+      }
+    }
+  }
+
   createBidResponse(bidResponseJson, placementConfig) {
     let bidResponse = this.formatBidResponse(bidResponseJson, placementConfig);
 
     if (bidResponse) {
-      this.bidResponses.push(bidResponse);
+      this.addBidNewResponse(bidResponse);
 
       return bidResponse;
     }
@@ -113,12 +154,6 @@ class BidsManager {
       };
     }
   }
-
-  getBidResponseByAlias(alias) {
-    return this.bidResponses.find((item) => {
-      return item.alias === alias;
-    });
-  }
 }
 
 BidsManager.SERVER_MAP = {
@@ -126,6 +161,7 @@ BidsManager.SERVER_MAP = {
   US: 'adserver.adtechus.com',
   Asia: 'adserver.adtechjp.com'
 };
+
 BidsManager.BIDDER_CODE = 'aolbid';
 BidsManager.ALIAS_KEY = 'mpalias';
 
