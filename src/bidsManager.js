@@ -1,5 +1,6 @@
 import {sendGetRequest} from './helpers/ajax';
 import utils from './helpers/utils';
+import RenderAdManager from 'renderAdManager';
 
 /***
  * The class contains logic for processing bid
@@ -11,6 +12,7 @@ class BidsManager {
     this.placementsConfigs = placementsConfigs;
     this.bidderKey = bidRequestConfig.bidderKey || 'aolbid';
     this.aliasKey = bidRequestConfig.aliasKey || 'mpalias';
+    this.userSyncOn = bidRequestConfig.userSyncOn || BidsManager.HEADER_BIDDING_EVENTS.bidResponse;
     this.bidResponses = [];
   }
 
@@ -62,8 +64,12 @@ class BidsManager {
     let responseJson = JSON.parse(response);
     let bidResponse = this.createBidResponse(responseJson, placementConfig);
 
-    if (bidResponse && externalBidRequestHandler) {
-      externalBidRequestHandler(bidResponse);
+    if (bidResponse) {
+      this.renderPixels(bidResponse);
+
+      if (externalBidRequestHandler) {
+        externalBidRequestHandler(bidResponse);
+      }
     }
   }
 
@@ -104,14 +110,6 @@ class BidsManager {
     return bidData.ext && bidData.ext.encp ? bidData.ext.encp : bidData.price;
   }
 
-  formatAd(ad, pixels) {
-    if (pixels) {
-      ad += pixels;
-    }
-
-    return ad;
-  }
-
   getBidResponseByAlias(alias) {
     return this.bidResponses.find((item) => {
       return item.alias === alias;
@@ -144,12 +142,12 @@ class BidsManager {
 
   formatBidResponse(bidResponseJson, placementConfig) {
     let bidData = this.getBidData(bidResponseJson);
-    let pixels = this.getPixels(bidResponseJson);
 
     if (bidData) {
       return {
         cpm: this.getCPM(bidData),
-        ad: this.formatAd(bidData.adm, pixels),
+        ad: bidData.adm,
+        pixels: this.getPixels(bidResponseJson),
         adContainerId: placementConfig.adContainerId,
         width: bidData.w,
         height: bidData.h,
@@ -166,12 +164,31 @@ class BidsManager {
       return item.alias === alias;
     });
   }
+
+  isUserSyncOnBidResponseMode() {
+    return this.userSyncOn === BidsManager.HEADER_BIDDING_EVENTS.bidResponse;
+  }
+
+  renderPixels(bidResponse) {
+    if (bidResponse.pixels && this.isUserSyncOnBidResponseMode()) {
+      let renderAdManager = new RenderAdManager(bidResponse);
+
+      renderAdManager.renderPixels();
+
+      bidResponse.pixelsRendered = true;
+    }
+  }
 }
 
 BidsManager.SERVER_MAP = {
   EU: 'adserver.adtech.de',
   US: 'adserver.adtechus.com',
   Asia: 'adserver.adtechjp.com'
+};
+
+BidsManager.HEADER_BIDDING_EVENTS = {
+  bidResponse: 'bidResponse',
+  adRender: 'adRender'
 };
 
 export default BidsManager;

@@ -2,7 +2,7 @@
  * The class contains logic for rendering ad(based on bid response config).
  */
 export default class RenderAdManager {
-  constructor(bidResponse, document) {
+  constructor(bidResponse) {
     this.bidResponse = bidResponse;
     this.document = document;
   }
@@ -56,5 +56,9 @@ export default class RenderAdManager {
       iframe.contentWindow.document.write(iframeContent);
       iframe.contentWindow.document.close();
     }
+  }
+
+  renderPixels(bidResponse) {
+    alert('1234' + bidResponse);
   }
 }

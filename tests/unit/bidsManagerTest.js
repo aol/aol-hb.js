@@ -198,20 +198,6 @@ describe('BidsManager', () => {
     });
   });
 
-  describe('formatAd()', () => {
-    it('Should format ad without pixels', () => {
-      let manager = getBidsManager();
-
-      expect(manager.formatAd('ad-content', null)).to.equal('ad-content');
-    });
-
-    it('Should format ad with pixels', () => {
-      let manager = getBidsManager();
-
-      expect(manager.formatAd('ad-content', '/pixes-content')).to.equal('ad-content/pixes-content');
-    });
-  });
-
   describe('handleBidRequestResponse()', () => {
     let jsonParseStub = null;
     before(()=> {
@@ -279,21 +265,22 @@ describe('BidsManager', () => {
       let bidResponse = {
         w: 'ad-width',
         h: 'ad-height',
-        crid: 'creative-id'
+        crid: 'creative-id',
+        adm: 'bid-response-ad'
       };
       let placementConfig = {
         adContainerId: 'ad-container-id',
         alias: 'placement-alias'
       };
-      sinon.stub(manager, 'getPixels');
+      sinon.stub(manager, 'getPixels').returns('get-pixels-result');
       sinon.stub(manager, 'getCPM').returns('cpm-stubbed');
-      sinon.stub(manager, 'formatAd').returns('ad-formatted');
       sinon.stub(manager, 'getBidData').withArgs(bidResponse).returns(bidResponse);
 
       let formattedBidResponse = manager.formatBidResponse(bidResponse, placementConfig);
       expect(formattedBidResponse).to.deep.equal({
         cpm: 'cpm-stubbed',
-        ad: 'ad-formatted',
+        ad: 'bid-response-ad',
+        pixels: 'get-pixels-result',
         adContainerId: 'ad-container-id',
         width: 'ad-width',
         height: 'ad-height',
