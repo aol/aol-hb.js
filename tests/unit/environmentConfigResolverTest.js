@@ -1,35 +1,51 @@
 describe('Environment config helper tests', () => {
-  let environmentResolver = require('config/helpers/environmentConfigResolver');
+  let resolver = require('config/helpers/environmentConfigResolver');
 
-  afterEach(() => {
-    delete process.env.TRAVIS;
+  describe('resolveKarmaBrowsers()', () => {
+    it('Should resolve browsers for local building mode', () => {
+      let isTravisMethodStub = sinon.stub(resolver, 'isTravisEnvironment').returns(false);
+
+      expect(resolver.resolveKarmaBrowsers()).to.deep.equal(['Chrome']);
+      isTravisMethodStub.restore();
+    });
+
+    it('Should resolve browsers for travis CI mode', () => {
+      let isTravisMethodStub = sinon.stub(resolver, 'isTravisEnvironment').returns(true);
+
+      expect(resolver.resolveKarmaBrowsers()).to.deep.equal(['CHROME_TRAVIS_CI']);
+      isTravisMethodStub.restore();
+    });
   });
 
-  it('Resolve karma browsers test', () => {
-    let isTravisMethodStub = sinon.stub(environmentResolver, 'isTravisEnvironment').returns(false);
-    expect(environmentResolver.resolveKarmaBrowsers()).to.deep.equal(['Chrome']);
+  describe('resolveNightWatchConfig()', () => {
+    it('Should resolve nightwatch config for building locally', () => {
+      let isTravisMethodStub = sinon.stub(resolver, 'isTravisEnvironment').returns(false);
 
-    isTravisMethodStub.returns(true);
-    expect(environmentResolver.resolveKarmaBrowsers()).to.deep.equal(['CHROME_TRAVIS_CI']);
+      expect(resolver.resolveNightWatchConfig()).to.equal('nightwatch.config.default');
+      isTravisMethodStub.restore();
+    });
 
-    isTravisMethodStub.restore();
+    it('Should resolve nightwatch config for building on travis CI', () => {
+      let isTravisMethodStub = sinon.stub(resolver, 'isTravisEnvironment').returns(true);
+
+      expect(resolver.resolveNightWatchConfig()).to.equal('nightwatch.config.travis');
+      isTravisMethodStub.restore();
+    });
   });
 
-  it('Resolve nightwatch config test', () => {
-    let isTravisMethodStub = sinon.stub(environmentResolver, 'isTravisEnvironment').returns(false);
-    expect(environmentResolver.resolveNightWatchConfig()).to.equal('nightwatch.config.default');
+  describe('isTravisEnvironment()', () => {
+    afterEach(() => {
+      delete process.env.TRAVIS;
+    });
 
-    isTravisMethodStub.returns(true);
-    expect(environmentResolver.resolveNightWatchConfig()).to.equal('nightwatch.config.travis');
+    it('Should be resolved as not travis environment', () => {
+      process.env.TRAVIS = false;
+      expect(resolver.isTravisEnvironment()).to.be.false;
+    });
 
-    isTravisMethodStub.restore();
-  });
-
-  it('Is travis environment method test', () => {
-    process.env.TRAVIS = false;
-    expect(environmentResolver.isTravisEnvironment()).to.be.false;
-
-    process.env.TRAVIS = true;
-    expect(environmentResolver.isTravisEnvironment()).to.be.true;
+    it('Should be resolved as travis environment', () => {
+      process.env.TRAVIS = true;
+      expect(resolver.isTravisEnvironment()).to.be.true;
+    });
   });
 });

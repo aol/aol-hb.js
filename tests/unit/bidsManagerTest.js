@@ -54,7 +54,7 @@ describe('BidsManager', () => {
       resolveHttpProtocolStub.restore();
     });
 
-    it('Should resolve bid request url', () => {
+    it('Should resolve bid request url without bid floor price', () => {
       let manager = getBidsManager();
       sinon.stub(manager, 'resolveHostName').returns('test.com');
       manager.bidRequestConfig.network = '5404.10';
@@ -99,78 +99,92 @@ describe('BidsManager', () => {
       expect(manager.resolveBidFloorPrice(0)).to.equal('');
     });
 
-    it('Should be formatter when floor price is defied', () => {
+    it('Should be formatted when floor price is defied', () => {
       let manager = getBidsManager();
 
       expect(manager.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');
     });
   });
 
-  it('Send bid requests method test', () => {
-    let manager = getBidsManager();
-    let sendGetRequestStub = sinon.stub(ajax, 'sendGetRequest');
-    let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl');
+  describe('sendBidRequests()', () => {
+    it('Should call sendBidRequest and formatUrl for each placement config', () => {
+      let manager = getBidsManager();
+      let sendGetRequestStub = sinon.stub(ajax, 'sendGetRequest');
+      let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl');
 
-    manager.placementsConfigs = [{}, {}, {}];
-    manager.sendBidRequests();
-    expect(sendGetRequestStub.callCount).to.equal(3, 'Three bid requests sent');
-    expect(formatUrlStub.callCount).to.equal(3, 'Bid request urls formatted three times bid');
+      manager.placementsConfigs = [{}, {}, {}];
+      manager.sendBidRequests();
+      expect(sendGetRequestStub.callCount).to.equal(3, 'Three bid requests sent');
+      expect(formatUrlStub.callCount).to.equal(3, 'Bid request urls formatted three times bid');
 
-    sendGetRequestStub.reset();
+      sendGetRequestStub.reset();
+    });
   });
 
-  it('Get bid data method test', () => {
-    let manager = getBidsManager();
-    let bidResponse = {};
-    expect(manager.getBidData(bidResponse)).to.be.undefined;
+  describe('getBidData()', () => {
+    it('Should return undefined when bid data is not presented', () => {
+      let manager = getBidsManager();
+      let bidResponse = {};
+      expect(manager.getBidData(bidResponse)).to.be.undefined;
 
-    bidResponse = {
-      seatbid: []
-    };
-    expect(manager.getBidData(bidResponse)).to.be.undefined;
+      bidResponse = {
+        seatbid: []
+      };
+      expect(manager.getBidData(bidResponse)).to.be.undefined;
 
-    bidResponse = {
-      seatbid: [
-        {}
-      ]
-    };
-    expect(manager.getBidData(bidResponse)).to.be.undefined;
+      bidResponse = {
+        seatbid: [
+          {}
+        ]
+      };
+      expect(manager.getBidData(bidResponse)).to.be.undefined;
 
-    bidResponse = {
-      seatbid: [
-        {
-          bid: []
-        }
-      ]
-    };
-    expect(manager.getBidData(bidResponse)).to.be.undefined;
+      bidResponse = {
+        seatbid: [
+          {
+            bid: []
+          }
+        ]
+      };
+      expect(manager.getBidData(bidResponse)).to.be.undefined;
+    });
 
-    bidResponse = {
-      seatbid: [
-        {
-          bid: ['test-object']
-        }
-      ]
-    };
-    expect(manager.getBidData(bidResponse)).to.equal('test-object');
+    it('Should return bid data when it is presented', () => {
+      let manager = getBidsManager();
+      let bidResponse = {
+        seatbid: [
+          {
+            bid: ['test-object']
+          }
+        ]
+      };
+
+      expect(manager.getBidData(bidResponse)).to.equal('test-object');
+    });
   });
 
-  it('Get Pixels method test', () => {
-    let manager = getBidsManager();
-    let bidResponse = {};
-    expect(manager.getPixels(bidResponse)).to.be.undefined;
+  describe('getPixels()', () => {
+    it('Should return empty when pixels are not presented', () => {
+      let manager = getBidsManager();
+      let bidResponse = {};
+      expect(manager.getPixels(bidResponse)).to.be.undefined;
 
-    bidResponse = {
-      ext: {}
-    };
-    expect(manager.getPixels(bidResponse)).to.be.undefined;
+      bidResponse = {
+        ext: {}
+      };
+      expect(manager.getPixels(bidResponse)).to.be.undefined;
+    });
 
-    bidResponse = {
-      ext: {
-        pixels: 'pixels-content'
-      }
-    };
-    expect(manager.getPixels(bidResponse)).to.equal(bidResponse.ext.pixels);
+    it('Should return pixels value when it is presented', () => {
+      let manager = getBidsManager();
+      let bidResponse = {
+        ext: {
+          pixels: 'pixels-content'
+        }
+      };
+
+      expect(manager.getPixels(bidResponse)).to.equal(bidResponse.ext.pixels);
+    });
   });
 
   describe('getCPM()', () => {
@@ -266,7 +280,7 @@ describe('BidsManager', () => {
   });
 
   describe('formatBidResponse()', () => {
-    it('Should be undefined when no bid data returned', () => {
+    it('Should be undefined when no bid data is returned', () => {
       let manager = getBidsManager();
       sinon.stub(manager, 'getBidData');
       sinon.stub(manager, 'getPixels');
