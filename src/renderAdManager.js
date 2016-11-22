@@ -11,6 +11,7 @@ export default class RenderAdManager {
     let iframe = this.createAdFrame();
 
     if (iframe) {
+      this.renderPixels();
       this.insertElement(iframe);
       this.populateIframeContent(iframe);
     }
@@ -34,11 +35,11 @@ export default class RenderAdManager {
     return iframe;
   }
 
-  insertElement(iframe) {
-    let element = this.document.getElementById(this.bidResponse.adContainerId);
+  insertElement(element) {
+    let adContainer = this.document.getElementById(this.bidResponse.adContainerId);
 
-    if (element) {
-      element.appendChild(iframe);
+    if (adContainer) {
+      adContainer.appendChild(element);
     }
   }
 
@@ -58,7 +59,9 @@ export default class RenderAdManager {
     }
   }
 
-  renderPixels(bidResponse) {
-    alert('1234' + bidResponse);
+  renderPixels() {
+    if (this.bidResponse && this.bidResponse.pixels && !this.bidResponse.pixelsRendered) {
+      this.insertElement(this.bidResponse.pixels);
+    }
   }
 }
