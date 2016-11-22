@@ -1,4 +1,4 @@
-import RenderAdManager from 'src/renderAdManager';
+import RenderingManager from 'src/renderingManager';
 
 describe('RenderAdManager', () => {
   let getSubject = (bidResponse) => {
@@ -7,7 +7,7 @@ describe('RenderAdManager', () => {
       getElementById: () => {}
     };
 
-    return new RenderAdManager(bidResponse || {}, document);
+    return new RenderingManager(bidResponse || {}, document);
   };
   let getIframe = () => {
     return {
