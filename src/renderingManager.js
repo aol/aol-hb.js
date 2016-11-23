@@ -1,8 +1,8 @@
 /***
  * The class contains logic for rendering ad(based on bid response config).
  */
-export default class RenderingManager {
-  constructor(bidResponse, document) {
+class RenderingManager {
+  constructor(bidResponse) {
     this.bidResponse = bidResponse;
     this.document = document;
   }
@@ -61,7 +61,66 @@ export default class RenderingManager {
 
   renderPixels() {
     if (this.bidResponse && this.bidResponse.pixels && !this.bidResponse.pixelsRendered) {
-      this.insertElement(this.bidResponse.pixels);
+      let pixelsElements = this.parsePixelsItems(this.bidResponse.pixels);
+
+      this.renderPixelsItems(pixelsElements);
     }
   }
+
+  parsePixelsItems(pixels) {
+    var itemsRegExp = /(img|iframe)[\s\S]*?src\s*=\s*("([^"]*)"|'([^"]*)')/gi;
+    let tagNameRegExp = /\w*(?=\s)/;
+    let srcRegExp = /src=(")(.+)"/;
+    let pixelsItems = [];
+
+    pixels.match(itemsRegExp).forEach((item) => {
+      let tagNameMatches = item.match(tagNameRegExp);
+      let sourcesPathMatches = item.match(srcRegExp);
+
+      if (tagNameMatches && sourcesPathMatches) {
+        pixelsItems.push({
+          tagName: tagNameMatches[0].toUpperCase(),
+          src: sourcesPathMatches[2]
+        });
+      }
+    });
+
+    return pixelsItems;
+  }
+
+  renderPixelsItems(pixelsItems) {
+    pixelsItems.forEach((item) => {
+      switch (item.tagName) {
+        case RenderingManager.PIXELS_ITEMS.img :
+          this.renderPixelsImage(item);
+          break;
+        case RenderingManager.PIXELS_ITEMS.iframe :
+          this.renderPixelsIframe(item);
+          break;
+      }
+    });
+  }
+
+  renderPixelsImage(item) {
+    let image = new Image();
+
+    image.src = item.src;
+  }
+
+  renderPixelsIframe(item) {
+    let iframe = document.createElement('iframe');
+
+    iframe.width = 1;
+    iframe.height = 1;
+    iframe.style = 'display: none';
+    iframe.src = item.src;
+    this.document.body.appendChild(iframe);
+  }
 }
+
+RenderingManager.PIXELS_ITEMS = {
+  iframe: 'IFRAME',
+  img: 'IMG'
+};
+
+export default RenderingManager;
