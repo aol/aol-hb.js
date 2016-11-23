@@ -40,14 +40,14 @@ describe('BidsManager', () => {
       expect(manager.resolveHostName()).to.equal('adserver.adtech.de');
     });
 
-    it('should return host name for Asis region', () => {
+    it('should return host name for Asia region', () => {
       let manager = getBidsManager();
 
       manager.bidRequestConfig.region = 'Asia';
       expect(manager.resolveHostName()).to.equal('adserver.adtechjp.com');
     });
 
-    it('should return host name for Asis region', () => {
+    it('should return host name for US region', () => {
       let manager = getBidsManager();
 
       manager.bidRequestConfig.region = 'US';
@@ -161,7 +161,7 @@ describe('BidsManager', () => {
       expect(manager.getBidData(bidResponse)).to.be.undefined;
     });
 
-    it('should return bid data when it presents', () => {
+    it('should return bid data when it is present', () => {
       let manager = getBidsManager();
       let bidResponse = {
         seatbid: [
@@ -185,7 +185,7 @@ describe('BidsManager', () => {
       expect(manager.getPixels(bidResponse)).to.be.undefined;
     });
 
-    it('should return pixels value when it presents', () => {
+    it('should return pixels value when it is present', () => {
       let manager = getBidsManager();
       let bidResponse = {
         ext: {
@@ -208,7 +208,7 @@ describe('BidsManager', () => {
       expect(manager.getCPM(bidData)).to.equal(bidData.price);
     });
 
-    it('should return encp when it presents', () => {
+    it('should return encp when it is present', () => {
       let manager = getBidsManager();
       let bidData = {
         ext: {

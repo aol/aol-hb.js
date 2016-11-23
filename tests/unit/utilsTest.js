@@ -8,7 +8,7 @@ describe('Utils helper tests', () => {
     });
 
     it('should return default protocol for null param', () => {
-      expect(utils.resolveHttpProtocol()).to.equal('http');
+      expect(utils.resolveHttpProtocol(null)).to.equal('http');
     });
 
     it('should return default protocol for not-existing document protocol param', () => {
