@@ -13,7 +13,7 @@ describe('RenderAdManager', () => {
   };
 
   describe('createAdFrame()', () => {
-    it('should return iframe elements with settings', () => {
+    it('should return iframe element with settings', () => {
       let subject = getSubject({
         adContainerId: 'ad-container-id',
         width: 'value-width',
@@ -53,12 +53,12 @@ describe('RenderAdManager', () => {
       getElementByIdStub.reset();
     });
 
-    it('should not insert element in container if it is not found', () => {
+    it('should not insert element in the container if it is not found', () => {
       renderingManager.insertElementInAdContainer('element-for-insert');
       expect(getElementByIdStub.calledOnce).to.be.true;
     });
 
-    it('should not insert element in container if it is not found', () => {
+    it('should insert element in the container if it is found', () => {
       let element = {
         appendChild: () => {}
       };
