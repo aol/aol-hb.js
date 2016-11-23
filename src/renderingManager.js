@@ -12,7 +12,7 @@ class RenderingManager {
 
     if (iframe) {
       this.renderPixels();
-      this.insertElement(iframe);
+      this.insertElementInAdContainer(iframe);
       this.populateIframeContent(iframe);
     }
   }
@@ -35,7 +35,7 @@ class RenderingManager {
     return iframe;
   }
 
-  insertElement(element) {
+  insertElementInAdContainer(element) {
     let adContainer = this.document.getElementById(this.bidResponse.adContainerId);
 
     if (adContainer) {
@@ -73,17 +73,19 @@ class RenderingManager {
     let srcRegExp = /src=(")(.+)"/;
     let pixelsItems = [];
 
-    pixels.match(itemsRegExp).forEach((item) => {
-      let tagNameMatches = item.match(tagNameRegExp);
-      let sourcesPathMatches = item.match(srcRegExp);
+    if (pixels) {
+      pixels.match(itemsRegExp).forEach((item) => {
+        let tagNameMatches = item.match(tagNameRegExp);
+        let sourcesPathMatches = item.match(srcRegExp);
 
-      if (tagNameMatches && sourcesPathMatches) {
-        pixelsItems.push({
-          tagName: tagNameMatches[0].toUpperCase(),
-          src: sourcesPathMatches[2]
-        });
-      }
-    });
+        if (tagNameMatches && sourcesPathMatches) {
+          pixelsItems.push({
+            tagName: tagNameMatches[0].toUpperCase(),
+            src: sourcesPathMatches[2]
+          });
+        }
+      });
+    }
 
     return pixelsItems;
   }
