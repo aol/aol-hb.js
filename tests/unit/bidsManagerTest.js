@@ -119,17 +119,25 @@ describe('BidsManager', () => {
   });
 
   describe('sendBidRequests()', () => {
+    let sendGetRequestStub;
+
+    beforeEach(() => {
+      sendGetRequestStub = sinon.stub(ajax, 'sendGetRequest');
+    });
+
+    afterEach(() => {
+      sendGetRequestStub.reset();
+    });
+
     it('should call sendBidRequest and formatUrl for each placement config', () => {
       let manager = getBidsManager();
-      let sendGetRequestStub = sinon.stub(ajax, 'sendGetRequest');
+
       let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl');
 
       manager.placementsConfigs = [{}, {}, {}];
       manager.sendBidRequests();
       expect(sendGetRequestStub.callCount).to.equal(3, 'Three bid requests sent');
       expect(formatUrlStub.callCount).to.equal(3, 'Bid request urls formatted three times bid');
-
-      sendGetRequestStub.reset();
     });
   });
 
