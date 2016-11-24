@@ -420,4 +420,38 @@ describe('BidsManager', () => {
       expect(onAllBidResponsesSpy.calledOnce).to.be.true;
     });
   });
+
+  describe('isUserSyncOnBidResponseMode()', () => {
+    it('should be true when userSyncOn is undefined', () => {
+      let manager = getBidsManager({
+        userSyncOn: undefined
+      });
+
+      expect(manager.isUserSyncOnBidResponseMode()).to.be.true;
+    });
+
+    it('should be true when userSyncOn is null', () => {
+      let manager = getBidsManager({
+        userSyncOn: undefined
+      });
+
+      expect(manager.isUserSyncOnBidResponseMode()).to.be.true;
+    });
+
+    it('should be true when userSyncOn is bidResponse', () => {
+      let manager = getBidsManager({
+        userSyncOn: BidsManager.HEADER_BIDDING_EVENTS.bidResponse
+      });
+
+      expect(manager.isUserSyncOnBidResponseMode()).to.be.true;
+    });
+
+    it('should be false when userSyncOn is adRender', () => {
+      let manager = getBidsManager({
+        userSyncOn: BidsManager.HEADER_BIDDING_EVENTS.adRender
+      });
+
+      expect(manager.isUserSyncOnBidResponseMode()).to.be.false;
+    });
+  });
 });

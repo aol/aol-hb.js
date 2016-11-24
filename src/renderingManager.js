@@ -68,7 +68,7 @@ class RenderingManager {
   }
 
   parsePixelsItems(pixels) {
-    var itemsRegExp = /(img|iframe)[\s\S]*?src\s*=\s*("([^"]*)"|'([^"]*)')/gi;
+    let itemsRegExp = /(img|iframe)[\s\S]*?src\s*=\s*("([^"]*)"|'([^"]*)')/gi;
     let tagNameRegExp = /\w*(?=\s)/;
     let srcRegExp = /src=(")(.+)"/;
     let pixelsItems = [];
@@ -103,19 +103,19 @@ class RenderingManager {
     });
   }
 
-  renderPixelsImage(item) {
+  renderPixelsImage(pixelsItem) {
     let image = new Image();
 
-    image.src = item.src;
+    image.src = pixelsItem.src;
   }
 
-  renderPixelsIframe(item) {
-    let iframe = document.createElement('iframe');
+  renderPixelsIframe(pixelsItem) {
+    let iframe = this.document.createElement('iframe');
 
     iframe.width = 1;
     iframe.height = 1;
     iframe.style = 'display: none';
-    iframe.src = item.src;
+    iframe.src = pixelsItem.src;
     this.document.body.appendChild(iframe);
   }
 }

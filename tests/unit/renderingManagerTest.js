@@ -4,7 +4,10 @@ describe('RenderAdManager', () => {
   let getSubject = (bidResponse) => {
     let document = {
       createElement: () => {},
-      getElementById: () => {}
+      getElementById: () => {},
+      body: {
+        appendChild: () => {}
+      }
     };
     let renderingManager = new RenderingManager(bidResponse || {});
     renderingManager.document = document;
@@ -154,6 +157,73 @@ describe('RenderAdManager', () => {
         {tagName: 'IFRAME', src: 'url2.com'},
         {tagName: 'IMG', src: 'url3.com'}
       ]);
+    });
+  });
+
+  describe('renderPixels()', () => {
+    let renderingManager;
+    let parsePixelsItemsStub;
+    let renderPixelsItemsStub;
+
+    beforeEach(() => {
+      renderingManager = getSubject();
+
+      parsePixelsItemsStub = sinon.stub(renderingManager, 'parsePixelsItems');
+      renderPixelsItemsStub = sinon.stub(renderingManager, 'renderPixelsItems');
+    });
+
+    it('should not call pixels rendering when pixels are undefined', () => {
+      renderingManager.bidResponse = {};
+
+      renderingManager.renderPixels();
+      expect(parsePixelsItemsStub.called).to.be.false;
+      expect(renderPixelsItemsStub.called).to.be.false;
+    });
+
+    it('should not call pixels rendering when pixels are already rendered', () => {
+      renderingManager.bidResponse = {
+        pixels: {},
+        pixelsRendered: true
+      };
+
+      renderingManager.renderPixels();
+      expect(parsePixelsItemsStub.called).to.be.false;
+      expect(renderPixelsItemsStub.called).to.be.false;
+    });
+
+    it('should call pixels rendering when pixels are not rendered yet', () => {
+      renderingManager.bidResponse = {
+        pixels: 'pixels-content'
+      };
+      renderingManager.pixelsRendered = false;
+      parsePixelsItemsStub.returns('pixels-elements');
+
+      renderingManager.renderPixels();
+      expect(parsePixelsItemsStub.withArgs('pixels-content').calledOnce).to.be.true;
+      expect(renderPixelsItemsStub.withArgs('pixels-elements').calledOnce).to.be.true;
+    });
+  });
+
+  describe('renderPixelsIframe()', () => {
+    it('should create iframe and render if for pixels item', () => {
+      let renderingManager = getSubject();
+      let createElementStub = sinon.stub(renderingManager.document, 'createElement').returns({
+        name: 'iframe-object'
+      });
+      let appendChildStub = sinon.stub(renderingManager.document.body, 'appendChild');
+      let expectedIframe = {
+        name: 'iframe-object',
+        width: 1,
+        height: 1,
+        style: 'display: none',
+        src: 'src-url'
+      };
+
+      renderingManager.renderPixelsIframe({
+        src: 'src-url'
+      });
+      expect(createElementStub.withArgs('iframe').calledOnce).to.be.true;
+      expect(appendChildStub.withArgs(expectedIframe).calledOnce).to.be.true;
     });
   });
 });
