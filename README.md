@@ -15,7 +15,7 @@
 ## Install
 
     $ clone the repository
-    $ cd pub-api
+    $ cd aol-hb.js
     $ npm install
     
 <a name="Build"></a>
