@@ -13,6 +13,8 @@ export function sendRequest(url, method, successCallback) {
     }
   };
 
+  xhr.withCredentials = true;
+
   xhr.open(method, url);
   xhr.onreadystatechange = responseHandler;
   xhr.send();
