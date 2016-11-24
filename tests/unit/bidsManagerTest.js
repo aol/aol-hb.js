@@ -220,20 +220,6 @@ describe('BidsManager', () => {
     });
   });
 
-  describe('formatAd()', () => {
-    it('should format ad without pixels', () => {
-      let manager = getBidsManager();
-
-      expect(manager.formatAd('ad-content', null)).to.equal('ad-content');
-    });
-
-    it('should format ad with pixels', () => {
-      let manager = getBidsManager();
-
-      expect(manager.formatAd('ad-content', '/pixes-content')).to.equal('ad-content/pixes-content');
-    });
-  });
-
   describe('handleBidRequestResponse()', () => {
     let jsonParseStub = null;
     before(()=> {
@@ -301,21 +287,22 @@ describe('BidsManager', () => {
       let bidResponse = {
         w: 'ad-width',
         h: 'ad-height',
-        crid: 'creative-id'
+        crid: 'creative-id',
+        adm: 'bid-response-ad'
       };
       let placementConfig = {
         adContainerId: 'ad-container-id',
         alias: 'placement-alias'
       };
-      sinon.stub(manager, 'getPixels');
+      sinon.stub(manager, 'getPixels').returns('get-pixels-result');
       sinon.stub(manager, 'getCPM').returns('cpm-stubbed');
-      sinon.stub(manager, 'formatAd').returns('ad-formatted');
       sinon.stub(manager, 'getBidData').withArgs(bidResponse).returns(bidResponse);
 
       let formattedBidResponse = manager.formatBidResponse(bidResponse, placementConfig);
       expect(formattedBidResponse).to.deep.equal({
         cpm: 'cpm-stubbed',
-        ad: 'ad-formatted',
+        ad: 'bid-response-ad',
+        pixels: 'get-pixels-result',
         adContainerId: 'ad-container-id',
         width: 'ad-width',
         height: 'ad-height',
@@ -431,6 +418,40 @@ describe('BidsManager', () => {
       manager.checkBidResponsesState();
 
       expect(onAllBidResponsesSpy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('isUserSyncOnBidResponseMode()', () => {
+    it('should be true when userSyncOn is undefined', () => {
+      let manager = getBidsManager({
+        userSyncOn: undefined
+      });
+
+      expect(manager.isUserSyncOnBidResponseMode()).to.be.true;
+    });
+
+    it('should be true when userSyncOn is null', () => {
+      let manager = getBidsManager({
+        userSyncOn: undefined
+      });
+
+      expect(manager.isUserSyncOnBidResponseMode()).to.be.true;
+    });
+
+    it('should be true when userSyncOn is bidResponse', () => {
+      let manager = getBidsManager({
+        userSyncOn: BidsManager.HEADER_BIDDING_EVENTS.bidResponse
+      });
+
+      expect(manager.isUserSyncOnBidResponseMode()).to.be.true;
+    });
+
+    it('should be false when userSyncOn is adRender', () => {
+      let manager = getBidsManager({
+        userSyncOn: BidsManager.HEADER_BIDDING_EVENTS.adRender
+      });
+
+      expect(manager.isUserSyncOnBidResponseMode()).to.be.false;
     });
   });
 });
