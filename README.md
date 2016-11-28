@@ -17,11 +17,17 @@ To build the project type in the terminal:
     
       $ gulp build
          
-build results will be placed in /build directory
+build results will be placed in /build directory. It contains:
+- aol-hb.js - source file
+- aol-hb.min.js - minified source file.
 
-## Examples
+## Installation
 
-Library initialization example:
+- load source file
+- define bid request configuration and an array of placement configurations
+- pass defined objects in the method aolhb.init
+
+Example:
 
 ```html
 <script src="aol-hb.min.js"></script>
@@ -38,7 +44,7 @@ Library initialization example:
     onAllBidResponses: function () {
       console.log('onAllBidResponses handler');
     },
-    userSyncOn: 'bidResponse'
+    userSyncOn: 'adRender'
   };
 
   var placementsConfigs = [{
@@ -55,6 +61,38 @@ Library initialization example:
   window.aolhb.init(bidRequestConfig, placementsConfigs);
 </script>
 ```       
+
+
+## API description
+
+### Bid request configuration options
+
+- `region`  
+  *Optional* String (defaults to `US`). The region for resolving host server.  
+  Supported values: `US`, `EU`, `Asia`
+  
+- `onBidResponse`  
+  *Optional*. Function. Сalls for each bid response.
+  
+- `onAllBidResponses`  
+  *Optional*. Function. Сalls when we've got responses for each bid request.
+  
+- `bidderKey`  
+  *Optional*. String (defaults to `aolbid`). Bidder key. 
+  
+- `aliasKey`  
+  *Optional*. String (defaults to `mpalias`). Alias key.
+  
+- `userSyncOn`  
+  *Optional*. String (defaults to `bidResponse`).  
+  Supported values: `bidResponse`, `adRender` 
+    
+- `network`  
+  **Required** Network identifier.
+  Format: 'networkId.subNetworkId'  
+  Sub network part can be missed  
+  Examples: `9544.99`, `9568`
+  
 
 ## Run unit tests
 
