@@ -23,9 +23,9 @@ build results will be placed in /build directory. It contains:
 
 ## Installation
 
-- load source file
-- define bid request configuration and an array of placement configurations
-- pass defined objects in the method aolhb.init
+- Load source file
+- Define bid request configuration and an array of placement configurations
+- Pass defined objects in the method aolhb.init
 
 Example:
 
@@ -35,16 +35,17 @@ Example:
   var bidRequestConfig = {
     region: 'US',
     network: '9599.1',
+    bidderKey: 'aolbid',
+    aliasKey: 'mpalias',
+    userSyncOn: 'adRender',
     onBidResponse: function(response) {
       console.log('CPM: ' + response.cpm);
       console.log('Ad code: ' + response.ad);
+      console.log('Alias: '+ response.alias);
     },
-    bidderKey: 'aolbid',
-    aliasKey: 'mpalias',
     onAllBidResponses: function () {
       console.log('onAllBidResponses handler');
-    },
-    userSyncOn: 'adRender'
+    }
   };
 
   var placementsConfigs = [{
