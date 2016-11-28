@@ -88,12 +88,25 @@ Example:
   Supported values: `bidResponse`, `adRender` 
     
 - `network`  
-  **Required** Network identifier.
+  **Required** String. Network identifier.
   Format: 'networkId.subNetworkId'  
   Sub network part can be missed  
   Examples: `9544.99`, `9568`
   
+### Placement configuration options
 
+- `bidfloor`  
+  *Optional* String. Floor proice for the placement. 
+
+- `placement`  
+  **Required** String. Placement identifier.
+
+- `alias`  
+  **Required** String. Placement alias.
+  
+- `adContainerId`  
+  **Required** String. Id of element in the DOM where an ad will be rendered.
+  
 ## Run unit tests
 
 To run unit tests type in the terminal:
