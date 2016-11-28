@@ -6,13 +6,13 @@ import RenderingManager from 'renderingManager';
  * The class contains logic for processing bid
  * requests and handling bid responses.
  */
-class BidsManager {
+class BidManager {
   constructor(bidRequestConfig, placementsConfigs) {
     this.bidRequestConfig = bidRequestConfig;
     this.placementsConfigs = placementsConfigs;
     this.bidderKey = bidRequestConfig.bidderKey || 'aolbid';
     this.aliasKey = bidRequestConfig.aliasKey || 'mpalias';
-    this.userSyncOn = bidRequestConfig.userSyncOn || BidsManager.HEADER_BIDDING_EVENTS.bidResponse;
+    this.userSyncOn = bidRequestConfig.userSyncOn || BidManager.HEADER_BIDDING_EVENTS.bidResponse;
     this.bidResponses = [];
   }
 
@@ -87,7 +87,7 @@ class BidsManager {
   }
 
   resolveHostName() {
-    return BidsManager.SERVER_MAP[this.bidRequestConfig.region] || BidsManager.SERVER_MAP.US;
+    return BidManager.SERVER_MAP[this.bidRequestConfig.region] || BidManager.SERVER_MAP.US;
   }
 
   getBidData(bidResponse) {
@@ -166,7 +166,7 @@ class BidsManager {
   }
 
   isUserSyncOnBidResponseMode() {
-    return this.userSyncOn === BidsManager.HEADER_BIDDING_EVENTS.bidResponse;
+    return this.userSyncOn === BidManager.HEADER_BIDDING_EVENTS.bidResponse;
   }
 
   renderPixels(bidResponse) {
@@ -180,15 +180,15 @@ class BidsManager {
   }
 }
 
-BidsManager.SERVER_MAP = {
+BidManager.SERVER_MAP = {
   EU: 'adserver.adtech.de',
   US: 'adserver.adtechus.com',
   Asia: 'adserver.adtechjp.com'
 };
 
-BidsManager.HEADER_BIDDING_EVENTS = {
+BidManager.HEADER_BIDDING_EVENTS = {
   bidResponse: 'bidResponse',
   adRender: 'adRender'
 };
 
-export default BidsManager;
+export default BidManager;
