@@ -17,8 +17,45 @@ To build the project type in the terminal:
     
       $ gulp build
          
-After that build results will be placed in /build directory
-        
+build results will be placed in /build directory
+
+## Examples
+
+Library initialization example:
+
+```html
+<script src="aol-hb.min.js"></script>
+<script>
+  var bidRequestConfig = {
+    region: 'US',
+    network: '9599.1',
+    onBidResponse: function(response) {
+      console.log('CPM: ' + response.cpm);
+      console.log('Ad code: ' + response.ad);
+    },
+    bidderKey: 'aolbid',
+    aliasKey: 'mpalias',
+    onAllBidResponses: function () {
+      console.log('onAllBidResponses handler');
+    },
+    userSyncOn: 'bidResponse'
+  };
+
+  var placementsConfigs = [{
+    placement: 3675022,
+    alias: '728x90atf',
+    adContainerId: 'div-gpt-ad-1438955597722-1',
+    bidfloor: '0.1'
+  }, {
+    placement: 3675026,
+    alias: '300x250atf',
+    adContainerId: 'div-gpt-ad-1438955597722-0',
+  }];
+
+  window.aolhb.init(bidRequestConfig, placementsConfigs);
+</script>
+```       
+
 ## Run unit tests
 
 To run unit tests type in the terminal:
