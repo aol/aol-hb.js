@@ -1,24 +1,18 @@
-[![Build Status](https://travis-ci.org/vzhukovsky/pub-api.svg?branch=master)](https://travis-ci.org/vzhukovsky/pub-api)
-
-
 # AOL Header Bidding API
 
+![](https://dl.dropboxusercontent.com/u/71280/AOLBlueMonster.png "Blue Monster")
 
-**Table of Contents**
+[![Build Status](https://travis-ci.org/vzhukovsky/pub-api.svg?branch=master)](https://travis-ci.org/vzhukovsky/pub-api)
 
-- [Install](#Install)
-- [Build](#Build)
-- [Run unit tests](#RunUnitTests)
-- [Run e2e tests](#RunE2eTests)
+## Description
+  An open source library for publishers and third party container solution providers to integrate with AOL's demand side platform for header bidding.
 
-<a name="Install"></a>
 ## Install
 
     $ clone the repository
     $ cd aol-hb.js
     $ npm install
     
-<a name="Build"></a>
 ## Build
 
 To build the project type in the terminal:
@@ -26,15 +20,13 @@ To build the project type in the terminal:
       $ gulp build
          
 After that build results will be placed in /build directory
-    
-<a name="RunUnitTests"></a>    
+        
 ## Run unit tests
 
 To run unit tests type in the terminal:
     
       $ gulp test-unit
-            
-<a name="RunE2eTests"></a>    
+               
 ## Run e2e tests
 
 Preconditions: 
