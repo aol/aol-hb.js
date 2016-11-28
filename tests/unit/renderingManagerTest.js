@@ -34,7 +34,7 @@ describe('RenderAdManager', () => {
       expect(setAttributeStub.withArgs('allowFullScreen', 'true').calledOnce).to.be.true;
       expect(setAttributeStub.withArgs('mozallowFullScreen', 'true').calledOnce).to.be.true;
       expect(setAttributeStub.withArgs('webkitAllowFullScreen', 'true').calledOnce).to.be.true;
-      expect(iframeElement.id).to.equal('adtpub-frame-ad-container-id');
+      expect(iframeElement.id).to.equal('aol-pub-frame-ad-container-id');
       expect(iframeElement.width).to.equal('value-width');
       expect(iframeElement.height).to.equal('value-height');
     });

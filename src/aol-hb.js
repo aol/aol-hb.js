@@ -1,11 +1,11 @@
 import 'helpers/polyfills';
-import BidsManager from 'bidsManager';
+import BidManager from 'bidManager';
 import RenderingManager from 'renderingManager';
 
 let globalContext = window.aolhb = {};
 
 globalContext.init = (bidRequestConfig, placementsConfigs) => {
-  let manager = new BidsManager(bidRequestConfig, placementsConfigs);
+  let manager = new BidManager(bidRequestConfig, placementsConfigs);
   manager.sendBidRequests();
 
   globalContext.renderAd = (alias) => {

@@ -20,7 +20,7 @@ class RenderingManager {
   createAdFrame() {
     let iframe = this.document.createElement('iframe');
 
-    iframe.id = 'adtpub-frame-' + this.bidResponse.adContainerId;
+    iframe.id = 'aol-pub-frame-' + this.bidResponse.adContainerId;
     iframe.name = iframe.id;
     iframe.style.border = '0px';
     iframe.scrolling = 'no';

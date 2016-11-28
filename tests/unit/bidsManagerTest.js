@@ -1,22 +1,22 @@
-import BidsManager from 'src/bidsManager';
+import BidManager from 'src/bidManager';
 import utils from 'src/helpers/utils';
 import * as ajax from 'src/helpers/ajax';
 
-describe('BidsManager', () => {
-  let getBidsManager = (bidRequestConfig) => {
-    return new BidsManager(bidRequestConfig || {}, []);
+describe('BidManager', () => {
+  let getBidManager = (bidRequestConfig) => {
+    return new BidManager(bidRequestConfig || {}, []);
   };
 
   describe('constructor()', () => {
     it('should set default values for bidderKey and aliasKey', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       expect(manager.bidderKey).to.equal('aolbid');
       expect(manager.aliasKey).to.equal('mpalias');
     });
 
     it('should override bidderKey and aliasKey by values from placementConfig', () => {
-      let manager = getBidsManager({
+      let manager = getBidManager({
         bidderKey: 'overridden-bidder-key',
         aliasKey: 'overridden-alias-key'
       });
@@ -28,27 +28,27 @@ describe('BidsManager', () => {
 
   describe('resolveHostName()', () => {
     it('should return default host name for undefined param', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
     });
 
     it('should return host name for EU region', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       manager.bidRequestConfig.region = 'EU';
       expect(manager.resolveHostName()).to.equal('adserver.adtech.de');
     });
 
     it('should return host name for Asia region', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       manager.bidRequestConfig.region = 'Asia';
       expect(manager.resolveHostName()).to.equal('adserver.adtechjp.com');
     });
 
     it('should return host name for US region', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       manager.bidRequestConfig.region = 'US';
       expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
@@ -67,7 +67,7 @@ describe('BidsManager', () => {
     });
 
     it('should resolve bid request url without bid floor price', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       sinon.stub(manager, 'resolveHostName').returns('test.com');
       manager.bidRequestConfig.network = '5404.10';
       let bidRequestUrl = manager.formatBidRequestUrl({
@@ -82,7 +82,7 @@ describe('BidsManager', () => {
     });
 
     it('should resolve bid request url with specified bidFloorPrice', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       sinon.stub(manager, 'resolveHostName').returns('test2.com');
       sinon.stub(manager, 'resolveBidFloorPrice').returns('bid-floor-price');
       manager.bidRequestConfig.network = '5404.10';
@@ -100,19 +100,19 @@ describe('BidsManager', () => {
 
   describe('resolveBidFloorPrice()', () => {
     it('should be empty string when floor price is not defined', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       expect(manager.resolveBidFloorPrice()).to.equal('');
     });
 
     it('should be empty string when floor price equals to 0', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       expect(manager.resolveBidFloorPrice(0)).to.equal('');
     });
 
     it('should be formatted when floor price is defied', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       expect(manager.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');
     });
@@ -130,7 +130,7 @@ describe('BidsManager', () => {
     });
 
     it('should call sendBidRequest and formatUrl for each placement config', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl');
 
@@ -143,13 +143,13 @@ describe('BidsManager', () => {
 
   describe('getBidData()', () => {
     it('should return undefined when bid response is undefined', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
 
       expect(manager.getBidData(undefined)).to.be.undefined;
     });
 
     it('should return undefined when bid data is empty array', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidResponse = {
         seatbid: [
           {
@@ -162,7 +162,7 @@ describe('BidsManager', () => {
     });
 
     it('should return bid data when it is present', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidResponse = {
         seatbid: [
           {
@@ -177,7 +177,7 @@ describe('BidsManager', () => {
 
   describe('getPixels()', () => {
     it('should return undefined when pixels are undefined', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidResponse = {
         ext: {}
       };
@@ -186,7 +186,7 @@ describe('BidsManager', () => {
     });
 
     it('should return pixels value when it is present', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidResponse = {
         ext: {
           pixels: 'pixels-content'
@@ -199,7 +199,7 @@ describe('BidsManager', () => {
 
   describe('getCPM()', () => {
     it('should return price when encp is undefined', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidData = {
         price: 5,
         ext: {}
@@ -209,7 +209,7 @@ describe('BidsManager', () => {
     });
 
     it('should return encp when it is present', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidData = {
         ext: {
           encp: 10
@@ -231,7 +231,7 @@ describe('BidsManager', () => {
     });
 
     it('should not call externalBidRequestHandler when cannot create bid response', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidResponseHandlerSpy = sinon.spy();
       let createBidResponseStub = sinon.stub(manager, 'createBidResponse').returns(false);
       manager.bidRequestConfig.onBidResponse = bidResponseHandlerSpy;
@@ -242,7 +242,7 @@ describe('BidsManager', () => {
     });
 
     it('should call externalBidRequestHandler when it is specified', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidResponseHandlerSpy = sinon.spy();
       let createBidResponseStub = sinon.stub(manager, 'createBidResponse').returns(true);
       manager.bidRequestConfig.onBidResponse = bidResponseHandlerSpy;
@@ -255,13 +255,13 @@ describe('BidsManager', () => {
 
   describe('createBidResponse()', () => {
     it('should be undefined when cannot format bid response', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       sinon.stub(manager, 'formatBidResponse').returns(false);
       expect(manager.createBidResponse()).to.be.undefined;
     });
 
     it('should add new bid response and return added item', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       sinon.stub(manager, 'formatBidResponse').returns({
         bidResponseProperty: 'some-value'
       });
@@ -275,7 +275,7 @@ describe('BidsManager', () => {
 
   describe('formatBidResponse()', () => {
     it('should be undefined when no bid data is returned', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       sinon.stub(manager, 'getBidData');
       sinon.stub(manager, 'getPixels');
 
@@ -283,7 +283,7 @@ describe('BidsManager', () => {
     });
 
     it('should return formatted bid response object', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       let bidResponse = {
         w: 'ad-width',
         h: 'ad-height',
@@ -318,7 +318,7 @@ describe('BidsManager', () => {
     let manager = null;
 
     beforeEach(() => {
-      manager = getBidsManager();
+      manager = getBidManager();
       manager.bidResponses = [
         {alias: 'alias1', name: 'name1'},
         {alias: 'alias2', name: 'name2'},
@@ -346,7 +346,7 @@ describe('BidsManager', () => {
 
   describe('addNewBidResponse()', () => {
     it('should add new bid response in the array ', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       sinon.stub(manager, 'getBidResponseByAlias').returns(false);
 
       manager.addNewBidResponse('bidResponseObject');
@@ -355,7 +355,7 @@ describe('BidsManager', () => {
     });
 
     it('should replace existing bid response object in the array ', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       sinon.stub(manager, 'getBidResponseByAlias').returns('existingBidResponse');
       manager.bidResponses = ['existingBidResponse'];
 
@@ -369,7 +369,7 @@ describe('BidsManager', () => {
     let manager = null;
 
     beforeEach(() => {
-      manager = getBidsManager();
+      manager = getBidManager();
       manager.placementsConfigs = [
         {alias: 'alias1', name: 'name1'},
         {alias: 'alias2', name: 'name2'},
@@ -397,7 +397,7 @@ describe('BidsManager', () => {
 
   describe('checkBidResponsesState()', () => {
     it('should not call onAllBidResponse handler when no responses are returned', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       manager.placementsConfigs = [1, 2, 3];
       manager.bidResponses = [1, 2, 3, 4];
       let onAllBidResponsesSpy = sinon.spy();
@@ -409,7 +409,7 @@ describe('BidsManager', () => {
     });
 
     it('should call onAllBidResponse handler when all responses are returned', () => {
-      let manager = getBidsManager();
+      let manager = getBidManager();
       manager.placementsConfigs = [1, 2, 3];
       manager.bidResponses = [1, 2, 3];
       let onAllBidResponsesSpy = sinon.spy();
@@ -423,7 +423,7 @@ describe('BidsManager', () => {
 
   describe('isUserSyncOnBidResponseMode()', () => {
     it('should be true when userSyncOn is undefined', () => {
-      let manager = getBidsManager({
+      let manager = getBidManager({
         userSyncOn: undefined
       });
 
@@ -431,7 +431,7 @@ describe('BidsManager', () => {
     });
 
     it('should be true when userSyncOn is null', () => {
-      let manager = getBidsManager({
+      let manager = getBidManager({
         userSyncOn: undefined
       });
 
@@ -439,16 +439,16 @@ describe('BidsManager', () => {
     });
 
     it('should be true when userSyncOn is bidResponse', () => {
-      let manager = getBidsManager({
-        userSyncOn: BidsManager.HEADER_BIDDING_EVENTS.bidResponse
+      let manager = getBidManager({
+        userSyncOn: BidManager.HEADER_BIDDING_EVENTS.bidResponse
       });
 
       expect(manager.isUserSyncOnBidResponseMode()).to.be.true;
     });
 
     it('should be false when userSyncOn is adRender', () => {
-      let manager = getBidsManager({
-        userSyncOn: BidsManager.HEADER_BIDDING_EVENTS.adRender
+      let manager = getBidManager({
+        userSyncOn: BidManager.HEADER_BIDDING_EVENTS.adRender
       });
 
       expect(manager.isUserSyncOnBidResponseMode()).to.be.false;
