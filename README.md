@@ -7,9 +7,9 @@
 
 ## Install
 
-    $ git clone git@github.com:aol/aol-hb.js.git
-    $ cd aol-hb.js
-    $ npm install
+      $ git clone git@github.com:aol/aol-hb.js.git
+      $ cd aol-hb.js
+      $ npm install
     
 ## Build
 
