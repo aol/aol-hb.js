@@ -11,8 +11,8 @@ describe('Utils helper tests', () => {
       expect(utils.resolveHttpProtocol(null)).to.equal('http');
     });
 
-    it('should return default protocol for not-existing document protocol param', () => {
-      expect(utils.resolveHttpProtocol('http')).to.equal('http');
+    it('should return default protocol for invalid document protocol param', () => {
+      expect(utils.resolveHttpProtocol('invalid-protocol-name')).to.equal('http');
     });
 
     it('should return protocol for existing document protocol param', () => {

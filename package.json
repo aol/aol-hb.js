@@ -1,7 +1,7 @@
 {
   "name": "aol-hb.js",
   "version": "1.0.0",
-  "description": "",
+  "description": "Header bidding library for AOL's demand side platform.",
   "main": "src/aol-hb.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
