@@ -1,15 +1,13 @@
-# AOL Header Bidding API
+# AOL Header Bidding JavaScript API
 
 ![](https://dl.dropboxusercontent.com/u/71280/AOLBlueMonster.png "Blue Monster")
-
-[![Build Status](https://travis-ci.org/vzhukovsky/pub-api.svg?branch=master)](https://travis-ci.org/vzhukovsky/pub-api)
 
 ## Description
   An open source library for publishers and third party container solution providers to integrate with AOL's demand side platform for header bidding.
 
 ## Install
 
-    $ clone the repository
+    $ git clone git@github.com:aol/aol-hb.js.git
     $ cd aol-hb.js
     $ npm install
     
