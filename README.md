@@ -23,9 +23,9 @@ build results will be placed in /build directory. It contains:
 
 ## Installation
 
-- Load source file
-- Define bid request configuration and an array of placement configurations
-- Pass defined objects in the method aolhb.init
+- Load source file.
+- Define bid request configuration and an array of placement configurations.
+- Pass defined objects in the method aolhb.init.
 
 Example:
 
@@ -43,8 +43,8 @@ Example:
       console.log('Ad code: ' + response.ad);
       console.log('Alias: '+ response.alias);
     },
-    onAllBidResponses: function () {
-      console.log('onAllBidResponses handler');
+    onAllBidResponses: function (bidResponses) {
+      console.log('Bid responses array: ', bidResponses);
     }
   };
 
@@ -65,6 +65,20 @@ Example:
 
 
 ## API description
+
+### Methods
+
+- `aolhb.init()`  
+   Library initialization method. It sends bid request for each placement based on configs passed as params.  
+   Params: `bidRequestConfig`, `placementsConfigs`
+
+- `aolhb.refreshAd()`  
+   Resend bid request for particular placement by its alias.  
+   Params: `placementAlias`
+
+- `aolhb.renderAd()`  
+   Render an ad by placement alias.  
+   Params: `placementAlias`
 
 ### Bid request configuration options
 
@@ -110,7 +124,7 @@ Example:
   
 ## Run unit tests
 
-To run unit tests type in the terminal:
+For running unit tests type in the terminal:
     
       $ gulp test-unit
                
@@ -119,6 +133,10 @@ To run unit tests type in the terminal:
 Preconditions: 
 - Selenium server with chrome driver should be started
 
-To run e2e tests type in the terminal:
+For running e2e tests type in the terminal:
     
       $ gulp test-e2e
+
+For opening e2e test pages in browsers type in the terminal:
+
+      $ gulp test-e2e-manual        
