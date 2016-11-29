@@ -115,13 +115,13 @@
     var bidRequestConfig = {
       region: 'US',
       network: '9599.1',
-      onBidResponse: bidResponseHandler,
       bidderKey: 'aolbid',
       aliasKey: 'mpalias',
+      userSyncOn: 'bidResponse',
+      onBidResponse: bidResponseHandler,
       onAllBidResponses: function () {
         console.log('onAllBidResponses');
-      },
-      userSyncOn: 'bidResponse'
+      }
     };
 
     var placementsConfigs = [{

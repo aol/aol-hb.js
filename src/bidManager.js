@@ -78,7 +78,7 @@ class BidManager {
     let allBidResponsesHandler = this.bidRequestConfig.onAllBidResponses;
 
     if (allBidResponsesReturned && allBidResponsesHandler) {
-      allBidResponsesHandler();
+      allBidResponsesHandler(this.bidResponses);
     }
   }
 
