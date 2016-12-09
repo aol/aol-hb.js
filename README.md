@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/aol/aol-hb.js.svg?branch=master)](https://travis-ci.org/aol/aol-hb.js)
 
 ## Description
-  An open source library for publishers and third party container solution providers to integrate with AOL's demand side platform for header bidding.
+  An open source library for publishers and third party container solution providers to integrate with AOL's supply side platform for header bidding.
 
 ## Install
 
