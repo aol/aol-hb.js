@@ -15,6 +15,7 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai-sinon'],
 
     files: [
+      'src/helpers/polyfills.js',
       'tests/unit/*Test.js'
     ],
 
