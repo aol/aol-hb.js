@@ -4,7 +4,7 @@ const environmentResolver = require('./helpers/environmentConfigResolver');
 webpackConfig.module.postLoaders = [
   {
     test: /\.js$/,
-    exclude: /(node_modules)|(tests)|(build)/,
+    exclude: /(node_modules)|(tests)|(dist)/,
     loader: 'istanbul-instrumenter'
   }
 ];
