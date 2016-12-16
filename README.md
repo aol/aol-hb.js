@@ -19,7 +19,7 @@ An open source library for publishers and third party container solution provide
 ### Code Example
 
 ```html
-<script src="node_modules/aol-hb/build/aol-hb.min.js"></script>
+<script src="node_modules/aol-hb/dist/aol-hb.min.js"></script>
 <script>
   var bidRequestConfig = {
     region: 'US',
