@@ -1,0 +1,14 @@
+/src/
+/tests/
+/config/
+/coverage/
+/reports/
+/temp/
+/.idea/
+
+/.editorconfig
+/.jshintrc
+/.jscsrc
+/.mailmap
+/.travis.yml
+/gulpfile.js
