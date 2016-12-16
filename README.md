@@ -11,7 +11,7 @@ An open source library for publishers and third party container solution provide
 
 ## Usage
 
-- npm install aol-hb
+- Install package(`npm install aol-hb`) or build source file.
 - Load source file.
 - Define bid request configuration and an array of placement configurations.
 - Pass defined objects in the method `aolhb.init()`.
