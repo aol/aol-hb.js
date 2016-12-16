@@ -1,6 +1,6 @@
 {
   "name": "aol-hb",
-  "version": "1.0.0",
+  "version": "0.8.0",
   "description": "Header bidding library for AOL's demand side platform.",
   "main": "src/build/aol-hb.js",
   "scripts": {
@@ -13,6 +13,14 @@
     "type": "git",
     "url": "https://github.com/aol/aol-hb.js.git"
   },
+  "keywords": [
+    "header bidding",
+    "auction",
+    "advertising",
+    "aol",
+    "publisher",
+    "ssp"
+  ],
   "devDependencies": {
     "babel-core": "^6.18.0",
     "babel-loader": "^6.2.5",
