@@ -68,7 +68,7 @@ class RenderingManager {
   }
 
   parsePixelsItems(pixels) {
-    let itemsRegExp = /(img|iframe)[\s\S]*?src\s*=\s*("([^"]*)"|'([^"]*)')/gi;
+    let itemsRegExp = /(img|iframe)[\s\S]*?src\s*=\s*("([^"]*)"|'([^']*)')/gi;
     let tagNameRegExp = /\w*(?=\s)/;
     let srcRegExp = /src=("|')([^\1]+)\1/;
     let pixelsItems = [];
