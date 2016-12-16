@@ -22,3 +22,5 @@ globalContext.init = (bidRequestConfig, placementsConfigs) => {
     manager.refreshAd(alias);
   };
 };
+
+export default globalContext;

@@ -5,34 +5,21 @@
 [![Build Status](https://travis-ci.org/aol/aol-hb.js.svg?branch=master)](https://travis-ci.org/aol/aol-hb.js)
 
 ## Description
-  An open source library for publishers and third party container solution providers to integrate with AOL's supply side platform for header bidding.
 
-## Install
+An open source library for publishers and third party container solution providers to integrate with AOL's supply side platform for header bidding.
 
-      $ git clone git@github.com:aol/aol-hb.js.git
-      $ cd aol-hb.js
-      $ npm install
-    
-## Build
 
-To build the project type in the terminal:
-    
-      $ gulp build
-         
-build results will be placed in /build directory. It contains:
-- aol-hb.js - source file
-- aol-hb.min.js - minified source file.
+## Usage
 
-## Installation
-
+- npm install aol-hb
 - Load source file.
 - Define bid request configuration and an array of placement configurations.
-- Pass defined objects in the method aolhb.init.
+- Pass defined objects in the method `aolhb.init()`.
 
-Example:
+### Code Example
 
 ```html
-<script src="aol-hb.min.js"></script>
+<script src="node_modules/aol-hb/build/aol-hb.min.js"></script>
 <script>
   var bidRequestConfig = {
     region: 'US',
@@ -63,7 +50,7 @@ Example:
 
   window.aolhb.init(bidRequestConfig, placementsConfigs);
 </script>
-```       
+```
 
 
 ## API description
@@ -123,22 +110,41 @@ Example:
   
 - `adContainerId`  
   **Required** String. Id of element in the DOM where an ad will be rendered.
-  
-## Run unit tests
+
+
+## Contributing
+
+### Install
+
+    $ git clone git@github.com:aol/aol-hb.js.git
+    $ cd aol-hb.js
+    $ npm install
+
+### Build
+
+To build the project type in the terminal:
+
+    $ gulp build
+
+build results will be placed in /build directory. It contains:
+- aol-hb.js - source file
+- aol-hb.min.js - minified source file.
+
+### Run unit tests
 
 For running unit tests type in the terminal:
-    
-      $ gulp test-unit
-               
-## Run e2e tests
+
+    $ gulp test-unit
+
+### Run e2e tests
 
 Preconditions: 
 - Selenium server with chrome driver should be started
 
 For running e2e tests type in the terminal:
-    
-      $ gulp test-e2e
+
+    $ gulp test-e2e
 
 For opening e2e test pages in browsers type in the terminal:
 
-      $ gulp test-e2e-manual        
+    $ gulp test-e2e-manual
