@@ -8,7 +8,7 @@
     "test": "gulp build-ci"
   },
   "author": "",
-  "license": "ISC",
+  "license": "SEE LICENSE IN LICENSE FILE",
   "repository": {
     "type": "git",
     "url": "https://github.com/aol/aol-hb.js.git"
