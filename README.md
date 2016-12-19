@@ -126,7 +126,7 @@ To build the project type in the terminal:
 
     $ gulp build
 
-build results will be placed in /build directory. It contains:
+build results will be placed in /dist directory. It contains:
 - aol-hb.js - source file
 - aol-hb.min.js - minified source file.
 
