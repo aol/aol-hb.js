@@ -38,5 +38,6 @@ jspm_packages
 # Temp files directory
 temp/
 
-# Unit tests coverage folder
+# Tests coverage folders
 coverage/
+reports/
