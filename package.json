@@ -2,7 +2,7 @@
   "name": "aol-hb",
   "version": "0.8.0",
   "description": "Header bidding library for AOL's demand side platform.",
-  "main": "src/dist/aol-hb.js",
+  "main": "dist/aol-hb.js",
   "scripts": {
     "prepublish": "gulp build",
     "test": "gulp build-ci"
