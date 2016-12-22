@@ -150,12 +150,25 @@ describe('RenderAdManager', () => {
         'document.write(\'' +
         '<iframe src="url2.com"></iframe>\');' +
         'document.write(\'' +
-        '<img src="url3.com">\'); </script>';
+        '<img src="url3.com">\'); '+
+        'document.write(\'<img src=\'url4.com\'>\');' +
+        'document.write(\'' +
+        '<iframe src=\'url5.com\'></iframe>\');' +
+        'document.write(\'' +
+        '<img src=\'url6.com\'>\'); '+
+        '<iframe src = \'url7.com\'></iframe>\');' +
+        '</script>';
+     
 
       expect(subject.parsePixelsItems(pixels)).to.deep.equal([
         {tagName: 'IMG', src: 'url1.com'},
         {tagName: 'IFRAME', src: 'url2.com'},
-        {tagName: 'IMG', src: 'url3.com'}
+        {tagName: 'IMG', src: 'url3.com'},
+        {tagName: 'IMG', src: 'url4.com'},
+        {tagName: 'IFRAME', src: 'url5.com'},
+        {tagName: 'IMG', src: 'url6.com'},
+        {tagName: 'IFRAME', src: 'url7.com'}
+
       ]);
     });
   });
