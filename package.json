@@ -6,7 +6,8 @@
   "scripts": {
     "prepublish": "gulp build",
     "test": "gulp build-ci",
-    "preversion": "git add dist/*.js --force"
+    "preversion": "git add dist/*.js --force",
+    "postversion": "sh ./post-version.sh"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE FILE",
