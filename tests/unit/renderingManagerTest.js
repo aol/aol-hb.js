@@ -150,15 +150,14 @@ describe('RenderAdManager', () => {
         'document.write(\'' +
         '<iframe src="url2.com"></iframe>\');' +
         'document.write(\'' +
-        '<img src="url3.com">\'); '+
+        '<img src="url3.com">\'); ' +
         'document.write(\'<img src=\'url4.com\'>\');' +
         'document.write(\'' +
         '<iframe src=\'url5.com\'></iframe>\');' +
         'document.write(\'' +
-        '<img src=\'url6.com\'>\'); '+
+        '<img src=\'url6.com\'>\'); ' +
         '<iframe src = \'url7.com\'></iframe>\');' +
         '</script>';
-     
 
       expect(subject.parsePixelsItems(pixels)).to.deep.equal([
         {tagName: 'IMG', src: 'url1.com'},
