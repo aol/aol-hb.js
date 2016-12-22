@@ -1,11 +1,12 @@
 {
   "name": "aol-hb",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Header bidding library for AOL's demand side platform.",
   "main": "dist/aol-hb.js",
   "scripts": {
     "prepublish": "gulp build",
-    "test": "gulp build-ci"
+    "test": "gulp build-ci",
+    "preversion": "git add dist/*.js --force"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE FILE",
@@ -21,6 +22,7 @@
     "publisher",
     "ssp"
   ],
+  "private": true,
   "devDependencies": {
     "babel-core": "^6.18.0",
     "babel-loader": "^6.2.5",
