@@ -5,7 +5,9 @@
   "main": "dist/aol-hb.js",
   "scripts": {
     "prepublish": "gulp build",
-    "test": "gulp build-ci"
+    "test": "gulp build-ci",
+    "preversion": "sh ./pre-version.sh",
+    "postversion": "sh ./post-version.sh"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE FILE",
