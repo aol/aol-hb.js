@@ -5,7 +5,9 @@
   "main": "dist/aol-hb.js",
   "scripts": {
     "prepublish": "gulp build",
-    "test": "gulp build-ci"
+    "test": "gulp build-ci",
+    "preversion": "git add dist/*.js --force",
+    "postversion": "git push origin --tags && git push origin master && commit_message=$(git log -1 --format=%B) && git reset --soft HEAD~1 && git reset dist/*.js && git commit -m $commit_message && git push origin master --force"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE FILE",
