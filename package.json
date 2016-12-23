@@ -1,6 +1,6 @@
 {
   "name": "aol-hb",
-  "version": "0.9.1",
+  "version": "0.9.3",
   "description": "Header bidding library for AOL's demand side platform.",
   "main": "dist/aol-hb.js",
   "scripts": {
