@@ -21,7 +21,7 @@ class BidManager {
    */
   sendBidRequests() {
     this.placementsConfigs.forEach((config) => {
-      sendGetRequest(this.formatBidRequestUrl(config), (bidResponse) => {
+      this.sendBidRequest(config, (bidResponse) => {
         this.handleBidRequestResponse(config, bidResponse);
         this.checkBidResponsesState();
       });
@@ -35,10 +35,20 @@ class BidManager {
     let placementConfig = this.getPlacementConfigByAlias(alias);
 
     if (placementConfig) {
-      sendGetRequest(this.formatBidRequestUrl(placementConfig), (bidResponse) => {
-        this.handleBidRequestResponse(placementConfig, bidResponse);
-      });
+      this.sendBidRequest(placementConfig);
     }
+  }
+
+  /**
+   * Send bid request for particular placement.
+   */
+  sendBidRequest(placementConfig, bidResponseHandler) {
+    let defaultBidResponseHandler = (bidResponse) => {
+      this.handleBidRequestResponse(placementConfig, bidResponse);
+    };
+    let bidRequestUrl = this.formatBidRequestUrl(placementConfig);
+
+    sendGetRequest(bidRequestUrl, bidResponseHandler || defaultBidResponseHandler);
   }
 
   formatBidRequestUrl(placementConfig) {
