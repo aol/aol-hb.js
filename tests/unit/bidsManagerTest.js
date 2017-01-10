@@ -119,6 +119,17 @@ describe('BidManager', () => {
   });
 
   describe('sendBidRequests()', () => {
+    it('should call sendBidRequest for each placement config', () => {
+      let manager = getBidManager();
+      let sendBidRequestStub = sinon.stub(manager, 'sendBidRequest');
+
+      manager.placementsConfigs = [{}, {}, {}];
+      manager.sendBidRequests();
+      expect(sendBidRequestStub.callCount).to.equal(3, 'sendBidRequest called three times');
+    });
+  });
+
+  describe('sendBidRequest()', () => {
     let sendGetRequestStub;
 
     beforeEach(() => {
@@ -129,15 +140,16 @@ describe('BidManager', () => {
       sendGetRequestStub.reset();
     });
 
-    it('should call sendBidRequest and formatUrl for each placement config', () => {
+    it('should call sendBidRequest and formatUrl for placement config', () => {
       let manager = getBidManager();
+      let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl').returns('bid-request-url');
+      let placementConfig = {
+        alias: 'placement-alias'
+      };
 
-      let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl');
-
-      manager.placementsConfigs = [{}, {}, {}];
-      manager.sendBidRequests();
-      expect(sendGetRequestStub.callCount).to.equal(3, 'Three bid requests sent');
-      expect(formatUrlStub.callCount).to.equal(3, 'Bid request urls formatted three times bid');
+      manager.sendBidRequest(placementConfig);
+      expect(sendGetRequestStub.withArgs('bid-request-url').calledOnce).to.be.true;
+      expect(formatUrlStub.withArgs(placementConfig).calledOnce).to.be.true;
     });
   });
 
