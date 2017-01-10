@@ -9,7 +9,7 @@ import RenderingManager from 'renderingManager';
 class BidManager {
   constructor(bidRequestConfig, placementsConfigs) {
     this.bidRequestConfig = bidRequestConfig;
-    this.placementsConfigs = placementsConfigs;
+    this.placementsConfigs = placementsConfigs || [];
     this.bidderKey = bidRequestConfig.bidderKey || 'aolbid';
     this.aliasKey = bidRequestConfig.aliasKey || 'mpalias';
     this.userSyncOn = bidRequestConfig.userSyncOn || BidManager.HEADER_BIDDING_EVENTS.bidResponse;
@@ -35,6 +35,13 @@ class BidManager {
     let placementConfig = this.getPlacementConfigByAlias(alias);
 
     if (placementConfig) {
+      this.sendBidRequest(placementConfig);
+    }
+  }
+
+  addNewAd(placementConfig) {
+    if (placementConfig) {
+      this.addNewPlacementConfig(placementConfig);
       this.sendBidRequest(placementConfig);
     }
   }
@@ -173,6 +180,10 @@ class BidManager {
     return this.placementsConfigs.find((item) => {
       return item.alias === alias;
     });
+  }
+
+  addNewPlacementConfig(placementsConfigs) {
+    this.placementsConfigs.push(placementsConfigs);
   }
 
   isUserSyncOnBidResponseMode() {
