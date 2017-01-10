@@ -39,6 +39,10 @@ class BidManager {
     }
   }
 
+  /**
+   * Add new ad in runtime.
+   * @param {Object} placementConfig placement configuration.
+   */
   addNewAd(placementConfig) {
     if (placementConfig) {
       this.addNewPlacementConfig(placementConfig);
