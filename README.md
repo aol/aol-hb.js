@@ -60,6 +60,11 @@ An open source library for publishers and third party container solution provide
 - `aolhb.init()`  
    Library initialization method. It sends bid request for each placement based on configs passed as params.  
    Params: `bidRequestConfig`, `placementsConfigs`
+   
+- `aolhb.addNewAd()`  
+   The method sends bid request for new placement based on placement config passed as a param. It can be used  
+   for adding new ads in runtime.  
+   Params: `placementsConfigs`
 
 - `aolhb.refreshAd()`  
    Resend bid request for particular placement by its alias.  
