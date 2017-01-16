@@ -119,6 +119,17 @@ describe('BidManager', () => {
   });
 
   describe('sendBidRequests()', () => {
+    it('should call sendBidRequest for each placement config', () => {
+      let manager = getBidManager();
+      let sendBidRequestStub = sinon.stub(manager, 'sendBidRequest');
+
+      manager.placementsConfigs = [{}, {}, {}];
+      manager.sendBidRequests();
+      expect(sendBidRequestStub.callCount).to.equal(3, 'sendBidRequest called three times');
+    });
+  });
+
+  describe('sendBidRequest()', () => {
     let sendGetRequestStub;
 
     beforeEach(() => {
@@ -129,15 +140,16 @@ describe('BidManager', () => {
       sendGetRequestStub.reset();
     });
 
-    it('should call sendBidRequest and formatUrl for each placement config', () => {
+    it('should call sendBidRequest and formatUrl for placement config', () => {
       let manager = getBidManager();
+      let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl').returns('bid-request-url');
+      let placementConfig = {
+        alias: 'placement-alias'
+      };
 
-      let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl');
-
-      manager.placementsConfigs = [{}, {}, {}];
-      manager.sendBidRequests();
-      expect(sendGetRequestStub.callCount).to.equal(3, 'Three bid requests sent');
-      expect(formatUrlStub.callCount).to.equal(3, 'Bid request urls formatted three times bid');
+      manager.sendBidRequest(placementConfig);
+      expect(sendGetRequestStub.withArgs('bid-request-url').calledOnce).to.be.true;
+      expect(formatUrlStub.withArgs(placementConfig).calledOnce).to.be.true;
     });
   });
 
@@ -452,6 +464,97 @@ describe('BidManager', () => {
       });
 
       expect(manager.isUserSyncOnBidResponseMode()).to.be.false;
+    });
+  });
+
+  describe('addNewAd()', () => {
+    let manager;
+    let addNewPlacementConfigStub;
+    let sendBidRequestStub;
+
+    beforeEach(() => {
+      manager = getBidManager();
+      addNewPlacementConfigStub = sinon.stub(manager, 'addNewPlacementConfig');
+      sendBidRequestStub = sinon.stub(manager, 'sendBidRequest');
+    });
+
+    afterEach(() => {
+      addNewPlacementConfigStub.reset();
+      sendBidRequestStub.reset();
+    });
+
+    it('should not call addNewPlacementConfig and sendBidRequest for undefined parameter', () => {
+      manager.addNewAd(undefined);
+
+      expect(addNewPlacementConfigStub.calledOnce).to.be.false;
+      expect(sendBidRequestStub.calledOnce).to.be.false;
+    });
+
+    it('should not call addNewPlacementConfig and sendBidRequest for null parameter', () => {
+      manager.addNewAd(null);
+
+      expect(addNewPlacementConfigStub.calledOnce).to.be.false;
+      expect(sendBidRequestStub.calledOnce).to.be.false;
+    });
+
+    it('should call addNewPlacementConfig and sendBidRequest once for specified parameter', () => {
+      let placementConfig = {
+        alias: 'placement-alias'
+      };
+
+      manager.addNewAd(placementConfig);
+
+      expect(addNewPlacementConfigStub.withArgs(placementConfig).calledOnce).to.be.true;
+      expect(sendBidRequestStub.withArgs(placementConfig).calledOnce).to.be.true;
+    });
+  });
+
+  describe('refreshAd()', () => {
+    let manager;
+    let getPlacementConfigStub;
+    let sendBidRequestStub;
+
+    beforeEach(() => {
+      manager = getBidManager();
+      getPlacementConfigStub = sinon.stub(manager, 'getPlacementConfigByAlias');
+      sendBidRequestStub = sinon.stub(manager, 'sendBidRequest');
+    });
+
+    afterEach(() => {
+      getPlacementConfigStub.reset();
+      sendBidRequestStub.reset();
+    });
+
+    it('should not call sendBidRequest when placement config not found', () => {
+      getPlacementConfigStub.returns(undefined);
+      manager.refreshAd();
+
+      expect(getPlacementConfigStub.calledOnce).to.be.true;
+      expect(sendBidRequestStub.calledOnce).to.be.false;
+    });
+
+    it('should call sendBidRequest when placement config found', () => {
+      let placementConfig = {
+        alias: 'placement-alias'
+      };
+      getPlacementConfigStub.returns(placementConfig);
+      manager.refreshAd();
+
+      expect(getPlacementConfigStub.calledOnce).to.be.true;
+      expect(sendBidRequestStub.withArgs(placementConfig).calledOnce).to.be.true;
+    });
+  });
+
+  describe('addNewPlacementConfig()', () => {
+    it('should add new placement config object in placement configs array', () => {
+      let manager = getBidManager();
+      let placementConfig = {
+        alias: 'placement-alias'
+      };
+
+      manager.addNewPlacementConfig(placementConfig);
+
+      expect(manager.placementsConfigs).to.deep.equal([placementConfig]);
     });
   });
 });

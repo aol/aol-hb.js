@@ -30,7 +30,7 @@ module.exports = function(config) {
     // Add webpack as preprocessor
     preprocessors: {
       'tests/unit/*Test.js': ['webpack'],
-      'src/**/*.js': ['coverage']
+      'src/**/*.js,!src/helpers/polyfills.js': ['coverage']
     },
 
     customLaunchers: {

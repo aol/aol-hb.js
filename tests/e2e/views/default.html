@@ -139,40 +139,78 @@
       alias: "300x250btf",
       adContainerId: 'div-gpt-ad-1439394117151-0',
       bidfloor: '0.1'
-    }, {
-      placement: 3675024,
-      alias: "728x90btf",
-      adContainerId: 'div-gpt-ad-1439394117151-1',
-      bidfloor: '0.1'
     }];
 
     window.aolhb.init(bidRequestConfig, placementsConfigs);
   </script>
+
+  <script>
+    function addNewAdHandler() {
+      var placementConfig = {
+        placement: 3675024,
+        alias: "728x90btf",
+        adContainerId: 'div-gpt-ad-1439394117151-1',
+        bidfloor: '0.1'
+      };
+
+      window.aolhb.addNewAd(placementConfig);
+    }
+  </script>
+
+  <style type="text/css">
+    .ads-container {
+      border: 1px solid black;
+    }
+
+    .ad-item {
+      margin: 10px 10px 10px 10px;
+      border: 1px solid black;
+    }
+
+    .inline-block {
+      display: inline-block;
+    }
+
+    .manage-ads-section {
+      padding: 10px 10px 10px 10px;
+      border: 1px solid black;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-  <div style="padding: 10px 10px 10px 10px; display:block">
-    <div class="panel">
-      <p class="alias"></p>
-    </div>
-    <div id="div-gpt-ad-1438955597722-1" ></div>
+
+  <div class="manage-ads-section">
+    <button onclick="addNewAdHandler()">
+      Add new ad in runtime
+    </button>
   </div>
-  <div style="padding: 10px 10px 10px 10px; display:inline-block">
-    <div class="panel">
-      <p class="alias"></p>
+
+  <div class="ads-container">
+    <div class="ad-item">
+      <div class="panel">
+        <p class="alias"></p>
+      </div>
+      <div id="div-gpt-ad-1438955597722-1" ></div>
     </div>
-    <div id="div-gpt-ad-1438955597722-0" ></div>
-  </div>
-  <div style="padding: 10px 10px 10px 10px; display:inline-block">
-    <div class="panel">
-      <p class="alias"></p>
+    <div class="ad-item inline-block">
+      <div class="panel">
+        <p class="alias"></p>
+      </div>
+      <div id="div-gpt-ad-1438955597722-0" ></div>
     </div>
-    <div id="div-gpt-ad-1439394117151-0"></div>
-  </div>
-  <div style="padding: 10px 10px 10px 10px; display:block ">
-    <div class="panel">
-      <p class="alias"></p>
+    <div class="ad-item inline-block">
+      <div class="panel">
+        <p class="alias"></p>
+      </div>
+      <div id="div-gpt-ad-1439394117151-0"></div>
     </div>
-    <div id="div-gpt-ad-1439394117151-1"></div>
+    <div class="ad-item">
+      <div class="panel">
+        <p class="alias"></p>
+      </div>
+      <div id="div-gpt-ad-1439394117151-1"></div>
+    </div>
   </div>
 </body>
 </html>

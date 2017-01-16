@@ -26,6 +26,10 @@ globalContext.init = (bidRequestConfig, placementsConfigs) => {
   globalContext.refreshAd = (alias) => {
     manager.refreshAd(alias);
   };
+
+  globalContext.addNewAd = (placementConfig) => {
+    manager.addNewAd(placementConfig);
+  };
 };
 
 globalContext.que.push = function (cmd) {
