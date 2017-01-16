@@ -16,8 +16,9 @@ An open source library for publishers and third party container solution provide
 - Define bid request configuration and an array of placement configurations.
 - Pass defined objects in the method `aolhb.init()`.
 
-### Code Example
+## Code Examples
 
+### Initialization
 ```html
 <script src="node_modules/aol-hb/dist/aol-hb.min.js"></script>
 <script>
@@ -52,6 +53,18 @@ An open source library for publishers and third party container solution provide
 </script>
 ```
 
+### Adding new ad in runtime
+```html
+<script>
+  var placementConfig = {
+    placement: 3675024,
+    alias: '728x90btf',
+    adContainerId: 'div-gpt-ad-1439394117151-1'
+  };
+
+  window.aolhb.addNewAd(placementConfig);
+</script>
+```
 
 ## API description
 
