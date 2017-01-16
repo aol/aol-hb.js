@@ -19,7 +19,7 @@ globalContext.init = (bidRequestConfig, placementsConfigs) => {
     }
   };
 
-  globalContext.getBidResponse = function (alias) {
+  globalContext.getBidResponse = (alias) => {
     return manager.getBidResponseByAlias(alias);
   };
 
@@ -32,7 +32,7 @@ globalContext.init = (bidRequestConfig, placementsConfigs) => {
   };
 };
 
-globalContext.que.push = function (cmd) {
+globalContext.que.push = (cmd) => {
   if (typeof cmd === 'function') {
     try {
       cmd.call();
@@ -44,7 +44,7 @@ globalContext.que.push = function (cmd) {
   }
 };
 
-for (var i = 0; i < globalContext.que.length; i++) {
+for (let i = 0; i < globalContext.que.length; i++) {
   if (typeof globalContext.que[i].called === 'undefined') {
     try {
       globalContext.que[i].call();
