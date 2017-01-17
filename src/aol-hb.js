@@ -37,10 +37,10 @@ globalContext.que.push = (cmd) => {
     try {
       cmd.call();
     } catch (e) {
-      console.error('Error processing command :' + e.message);
+      console.warn('Error processing command :' + e.message);
     }
   } else {
-    console.error('Commands written into aolhb.que.push must wrapped in a function');
+    console.warn('Commands written into aolhb.que.push must wrapped in a function');
   }
 };
 
@@ -50,7 +50,7 @@ for (let i = 0; i < globalContext.que.length; i++) {
       globalContext.que[i].call();
       globalContext.que[i].called = true;
     } catch (e) {
-      console.error('Error processing command :', 'aol-hb.js', e);
+      console.warn('Error processing command :', 'aol-hb.js', e);
     }
   }
 }
