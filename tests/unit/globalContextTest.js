@@ -4,7 +4,7 @@ describe('GlobalContext', () => {
 
   it('should have the global variable aolhb and its properties', () => {
     expect(GlobalContext).to.be.a('object');
-    expect(GlobalContext).to.have.property('que').that.is.a('array');
+    expect(GlobalContext).to.have.property('queue').that.is.a('array');
     expect(GlobalContext).to.have.property('init').that.is.a('function');
   });
 
