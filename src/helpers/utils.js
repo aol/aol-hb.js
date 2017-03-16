@@ -26,11 +26,10 @@ let utils = {
   /**
    * Resolve type of http protocol based on input param
    *
-   * @param {string} documentProtocol document.location.protocol value
    * @returns {string} protocol type
    */
-  resolveHttpProtocol: (documentProtocol) => {
-    return (documentProtocol === 'https:') ? 'https' : 'http';
+  resolveHttpProtocol: () => {
+    return (document.location.protocol === 'https:') ? 'https' : 'http';
   }
 };
 

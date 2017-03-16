@@ -1,4 +1,4 @@
-import {sendGetRequest} from './helpers/ajax';
+import {sendGetRequest, sendPostRequest} from './helpers/ajax';
 import utils from './helpers/utils';
 import RenderingManager from 'renderingManager';
 
@@ -57,23 +57,48 @@ class BidManager {
     let defaultBidResponseHandler = (bidResponse) => {
       this.handleBidRequestResponse(placementConfig, bidResponse);
     };
-    let bidRequestUrl = this.formatBidRequestUrl(placementConfig);
+    bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
 
-    sendGetRequest(bidRequestUrl, bidResponseHandler || defaultBidResponseHandler);
+    if (this.bidRequestConfig.mobileWebMode) {
+      this.sendNexageRequest(placementConfig, bidResponseHandler);
+    } else {
+      this.sendMarketplaceRequest(placementConfig, bidResponseHandler);
+    }
   }
 
-  formatBidRequestUrl(placementConfig) {
+  sendMarketplaceRequest(placementConfig, bidRequestHandler) {
+    let bidRequestUrl = this.formatMarketplaceUrl(placementConfig);
+
+    sendGetRequest(bidRequestUrl, bidRequestHandler);
+  }
+
+  formatMarketplaceUrl(placementConfig) {
     let url = utils.formatTemplateString`${'protocol'}://${'hostName'}/pubapi/3.0/${'network'}/
       ${'placement'}/0/-1/ADTECH;cmd=bid;cors=yes;
       v=2;alias=${'alias'};${'bidFloorPrice'}`;
 
     let options = {
-      protocol: utils.resolveHttpProtocol(document.location.protocol),
+      protocol: utils.resolveHttpProtocol(),
       hostName: this.resolveHostName(),
       network: this.bidRequestConfig.network,
       placement: parseInt(placementConfig.placement),
       alias: placementConfig.alias,
       bidFloorPrice: this.resolveBidFloorPrice(placementConfig.bidFloorPrice)
+    };
+
+    return url(options);
+  }
+
+  sendNexageRequest(placementConfig, bidRequestHandler) {
+    let bidRequestUrl = this.formatNexageUrl(placementConfig);
+
+    sendPostRequest(bidRequestUrl, bidRequestHandler);
+  }
+
+  formatNexageUrl() {
+    let url = utils.formatTemplateString`${'protocol'}://hb.nexage.com/bidRequest?`;
+    let options = {
+      protocol: utils.resolveHttpProtocol()
     };
 
     return url(options);

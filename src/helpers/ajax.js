@@ -23,3 +23,7 @@ export function sendRequest(url, method, successCallback) {
 export function sendGetRequest(url, successCallback) {
   return sendRequest(url, 'GET', successCallback);
 }
+
+export function sendPostRequest(url, successCallback) {
+  return sendRequest(url, 'POST', successCallback);
+}
