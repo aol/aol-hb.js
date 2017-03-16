@@ -55,7 +55,7 @@ describe('BidManager', () => {
     });
   });
 
-  describe('formatBidRequestUrl()', () => {
+  describe('formatMarketplaceUrl()', () => {
     let resolveHttpProtocolStub;
 
     before(() => {
@@ -66,11 +66,11 @@ describe('BidManager', () => {
       resolveHttpProtocolStub.restore();
     });
 
-    it('should resolve bid request url without bid floor price', () => {
+    it('should resolve marketplace url without bid floor price', () => {
       let manager = getBidManager();
       sinon.stub(manager, 'resolveHostName').returns('test.com');
       manager.bidRequestConfig.network = '5404.10';
-      let bidRequestUrl = manager.formatBidRequestUrl({
+      let bidRequestUrl = manager.formatMarketplaceUrl({
         protocol: 'https',
         placement: '15',
         alias: '54'
@@ -81,12 +81,12 @@ describe('BidManager', () => {
       expect(bidRequestUrl).to.equal(expectedUrl);
     });
 
-    it('should resolve bid request url with specified bidFloorPrice', () => {
+    it('should resolve marketplace url with specified bidFloorPrice', () => {
       let manager = getBidManager();
       sinon.stub(manager, 'resolveHostName').returns('test2.com');
       sinon.stub(manager, 'resolveBidFloorPrice').returns('bid-floor-price');
       manager.bidRequestConfig.network = '5404.10';
-      let bidRequestUrl = manager.formatBidRequestUrl({
+      let bidRequestUrl = manager.formatMarketplaceUrl({
         placement: '15',
         alias: '54',
         bidFloorPrice: 'bid-floor-price'
@@ -142,7 +142,7 @@ describe('BidManager', () => {
 
     it('should call sendBidRequest and formatUrl for placement config', () => {
       let manager = getBidManager();
-      let formatUrlStub = sinon.stub(manager, 'formatBidRequestUrl').returns('bid-request-url');
+      let formatUrlStub = sinon.stub(manager, 'formatMarketplaceUrl').returns('bid-request-url');
       let placementConfig = {
         alias: 'placement-alias'
       };
