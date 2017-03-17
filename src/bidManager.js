@@ -1,6 +1,6 @@
-import {sendGetRequest} from './helpers/ajax';
-import utils from './helpers/utils';
 import RenderingManager from 'renderingManager';
+import MarketplaceRequest from 'requests/marketplace';
+import NexageGetRequest from 'requests/nexageGet';
 
 /***
  * The class contains logic for processing bid
@@ -59,52 +59,15 @@ class BidManager {
     };
     bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
 
+    let request;
+
     if (this.bidRequestConfig.dcn && placementConfig.pos) {
-      this.sendNexageRequest(placementConfig, bidResponseHandler);
+      request = new NexageGetRequest(this.bidRequestConfig, placementConfig);
     } else {
-      this.sendMarketplaceRequest(placementConfig, bidResponseHandler);
+      request = new MarketplaceRequest(this.bidRequestConfig, placementConfig);
     }
-  }
 
-  sendMarketplaceRequest(placementConfig, bidRequestHandler) {
-    let bidRequestUrl = this.formatMarketplaceUrl(placementConfig);
-
-    sendGetRequest(bidRequestUrl, bidRequestHandler);
-  }
-
-  formatMarketplaceUrl(placementConfig) {
-    let url = utils.formatTemplateString`${'protocol'}://${'hostName'}/pubapi/3.0/${'network'}/
-      ${'placement'}/0/-1/ADTECH;cmd=bid;cors=yes;
-      v=2;alias=${'alias'};${'bidFloorPrice'}`;
-
-    let options = {
-      protocol: utils.resolveHttpProtocol(),
-      hostName: this.resolveHostName(),
-      network: this.bidRequestConfig.network,
-      placement: parseInt(placementConfig.placement),
-      alias: placementConfig.alias,
-      bidFloorPrice: this.resolveBidFloorPrice(placementConfig.bidFloorPrice)
-    };
-
-    return url(options);
-  }
-
-  sendNexageRequest(placementConfig, bidRequestHandler) {
-    let bidRequestUrl = this.formatNexageUrl(placementConfig);
-
-    sendGetRequest(bidRequestUrl, bidRequestHandler);
-  }
-
-  formatNexageUrl(placementConfig) {
-    let url = utils.formatTemplateString`${'protocol'}://hb.nexage.com/bidRequest?
-      dcn=${'dcn'}&pos=${'pos'}&cmd=bid`;
-    let options = {
-      protocol: utils.resolveHttpProtocol(),
-      dcn: this.bidRequestConfig.dcn,
-      pos: placementConfig.pos
-    };
-
-    return url(options);
+    request.send(bidResponseHandler);
   }
 
   handleBidRequestResponse(placementConfig, response) {
@@ -129,14 +92,6 @@ class BidManager {
     if (allBidResponsesReturned && allBidResponsesHandler) {
       allBidResponsesHandler(this.bidResponses);
     }
-  }
-
-  resolveBidFloorPrice(floorPrice) {
-    return floorPrice ? `bidfloor=${floorPrice.toString()};` : '';
-  }
-
-  resolveHostName() {
-    return BidManager.SERVER_MAP[this.bidRequestConfig.region] || BidManager.SERVER_MAP.US;
   }
 
   getBidData(bidResponse) {
@@ -232,12 +187,6 @@ class BidManager {
     }
   }
 }
-
-BidManager.SERVER_MAP = {
-  EU: 'adserver.adtech.de',
-  US: 'adserver.adtechus.com',
-  Asia: 'adserver.adtechjp.com'
-};
 
 BidManager.HEADER_BIDDING_EVENTS = {
   bidResponse: 'bidResponse',
