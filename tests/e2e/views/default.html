@@ -118,7 +118,7 @@
       bidderKey: 'aolbid',
       aliasKey: 'mpalias',
       userSyncOn: 'bidResponse',
-      mobileWebMode: true,
+      dcn: 1234,
       onBidResponse: bidResponseHandler,
       onAllBidResponses: function () {
         console.log('onAllBidResponses');
@@ -140,7 +140,12 @@
       alias: "300x250btf",
       adContainerId: 'div-gpt-ad-1439394117151-0',
       bidfloor: '0.1'
-    }];
+    }, {
+      pos: 'header',
+      reserve: '0.1',
+      adContainerId: 'div-gpt-ad-1439394117151-0'
+    }
+    ];
 
     window.aolhb.init(bidRequestConfig, placementsConfigs);
   </script>

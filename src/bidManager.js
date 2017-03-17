@@ -1,4 +1,4 @@
-import {sendGetRequest, sendPostRequest} from './helpers/ajax';
+import {sendGetRequest} from './helpers/ajax';
 import utils from './helpers/utils';
 import RenderingManager from 'renderingManager';
 
@@ -59,7 +59,7 @@ class BidManager {
     };
     bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
 
-    if (this.bidRequestConfig.mobileWebMode) {
+    if (this.bidRequestConfig.dcn && placementConfig.pos) {
       this.sendNexageRequest(placementConfig, bidResponseHandler);
     } else {
       this.sendMarketplaceRequest(placementConfig, bidResponseHandler);
@@ -92,13 +92,16 @@ class BidManager {
   sendNexageRequest(placementConfig, bidRequestHandler) {
     let bidRequestUrl = this.formatNexageUrl(placementConfig);
 
-    sendPostRequest(bidRequestUrl, bidRequestHandler);
+    sendGetRequest(bidRequestUrl, bidRequestHandler);
   }
 
-  formatNexageUrl() {
-    let url = utils.formatTemplateString`${'protocol'}://hb.nexage.com/bidRequest?`;
+  formatNexageUrl(placementConfig) {
+    let url = utils.formatTemplateString`${'protocol'}://hb.nexage.com/bidRequest?
+      dcn=${'dcn'}&pos=${'pos'}&cmd=bid`;
     let options = {
-      protocol: utils.resolveHttpProtocol()
+      protocol: utils.resolveHttpProtocol(),
+      dcn: this.bidRequestConfig.dcn,
+      pos: placementConfig.pos
     };
 
     return url(options);
