@@ -1,6 +1,6 @@
 import RenderingManager from 'renderingManager';
-import MarketplaceRequest from 'requests/marketplace';
-import NexageGetRequest from 'requests/nexageGet';
+import MarketplaceBidRequest from 'bidRequests/marketplace';
+import NexageGetBidRequest from 'bidRequests/nexageGet';
 
 /***
  * The class contains logic for processing bid
@@ -62,9 +62,9 @@ class BidManager {
     let request;
 
     if (this.bidRequestConfig.dcn && placementConfig.pos) {
-      request = new NexageGetRequest(this.bidRequestConfig, placementConfig);
+      request = new NexageGetBidRequest(this.bidRequestConfig, placementConfig);
     } else {
-      request = new MarketplaceRequest(this.bidRequestConfig, placementConfig);
+      request = new MarketplaceBidRequest(this.bidRequestConfig, placementConfig);
     }
 
     request.send(bidResponseHandler);

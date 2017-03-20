@@ -1,6 +1,4 @@
 import BidManager from 'src/bidManager';
-import utils from 'src/helpers/utils';
-import * as ajax from 'src/helpers/ajax';
 
 describe('BidManager', () => {
   let getBidManager = (bidRequestConfig) => {
@@ -26,98 +24,6 @@ describe('BidManager', () => {
     });
   });
 
-  describe('resolveHostName()', () => {
-    it('should return default host name for undefined param', () => {
-      let manager = getBidManager();
-
-      expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
-    });
-
-    it('should return host name for EU region', () => {
-      let manager = getBidManager();
-
-      manager.bidRequestConfig.region = 'EU';
-      expect(manager.resolveHostName()).to.equal('adserver.adtech.de');
-    });
-
-    it('should return host name for Asia region', () => {
-      let manager = getBidManager();
-
-      manager.bidRequestConfig.region = 'Asia';
-      expect(manager.resolveHostName()).to.equal('adserver.adtechjp.com');
-    });
-
-    it('should return host name for US region', () => {
-      let manager = getBidManager();
-
-      manager.bidRequestConfig.region = 'US';
-      expect(manager.resolveHostName()).to.equal('adserver.adtechus.com');
-    });
-  });
-
-  describe('formatMarketplaceUrl()', () => {
-    let resolveHttpProtocolStub;
-
-    before(() => {
-      resolveHttpProtocolStub = sinon.stub(utils, 'resolveHttpProtocol').returns('https');
-    });
-
-    after(() => {
-      resolveHttpProtocolStub.restore();
-    });
-
-    it('should resolve marketplace url without bid floor price', () => {
-      let manager = getBidManager();
-      sinon.stub(manager, 'resolveHostName').returns('test.com');
-      manager.bidRequestConfig.network = '5404.10';
-      let bidRequestUrl = manager.formatMarketplaceUrl({
-        protocol: 'https',
-        placement: '15',
-        alias: '54'
-      });
-
-      let expectedUrl = 'https://test.com/pubapi/3.0/5404.10/15/0/-1/ADTECH;' +
-        'cmd=bid;cors=yes;v=2;alias=54;';
-      expect(bidRequestUrl).to.equal(expectedUrl);
-    });
-
-    it('should resolve marketplace url with specified bidFloorPrice', () => {
-      let manager = getBidManager();
-      sinon.stub(manager, 'resolveHostName').returns('test2.com');
-      sinon.stub(manager, 'resolveBidFloorPrice').returns('bid-floor-price');
-      manager.bidRequestConfig.network = '5404.10';
-      let bidRequestUrl = manager.formatMarketplaceUrl({
-        placement: '15',
-        alias: '54',
-        bidFloorPrice: 'bid-floor-price'
-      });
-
-      let expectedUrl = 'https://test2.com/pubapi/3.0/5404.10/15/0/-1/ADTECH;' +
-        'cmd=bid;cors=yes;v=2;alias=54;bid-floor-price';
-      expect(bidRequestUrl).to.equal(expectedUrl);
-    });
-  });
-
-  describe('resolveBidFloorPrice()', () => {
-    it('should be empty string when floor price is not defined', () => {
-      let manager = getBidManager();
-
-      expect(manager.resolveBidFloorPrice()).to.equal('');
-    });
-
-    it('should be empty string when floor price equals to 0', () => {
-      let manager = getBidManager();
-
-      expect(manager.resolveBidFloorPrice(0)).to.equal('');
-    });
-
-    it('should be formatted when floor price is defied', () => {
-      let manager = getBidManager();
-
-      expect(manager.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');
-    });
-  });
-
   describe('sendBidRequests()', () => {
     it('should call sendBidRequest for each placement config', () => {
       let manager = getBidManager();
@@ -126,30 +32,6 @@ describe('BidManager', () => {
       manager.placementsConfigs = [{}, {}, {}];
       manager.sendBidRequests();
       expect(sendBidRequestStub.callCount).to.equal(3, 'sendBidRequest called three times');
-    });
-  });
-
-  describe('sendBidRequest()', () => {
-    let sendGetRequestStub;
-
-    beforeEach(() => {
-      sendGetRequestStub = sinon.stub(ajax, 'sendGetRequest');
-    });
-
-    afterEach(() => {
-      sendGetRequestStub.reset();
-    });
-
-    it('should call sendBidRequest and formatUrl for placement config', () => {
-      let manager = getBidManager();
-      let formatUrlStub = sinon.stub(manager, 'formatMarketplaceUrl').returns('bid-request-url');
-      let placementConfig = {
-        alias: 'placement-alias'
-      };
-
-      manager.sendBidRequest(placementConfig);
-      expect(sendGetRequestStub.withArgs('bid-request-url').calledOnce).to.be.true;
-      expect(formatUrlStub.withArgs(placementConfig).calledOnce).to.be.true;
     });
   });
 
