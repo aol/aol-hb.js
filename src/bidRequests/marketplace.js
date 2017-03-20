@@ -1,12 +1,10 @@
 import utils from 'helpers/utils';
-import {sendGetRequest} from 'helpers/ajax';
+import BaseBidRequest from './baseBidRequest';
 
-class MarketplaceRequest {
-  constructor(bidRequestConfig, placementConfig) {
-    this.bidRequestConfig = bidRequestConfig;
-    this.placementConfig = placementConfig;
-  }
-
+/***
+ * The class contains logic sending bid request to Adtech server
+ */
+class MarketplaceBidRequest extends BaseBidRequest {
   formatUrl() {
     let url = utils.formatTemplateString`${'protocol'}://${'hostName'}/pubapi/3.0/${'network'}/
       ${'placement'}/0/-1/ADTECH;cmd=bid;cors=yes;
@@ -25,26 +23,20 @@ class MarketplaceRequest {
   }
 
   resolveHostName() {
-    let serverMap = MarketplaceRequest.SERVER_MAP;
+    let serverMap = MarketplaceBidRequest.SERVER_MAP;
 
-    return serverMap[this.bidRequestConfig.region] || serverMap.SERVER_MAP.US;
+    return serverMap[this.bidRequestConfig.region] || serverMap.US;
   }
 
   resolveBidFloorPrice(floorPrice) {
     return floorPrice ? `bidfloor=${floorPrice.toString()};` : '';
   }
-
-  send(bidRequestHandler) {
-    let bidRequestUrl = this.formatUrl(this.placementConfig);
-
-    sendGetRequest(bidRequestUrl, bidRequestHandler);
-  }
 }
 
-MarketplaceRequest.SERVER_MAP = {
+MarketplaceBidRequest.SERVER_MAP = {
   EU: 'adserver.adtech.de',
   US: 'adserver.adtechus.com',
   Asia: 'adserver.adtechjp.com'
 };
 
-export default MarketplaceRequest;
+export default MarketplaceBidRequest;
