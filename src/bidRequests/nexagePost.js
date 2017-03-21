@@ -16,7 +16,10 @@ class NexagePostBidRequest extends BaseBidRequest {
     let bidRequestUrl = this.formatUrl(this.placementConfig);
     let options = {
       contentType: 'application/json',
-      data: JSON.stringify(this.placementConfig.openRtbParams)
+      data: this.placementConfig.openRtbParams,
+      customHeaders: {
+        'x-openrtb-version': '2.2'
+      }
     };
 
     sendPostRequest(bidRequestUrl, bidRequestHandler, options);
