@@ -66,7 +66,7 @@ describe('MarketplaceBidRequest', () => {
       expect(bidRequest.resolveBidFloorPrice(0)).to.equal('');
     });
 
-    it('should be formatted when floor price is defied', () => {
+    it('should be formatted when floor price is defined', () => {
       let bidRequest = getBidRequest();
 
       expect(bidRequest.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');

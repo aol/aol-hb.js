@@ -34,8 +34,8 @@ let utils = {
 
   /***
    * Iterate through object properties or array elements
-   * @param obj
-   * @param callback
+   * @param {object|array} obj
+   * @param {function} callback
    */
   each: (obj, callback) => {
     if (!obj) {
