@@ -1,6 +1,7 @@
 import RenderingManager from 'renderingManager';
 import MarketplaceBidRequest from 'bidRequests/marketplace';
 import NexageGetBidRequest from 'bidRequests/nexageGet';
+import NexagePostBidRequest from 'bidRequests/nexagePost';
 
 /***
  * The class contains logic for processing bid
@@ -59,15 +60,11 @@ class BidManager {
     };
     bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
 
-    let request;
+    let bidRequest = this.resolveBidRequest(this.bidRequestConfig, placementConfig);
 
-    if (this.bidRequestConfig.dcn && placementConfig.pos) {
-      request = new NexageGetBidRequest(this.bidRequestConfig, placementConfig);
-    } else {
-      request = new MarketplaceBidRequest(this.bidRequestConfig, placementConfig);
+    if (bidRequest) {
+      bidRequest.send(bidResponseHandler);
     }
-
-    request.send(bidResponseHandler);
   }
 
   handleBidRequestResponse(placementConfig, response) {
@@ -185,6 +182,32 @@ class BidManager {
 
       bidResponse.pixelsRendered = true;
     }
+  }
+
+  resolveBidRequest(bidRequestConfig, placementConfig) {
+    if (bidRequestConfig.dcn && placementConfig.pos) {
+      return new NexageGetBidRequest(bidRequestConfig, placementConfig);
+    } else if (bidRequestConfig.network && placementConfig.placement) {
+      return new MarketplaceBidRequest(bidRequestConfig, placementConfig);
+    } if (this.isNexagePostRequest(placementConfig.openRtbParams)) {
+      return new NexagePostBidRequest(bidRequestConfig, placementConfig);
+    }
+  }
+
+  isNexagePostRequest(openRtbParams) {
+    if (openRtbParams && openRtbParams.id && openRtbParams.imp[0]) {
+      let imp = openRtbParams.imp[0];
+
+      return imp.id && imp.tagid && (this.isBannerPresent(imp) || this.isVideoPresent(imp));
+    }
+  }
+
+  isBannerPresent(imp) {
+    return imp && imp.banner && imp.banner.w && imp.banner.h;
+  }
+
+  isVideoPresent(imp) {
+    return imp.video && imp.video.mimes && imp.video.minduration && imp.video.maxduration;
   }
 }
 
