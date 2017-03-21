@@ -1,3 +1,5 @@
+import utils from './utils';
+
 /**
  * Module for processing ajax requests
  *
@@ -16,6 +18,10 @@ export function sendRequest(url,successCallback, options = {}) {
 
   xhr.open(options.method, url);
   xhr.onreadystatechange = responseHandler;
+
+  utils.each(options.customHeaders, (value, key) => {
+    xhr.setRequestHeader(key, value);
+  });
 
   xhr.setRequestHeader('Content-Type', options.contentType || 'text/plain');
 

@@ -30,6 +30,33 @@ let utils = {
    */
   resolveHttpProtocol: () => {
     return (document.location.protocol === 'https:') ? 'https' : 'http';
+  },
+
+  /***
+   * Iterate through object properties or array elements
+   * @param obj
+   * @param callback
+   */
+  each: (obj, callback) => {
+    if (!obj) {
+      return;
+    }
+
+    if (typeof obj.forEach === 'function') {
+      return obj.forEach(callback, this);
+    }
+
+    if (obj.length > 0) {
+      for (let i = 0; i < obj.length; i++) {
+        callback(obj[i], i, obj);
+      }
+    } else {
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          callback(obj[key], key);
+        }
+      }
+    }
   }
 };
 
