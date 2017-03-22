@@ -189,7 +189,7 @@ class BidManager {
       return new NexageGetBidRequest(bidRequestConfig, placementConfig);
     } else if (bidRequestConfig.network && placementConfig.placement) {
       return new MarketplaceBidRequest(bidRequestConfig, placementConfig);
-    } if (this.isNexagePostRequest(placementConfig.openRtbParams)) {
+    } else if (this.isNexagePostRequest(placementConfig.openRtbParams)) {
       return new NexagePostBidRequest(bidRequestConfig, placementConfig);
     }
   }
@@ -198,12 +198,16 @@ class BidManager {
     if (openRtbParams && openRtbParams.id && openRtbParams.imp[0]) {
       let imp = openRtbParams.imp[0];
 
-      return imp.id && imp.tagid && (this.isBannerPresent(imp) || this.isVideoPresent(imp));
+      return this.isImpressionValid(imp);
     }
   }
 
+  isImpressionValid(imp) {
+    return imp.id && imp.tagid && (this.isBannerPresent(imp) || this.isVideoPresent(imp));
+  }
+
   isBannerPresent(imp) {
-    return imp && imp.banner && imp.banner.w && imp.banner.h;
+    return imp.banner && imp.banner.w && imp.banner.h;
   }
 
   isVideoPresent(imp) {

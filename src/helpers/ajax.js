@@ -6,7 +6,7 @@ import utils from './utils';
  * @param {string} url requested url
  * @param {Function} successCallback success result callback
  */
-export function sendRequest(url,successCallback, options = {}) {
+export function sendRequest(url, successCallback, options = {}) {
   let xhr = new XMLHttpRequest();
   let responseHandler = () => {
     if (xhr.readyState === XMLHttpRequest.DONE && successCallback) {
