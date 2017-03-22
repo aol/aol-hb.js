@@ -1,4 +1,7 @@
 import BidManager from 'src/bidManager';
+import MarketplaceBidRequest from 'bidRequests/marketplace';
+import NexageGetBidRequest from 'bidRequests/nexageGet';
+import NexagePostBidRequest from 'bidRequests/nexagePost';
 
 describe('BidManager', () => {
   let getBidManager = (bidRequestConfig) => {
@@ -437,6 +440,320 @@ describe('BidManager', () => {
       manager.addNewPlacementConfig(placementConfig);
 
       expect(manager.placementsConfigs).to.deep.equal([placementConfig]);
+    });
+  });
+
+  describe('isVideoPresent', () => {
+    it('should not be ok if impression contains empty banner object', () => {
+      let manager = getBidManager();
+      let impression = {
+        banner: {}
+      };
+
+      expect(manager.isBannerPresent(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if only witdh is specified for banner object', () => {
+      let manager = getBidManager();
+      let impression = {
+        banner: {
+          w: 10
+        }
+      };
+
+      expect(manager.isBannerPresent(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if only height is specified for banner object', () => {
+      let manager = getBidManager();
+      let impression = {
+        banner: {
+          h: 15
+        }
+      };
+
+      expect(manager.isBannerPresent(impression)).to.not.be.ok;
+    });
+
+    it('should be ok if width and height are specified for banner object', () => {
+      let manager = getBidManager();
+      let impression = {
+        banner: {
+          w: 10,
+          h: 15
+        }
+      };
+
+      expect(manager.isBannerPresent(impression)).to.be.ok;
+    });
+  });
+
+  describe('isVideoPresent()', () => {
+    it('should not be ok if impression contains empty video object', () => {
+      let manager = getBidManager();
+      let impression = {
+        video: {}
+      };
+
+      expect(manager.isVideoPresent(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if only mimes is specified for video object', () => {
+      let manager = getBidManager();
+      let impression = {
+        video: {
+          mimes: '1'
+        }
+      };
+
+      expect(manager.isVideoPresent(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if only minduration is specified for video object', () => {
+      let manager = getBidManager();
+      let impression = {
+        video: {
+          minduration: 10
+        }
+      };
+
+      expect(manager.isVideoPresent(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if only maxduration is specified for video object', () => {
+      let manager = getBidManager();
+      let impression = {
+        video: {
+          maxduration: 10
+        }
+      };
+
+      expect(manager.isVideoPresent(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if maxduration and minduration are specified for video object', () => {
+      let manager = getBidManager();
+      let impression = {
+        video: {
+          minduration: 10,
+          maxduration: 10
+        }
+      };
+
+      expect(manager.isVideoPresent(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if mimes and maxduration are specified for video object', () => {
+      let manager = getBidManager();
+      let impression = {
+        video: {
+          mimes: '1',
+          maxduration: 10
+        }
+      };
+
+      expect(manager.isVideoPresent(impression)).to.not.be.ok;
+    });
+
+    it('should be ok if mimes, minduration and maxduration are specified for video object', () => {
+      let manager = getBidManager();
+      let impression = {
+        video: {
+          mimes: '1',
+          minduration: 10,
+          maxduration: 10
+        }
+      };
+
+      expect(manager.isVideoPresent(impression)).to.be.ok;
+    });
+  });
+
+  describe('isImpressionValid()', () => {
+    let manager;
+    let isBannerPresentStub;
+    let isVideoPresentStub;
+
+    beforeEach(() => {
+      manager = getBidManager();
+      isBannerPresentStub = sinon.stub(manager, 'isBannerPresent').returns(false);
+      isVideoPresentStub = sinon.stub(manager, 'isVideoPresent').returns(false);
+    });
+
+    afterEach(() => {
+      isBannerPresentStub.reset();
+      isVideoPresentStub.reset();
+    });
+
+    it('should not be ok if imp id param is undefined', () => {
+      let impression = {
+        id: undefined,
+        tagid: 1234
+      };
+      isBannerPresentStub.returns(true);
+      isVideoPresentStub.returns(true);
+
+      expect(manager.isImpressionValid(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if imp tagid param is undefined', () => {
+      let impression = {
+        id: 1234,
+        tagid: undefined
+      };
+      isBannerPresentStub.returns(true);
+      isVideoPresentStub.returns(true);
+
+      expect(manager.isImpressionValid(impression)).to.not.be.ok;
+    });
+
+    it('should not be ok if imp does not support banner and video types', () => {
+      let impression = {
+        id: 1234,
+        tagid: 5678
+      };
+      isBannerPresentStub.returns(false);
+      isVideoPresentStub.returns(false);
+
+      expect(manager.isImpressionValid(impression)).to.not.be.ok;
+    });
+
+    it('should be ok if imp supports banner type', () => {
+      let impression = {
+        id: 1234,
+        tagid: 5678
+      };
+      isBannerPresentStub.returns(true);
+      isVideoPresentStub.returns(false);
+
+      expect(manager.isImpressionValid(impression)).to.be.ok;
+    });
+
+    it('should be ok if imp supports video type', () => {
+      let impression = {
+        id: 1234,
+        tagid: 5678
+      };
+      isBannerPresentStub.returns(false);
+      isVideoPresentStub.returns(true);
+
+      expect(manager.isImpressionValid(impression)).to.be.ok;
+    });
+
+    it('should be ok if imp supports banner and video types', () => {
+      let impression = {
+        id: 1234,
+        tagid: 5678
+      };
+      isBannerPresentStub.returns(true);
+      isVideoPresentStub.returns(true);
+
+      expect(manager.isImpressionValid(impression)).to.be.ok;
+    });
+  });
+
+  describe('isNexagePostRequest()', () => {
+    let manager;
+    let isImpressionValidStub;
+
+    beforeEach(() => {
+      manager = getBidManager();
+      isImpressionValidStub = sinon.stub(manager, 'isImpressionValid').returns(true);
+    });
+
+    afterEach(() => {
+      isImpressionValidStub.reset();
+    });
+
+    it('should not be ok when openRtbParams are undefined', () => {
+      expect(manager.isNexagePostRequest(undefined)).to.not.be.ok;
+    });
+
+    it('should not be ok when id is not specified in openRtbParams', () => {
+      let openRtbParams = {
+        id: undefined,
+        imp: [{}]
+      };
+
+      expect(manager.isNexagePostRequest(openRtbParams)).to.not.be.ok;
+    });
+
+    it('should not be ok when impressions array is empty', () => {
+      let openRtbParams = {
+        id: 1,
+        imp: []
+      };
+
+      expect(manager.isNexagePostRequest(openRtbParams)).to.not.be.ok;
+    });
+
+    it('should not be ok when impression is invalid', () => {
+      let openRtbParams = {
+        id: 1,
+        imp: [{
+          banner: {}
+        }]
+      };
+      isImpressionValidStub.returns(false);
+
+      expect(manager.isNexagePostRequest(openRtbParams)).to.not.be.ok;
+    });
+
+    it('should be ok when valid impression is present', () => {
+      let openRtbParams = {
+        id: 1,
+        imp: [{
+          banner: {}
+        }]
+      };
+      isImpressionValidStub.returns(true);
+
+      expect(manager.isNexagePostRequest(openRtbParams)).to.be.ok;
+    });
+  });
+
+  describe('resolveBidRequest()', () => {
+    let manager;
+    let isNexagePostRequestStub;
+
+    beforeEach(() => {
+      manager = getBidManager();
+      isNexagePostRequestStub = sinon.stub(manager, 'isNexagePostRequest').returns(false);
+    });
+
+    afterEach(() => {
+      isNexagePostRequestStub.reset();
+    });
+
+    it('should return NexageGetBidRequest object if dcn and pos are specified', () => {
+      let bidRequest = {
+        dcn: '1234'
+      };
+      let positionConfig = {
+        pos: '1234'
+      };
+      let bidRequestObject = manager.resolveBidRequest(bidRequest, positionConfig);
+
+      expect(bidRequestObject instanceof NexageGetBidRequest).to.be.true;
+    });
+
+    it('should return MarketplaceBidRequest object if network and placement are specified', () => {
+      let bidRequest = {
+        network: '9343.1'
+      };
+      let positionConfig = {
+        placement: '1234'
+      };
+      let bidRequestObject = manager.resolveBidRequest(bidRequest, positionConfig);
+
+      expect(bidRequestObject instanceof MarketplaceBidRequest).to.be.true;
+    });
+
+    it('should return NexagePostBidRequest object if isNexagePostRequestStub returns true', () => {
+      isNexagePostRequestStub.returns(true);
+      let bidRequestObject = manager.resolveBidRequest({}, {});
+
+      expect(bidRequestObject instanceof NexagePostBidRequest).to.be.true;
     });
   });
 });
