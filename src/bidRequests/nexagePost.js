@@ -4,9 +4,10 @@ import BaseBidRequest from './baseBidRequest';
 
 class NexagePostBidRequest extends BaseBidRequest {
   formatUrl() {
-    let url = utils.formatTemplateString`${'protocol'}://hb.nexage.com/bidRequest`;
+    let url = utils.formatTemplateString`${'protocol'}://${'hostName'}/bidRequest?`;
     let options = {
-      protocol: utils.resolveHttpProtocol()
+      protocol: utils.resolveHttpProtocol(),
+      hostName: this.bidRequestConfig.host || 'hb.nexage.com'
     };
 
     return url(options);

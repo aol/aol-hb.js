@@ -1,7 +1,7 @@
 import utils from 'src/helpers/utils';
 import NexageGetBidRequest from 'src/bidRequests/nexageGet.js';
 
-describe('MarketplaceBidRequest', () => {
+describe('NexageGetBidRequest', () => {
   let getBidRequest = (bidRequestConfig, placementConfig) => {
     return new NexageGetBidRequest(bidRequestConfig || {}, placementConfig || {});
   };
@@ -17,7 +17,7 @@ describe('MarketplaceBidRequest', () => {
       resolveHttpProtocolStub.restore();
     });
 
-    it('should resolve url without dynamic params', () => {
+    it('should resolve url with default host name', () => {
       let bidRequestConfig = {
         dcn: 'dcn-value1'
       };
@@ -28,6 +28,22 @@ describe('MarketplaceBidRequest', () => {
       let bidRequest = getBidRequest(bidRequestConfig, placementConfig);
 
       let expectedUrl = 'https://hb.nexage.com/bidRequest?dcn=dcn-value1' +
+        '&pos=placement-position&cmd=bid';
+      expect(bidRequest.formatUrl()).to.equal(expectedUrl);
+    });
+
+    it('should resolve url with specified hostName', () => {
+      let bidRequestConfig = {
+        dcn: 'dcn-value1',
+        host: 'test-host'
+      };
+      let placementConfig = {
+        pos: 'placement-position'
+      };
+
+      let bidRequest = getBidRequest(bidRequestConfig, placementConfig);
+
+      let expectedUrl = 'https://test-host/bidRequest?dcn=dcn-value1' +
         '&pos=placement-position&cmd=bid';
       expect(bidRequest.formatUrl()).to.equal(expectedUrl);
     });

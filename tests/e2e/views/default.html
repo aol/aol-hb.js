@@ -119,6 +119,7 @@
       aliasKey: 'mpalias',
       userSyncOn: 'bidResponse',
       dcn: 1234,
+      host: 'medaition-node1.sbx:8080',
       onBidResponse: bidResponseHandler,
       onAllBidResponses: function () {
         console.log('onAllBidResponses');
@@ -157,7 +158,8 @@
             banner: {
               w: 300,
               h: 300
-            }
+            },
+            bidfloor: '0.2'
           }
         ],
         site: {
