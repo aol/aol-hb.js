@@ -72,9 +72,10 @@ class RenderingManager {
     let tagNameRegExp = /\w*(?=\s)/;
     let srcRegExp = /src\s*=\s*("|')([^\1]+)\1/i;
     let pixelsItems = [];
+    let pixelsMatch = pixels.match(itemsRegExp);
 
-    if (pixels) {
-      pixels.match(itemsRegExp).forEach((item) => {
+    if (pixelsMatch) {
+      pixelsMatch.forEach((item) => {
         let tagNameMatches = item.match(tagNameRegExp);
         let sourcesPathMatches = item.match(srcRegExp);
 
