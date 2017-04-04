@@ -131,16 +131,10 @@ describe('RenderAdManager', () => {
   });
 
   describe('parsePixelsItems()', () => {
-    it('should return empty for undefined parameter', () => {
+    it('should return empty for empty string parameter', () => {
       let subject = getSubject();
 
-      expect(subject.parsePixelsItems()).to.be.empty;
-    });
-
-    it('should return empty for null parameter', () => {
-      let subject = getSubject();
-
-      expect(subject.parsePixelsItems(null)).to.be.empty;
+      expect(subject.parsePixelsItems('')).to.be.empty;
     });
 
     it('should return parsed items when pixels are present', () => {
