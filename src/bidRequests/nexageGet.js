@@ -20,11 +20,9 @@ class NexageGetBidRequest extends BaseBidRequest {
     let params = '';
     let ext = this.placementConfig.ext;
 
-    for (let key in ext) {
-      if (ext.hasOwnProperty(key)) {
-        params += `&${key}=` + encodeURIComponent(ext[key]);
-      }
-    }
+    utils.each(ext, (value, key) => {
+      params += encodeURIComponent(`&${key}=${value}`);
+    });
 
     return params;
   }

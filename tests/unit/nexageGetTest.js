@@ -81,7 +81,7 @@ describe('NexageGetBidRequest', () => {
         mraid: '2',
         sdk: 'ANDROID'
       };
-      let expectedResult = '&reserve=0.1&mraid=2&sdk=ANDROID';
+      let expectedResult = encodeURIComponent('&reserve=0.1&mraid=2&sdk=ANDROID');
 
       expect(bidRequest.formatDynamicParams()).to.equal(expectedResult);
     });
@@ -92,7 +92,7 @@ describe('NexageGetBidRequest', () => {
       bidRequest.placementConfig.ext = {
         sdk: 'A@#ND~RO+ID'
       };
-      let expectedResult = '&sdk=' + encodeURIComponent(bidRequest.placementConfig.ext.sdk);
+      let expectedResult = encodeURIComponent('&sdk=' + bidRequest.placementConfig.ext.sdk);
 
       expect(bidRequest.formatDynamicParams()).to.equal(expectedResult);
     });
