@@ -1,5 +1,6 @@
 const config = require('./config');
 const path = require('path');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
 
 module.exports = {
   output: {
@@ -24,7 +25,22 @@ module.exports = {
         query: {
           presets: ['es2015']
         }
+      }, {
+        test: /\.js$/,
+        loader: StringReplacePlugin.replace({
+          replacements: [
+            {
+              pattern: /\$\$AOLHB_GLOBAL\$\$/g,
+              replacement: function() {
+                return config.globalNamespace;
+              }
+            }
+          ]
+        })
       }
+    ],
+    plugins: [
+      new StringReplacePlugin()
     ]
   }
 };

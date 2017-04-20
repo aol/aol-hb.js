@@ -7,5 +7,6 @@ module.exports = {
   karmaConfigFilePath: path.resolve('./config/karma.conf.js'),
   e2eTestViewsDirectory: path.resolve('./tests/e2e/views'),
   tempFilesDir: path.resolve('./temp/'),
-  nightWatchConfigPath: path.resolve('./temp/') + '/' + 'nightwatch.json'
+  nightWatchConfigPath: path.resolve('./temp/') + '/' + 'nightwatch.json',
+  globalNamespace: 'aolhb'
 };
