@@ -2,7 +2,8 @@ import 'helpers/polyfills';
 import BidManager from 'bidManager';
 import RenderingManager from 'renderingManager';
 
-let globalContext = window.aolhb = window.aolhb || {};
+let globalContext = window.$$AOLHB_GLOBAL$$ = window.$$AOLHB_GLOBAL$$ || {};
+
 globalContext.queue = globalContext.queue || [];
 
 globalContext.init = (bidRequestConfig, placementsConfigs) => {
