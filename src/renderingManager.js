@@ -7,7 +7,7 @@ class RenderingManager {
     this.document = document;
   }
 
-  render() {
+  renderAd() {
     let iframe = this.createAdFrame();
 
     if (iframe) {
@@ -60,10 +60,12 @@ class RenderingManager {
   }
 
   renderPixels() {
-    if (this.bidResponse && this.bidResponse.pixels && !this.bidResponse.pixelsRendered) {
+    if (this.bidResponse.pixels && !$$AOLHB_GLOBAL$$.pixelsDropped) {
       let pixelsElements = this.parsePixelsItems(this.bidResponse.pixels);
 
       this.renderPixelsItems(pixelsElements);
+
+      $$AOLHB_GLOBAL$$.pixelsDropped = true;
     }
   }
 

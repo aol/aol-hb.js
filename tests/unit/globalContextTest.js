@@ -1,4 +1,4 @@
-import GlobalContext from 'src/aol-hb.js';
+import GlobalContext from 'src/aol-hb';
 
 describe('GlobalContext', () => {
 
@@ -16,4 +16,7 @@ describe('GlobalContext', () => {
     expect(GlobalContext).to.have.property('addNewAd').that.is.a('function');
   });
 
+  it('should set pixelsDropped to false by default', () => {
+    expect(GlobalContext.pixelsDropped).to.be.false;
+  });
 });
