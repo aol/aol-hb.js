@@ -76,6 +76,7 @@
     // 3rd party
     "sinon": true,
     "assert": true,
-    "expect": true
+    "expect": true,
+    "$$AOLHB_GLOBAL$$": true
   }
 }

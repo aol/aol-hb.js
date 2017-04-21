@@ -6,6 +6,8 @@ let globalContext = window.$$AOLHB_GLOBAL$$ = window.$$AOLHB_GLOBAL$$ || {};
 
 globalContext.queue = globalContext.queue || [];
 
+globalContext.pixelsDropped = false;
+
 globalContext.init = (bidRequestConfig, placementsConfigs) => {
   let manager = new BidManager(bidRequestConfig, placementsConfigs);
   manager.sendBidRequests();
@@ -16,7 +18,7 @@ globalContext.init = (bidRequestConfig, placementsConfigs) => {
     if (bidResponseConfig) {
       let renderingManager = new RenderingManager(bidResponseConfig, document);
 
-      renderingManager.render();
+      renderingManager.renderAd();
     }
   };
 

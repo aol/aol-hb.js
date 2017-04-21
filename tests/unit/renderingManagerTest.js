@@ -90,7 +90,7 @@ describe('RenderAdManager', () => {
     });
   });
 
-  describe('render()', () => {
+  describe('renderAd()', () => {
     let renderingManager;
     let createAdFrameStub;
     let insertElementStub;
@@ -113,7 +113,7 @@ describe('RenderAdManager', () => {
     });
 
     it('should not call rendering methods when ad data is not present', () => {
-      renderingManager.render();
+      renderingManager.renderAd();
 
       expect(insertElementStub.calledOnce).to.be.false;
       expect(populateIframeContentStub.calledOnce).to.be.false;
@@ -122,7 +122,7 @@ describe('RenderAdManager', () => {
 
     it('should call rendering methods when ad data is present', () => {
       createAdFrameStub.returns({});
-      renderingManager.render();
+      renderingManager.renderAd();
 
       expect(insertElementStub.calledOnce).to.be.true;
       expect(populateIframeContentStub.calledOnce).to.be.true;
@@ -172,6 +172,7 @@ describe('RenderAdManager', () => {
     let renderPixelsItemsStub;
 
     beforeEach(() => {
+      $$AOLHB_GLOBAL$$.pixelsDropped = false;
       renderingManager = getSubject();
 
       parsePixelsItemsStub = sinon.stub(renderingManager, 'parsePixelsItems');
@@ -184,13 +185,14 @@ describe('RenderAdManager', () => {
       renderingManager.renderPixels();
       expect(parsePixelsItemsStub.called).to.be.false;
       expect(renderPixelsItemsStub.called).to.be.false;
+      expect($$AOLHB_GLOBAL$$.pixelsDropped).to.be.false;
     });
 
     it('should not call pixels rendering when pixels are already rendered', () => {
       renderingManager.bidResponse = {
-        pixels: {},
-        pixelsRendered: true
+        pixels: {}
       };
+      $$AOLHB_GLOBAL$$.pixelsDropped = true;
 
       renderingManager.renderPixels();
       expect(parsePixelsItemsStub.called).to.be.false;
@@ -201,12 +203,12 @@ describe('RenderAdManager', () => {
       renderingManager.bidResponse = {
         pixels: 'pixels-content'
       };
-      renderingManager.pixelsRendered = false;
       parsePixelsItemsStub.returns('pixels-elements');
 
       renderingManager.renderPixels();
       expect(parsePixelsItemsStub.withArgs('pixels-content').calledOnce).to.be.true;
       expect(renderPixelsItemsStub.withArgs('pixels-elements').calledOnce).to.be.true;
+      expect($$AOLHB_GLOBAL$$.pixelsDropped).to.be.true;
     });
   });
 

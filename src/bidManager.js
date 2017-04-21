@@ -179,8 +179,6 @@ class BidManager {
       let renderingManager = new RenderingManager(bidResponse);
 
       renderingManager.renderPixels();
-
-      bidResponse.pixelsRendered = true;
     }
   }
 
