@@ -2,6 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- Consent Manager Tag : Stubbed -->
+  <script type="text/javascript" , async=true>
+    var __cmp = (function () {
+      return typeof (__cmp) == "function" ? __cmp : function (c, version, callback) {
+        var b = arguments;
+        if (!b.length) {
+          return __cmp.a;
+        }
+        else if (c == '__cmp')
+          return false;
+        else {
+          if (typeof __cmp.a === 'undefined') {
+            __cmp.a = [];
+          }
+          // callback({
+          //   consentData: 'bdasfsd3213dfgfg',
+          //   gdprApplies: true
+          // })
+          __cmp.a.push([].slice.apply(b));
+        }
+      }
+    })();
+  </script>
+  <!-- End Consent Manager Tag : Stubbed -->
+
   <script src="/project"></script>
   <script>
 
@@ -105,7 +130,6 @@
       userSyncOn: 'bidResponse',
       dcn: 1234,
       host: 'medaition-node1.sbx:8080',
-      gdprEnabled: true,
       onBidResponse: bidResponseHandler,
       onAllBidResponses: function () {
         console.log('onAllBidResponses');

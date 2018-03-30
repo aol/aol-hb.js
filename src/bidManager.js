@@ -2,6 +2,7 @@ import RenderingManager from 'renderingManager';
 import MarketplaceBidRequest from 'bidRequests/marketplace';
 import NexageGetBidRequest from 'bidRequests/nexageGet';
 import NexagePostBidRequest from 'bidRequests/nexagePost';
+import consentManagement from 'helpers/consentManagement';
 
 /***
  * The class contains logic for processing bid
@@ -55,16 +56,18 @@ class BidManager {
    * Send bid request for particular placement.
    */
   sendBidRequest(placementConfig, bidResponseHandler) {
-    let defaultBidResponseHandler = (bidResponse) => {
-      this.handleBidRequestResponse(placementConfig, bidResponse);
-    };
-    bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
+    consentManagement.getConsentData((consentData) => {
+      let defaultBidResponseHandler = (bidResponse) => {
+        this.handleBidRequestResponse(placementConfig, bidResponse);
+      };
+      bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
 
-    let bidRequest = this.resolveBidRequest(this.bidRequestConfig, placementConfig);
+      let bidRequest = this.resolveBidRequest(this.bidRequestConfig, placementConfig, consentData);
 
-    if (bidRequest) {
-      bidRequest.send(bidResponseHandler);
-    }
+      if (bidRequest) {
+        bidRequest.send(bidResponseHandler);
+      }
+    });
   }
 
   handleBidRequestResponse(placementConfig, response) {
@@ -182,11 +185,11 @@ class BidManager {
     }
   }
 
-  resolveBidRequest(bidRequestConfig, placementConfig) {
+  resolveBidRequest(bidRequestConfig, placementConfig, consentData) {
     if (bidRequestConfig.dcn && placementConfig.pos) {
       return new NexageGetBidRequest(bidRequestConfig, placementConfig);
     } else if (bidRequestConfig.network && placementConfig.placement) {
-      return new MarketplaceBidRequest(bidRequestConfig, placementConfig);
+      return new MarketplaceBidRequest(bidRequestConfig, placementConfig, consentData);
     } else if (this.isNexagePostRequest(placementConfig.openRtbParams)) {
       return new NexagePostBidRequest(bidRequestConfig, placementConfig);
     }

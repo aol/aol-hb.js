@@ -1,4 +1,6 @@
 
+let consentData;
+
 module.exports = {
   getCmpApi() {
     let w = window;
@@ -9,16 +11,35 @@ module.exports = {
       if (w.__cmp) {
         return w.__cmp;
       }
-    };
+    }
 
     return window.__cmp;
   },
 
-  getConsentString() {
+  getConsentData(callback) {
     let cmpApi = this.getCmpApi();
+    let handler = (function() {
+      let executed = false;
 
-    if (cmpApi) {
-      return cmpApi('getConsentData');
+      return function() {
+        if (!executed) {
+          executed = true;
+          callback(consentData);
+        }
+      };
+    })();
+
+    if (cmpApi && !consentData) {
+      setTimeout(handler, 4000);
+
+      cmpApi('getConsentData', null, (data) => {
+        consentData = data;
+        handler(data);
+      });
+
+      return;
     }
+
+    callback(consentData);
   }
 };
