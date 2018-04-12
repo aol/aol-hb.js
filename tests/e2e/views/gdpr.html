@@ -3,29 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <!-- Consent Manager Tag : Stubbed -->
-  <script type="text/javascript" , async=true>
-    var __cmp = (function () {
-      return typeof (__cmp) == "function" ? __cmp : function (c, version, callback) {
-        var b = arguments;
-        if (!b.length) {
-          return __cmp.a;
-        }
-        else if (c == '__cmp')
-          return false;
-        else {
-          if (typeof __cmp.a === 'undefined') {
-            __cmp.a = [];
-          }
-          // callback({
-          //   consentData: 'bdasfsd3213dfgfg',
-          //   gdprApplies: true
-          // })
-          __cmp.a.push([].slice.apply(b));
-        }
-      }
-    })();
-  </script>
+  <script type="text/javascript">var gdprAppliesGlobally=!1,frameAdded=!1,addFrame=function(){if(!frameAdded){var e=document.createElement("iframe");e.style="display:none",e.name="_cmp_",document.body.appendChild(e),frameAdded=!0}};document.body?addFrame():document.addEventListener?document.addEventListener("DOMContentLoaded",addFrame):document.attachEvent("onreadystatechange",addFrame),window.__cmp="function"==typeof __cmp?__cmp:function(){var e=arguments;if(!e.length)return __cmp.a;"ping"===e[0]?e[2]({gdprAppliesGlobally:gdprAppliesGlobally,cmpLoaded:!1},!0):(__cmp.a=__cmp.a||[],__cmp.a.push([].slice.apply(e)))};var cmpMsgHandler=function(e){var a="string"==typeof e.data,d=a?JSON.parse(e.data):e.data;if(d.__cmpCall){var n=d.__cmpCall;window.__cmp(n.command,n.parameter,function(d,t){var c={__cmpReturn:{returnValue:d,success:t,callId:n.callId}};e.source.postMessage(a?JSON.stringify(c):c,"*")})}};window.addEventListener?window.addEventListener("message",cmpMsgHandler,!1):window.attachEvent("onmessage",cmpMsgHandler);</script>
   <!-- End Consent Manager Tag : Stubbed -->
+  <script src="//consent.cmp.oath.com/cmp.js" async></script>
+  <script>
+    window.__cmp('init', {
+      gdprAppliesGlobally: true
+    });
+  </script>
 
   <script src="/project"></script>
   <script>
