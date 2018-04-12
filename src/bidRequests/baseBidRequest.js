@@ -15,6 +15,12 @@ class BaseBidRequest {
 
     sendGetRequest(bidRequestUrl, bidRequestHandler);
   }
+
+  isConsentRequired() {
+    let consentData = this.consentData;
+
+    return !!(consentData && consentData.consentString && consentData.consentRequired);
+  }
 }
 
 export default BaseBidRequest;

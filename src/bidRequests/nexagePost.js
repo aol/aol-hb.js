@@ -25,6 +25,26 @@ class NexagePostBidRequest extends BaseBidRequest {
 
     sendPostRequest(bidRequestUrl, bidRequestHandler, options);
   }
+
+  buildOpenRtbRequestData() {
+    let {id, imp} = this.placementConfig.openRtbParams;
+    let openRtbObject = {id, imp};
+
+    if (this.isConsentRequired()) {
+      openRtbObject.user = {
+        ext: {
+          consent: this.consentData.consentString
+        }
+      };
+      openRtbObject.regs = {
+        ext: {
+          gdpr: 1
+        }
+      };
+    }
+
+    return openRtbObject;
+  }
 }
 
 export default NexagePostBidRequest;

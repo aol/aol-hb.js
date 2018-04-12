@@ -18,7 +18,12 @@ class NexageGetBidRequest extends BaseBidRequest {
 
   formatDynamicParams() {
     let params = '';
-    let ext = this.placementConfig.ext;
+    let ext = this.placementConfig.ext || {};
+
+    if (this.isConsentRequired()) {
+      ext.euconsent = this.consentData.consentString;
+      ext.gdpr = true;
+    }
 
     utils.each(ext, (value, key) => {
       params += encodeURIComponent(`&${key}=${value}`);
