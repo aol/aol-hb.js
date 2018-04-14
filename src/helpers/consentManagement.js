@@ -1,7 +1,9 @@
 
+const DEFAULT_TIMEOUT = 4000;
+
 let consentData;
 
-module.exports = {
+export default {
   getCmpApi() {
     let w = window;
 
@@ -30,16 +32,30 @@ module.exports = {
     })();
 
     if (cmpApi && !consentData) {
-      setTimeout(handler, 4000);
+      setTimeout(handler, DEFAULT_TIMEOUT);
 
       cmpApi('getConsentData', null, (data) => {
-        consentData = data;
-        handler(data);
+        saveConsentData(data);
+        handler(consentData);
       });
 
       return;
     }
 
     callback(consentData);
+  },
+  saveConsentData(data) {
+    // TODO: Move to utils.
+    if (typeof data === 'object') {
+      consentData = {
+        consentString: data.consentData,
+        consentRequired: data.gdprApplies
+      }
+    } else if (typeof data === 'string') {
+      consentData = {
+        consentString: data,
+        consentRequired: true
+      }
+    }
   }
 };

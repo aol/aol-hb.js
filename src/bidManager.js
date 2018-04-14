@@ -56,8 +56,8 @@ class BidManager {
    * Send bid request for particular placement.
    */
   sendBidRequest(placementConfig, bidResponseHandler) {
-    consentManagement.getConsentData((consentData) => {
-      let defaultBidResponseHandler = (bidResponse) => {
+    consentManagement.getConsentData(consentData => {
+      let defaultBidResponseHandler = bidResponse => {
         this.handleBidRequestResponse(placementConfig, bidResponse);
       };
       bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
