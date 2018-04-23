@@ -2,16 +2,16 @@ import RenderingManager from 'renderingManager';
 import MarketplaceBidRequest from 'bidRequests/marketplace';
 import NexageGetBidRequest from 'bidRequests/nexageGet';
 import NexagePostBidRequest from 'bidRequests/nexagePost';
-import consentManagement from 'helpers/consentManagement';
 
 /***
  * The class contains logic for processing bid
  * requests and handling bid responses.
  */
 class BidManager {
-  constructor(bidRequestConfig, placementsConfigs) {
+  constructor(bidRequestConfig, placementsConfigs, consentData) {
     this.bidRequestConfig = bidRequestConfig;
     this.placementsConfigs = placementsConfigs || [];
+    this.consentData = consentData;
     this.bidderKey = bidRequestConfig.bidderKey || 'aolbid';
     this.aliasKey = bidRequestConfig.aliasKey || 'mpalias';
     this.userSyncOn = bidRequestConfig.userSyncOn || BidManager.HEADER_BIDDING_EVENTS.bidResponse;
@@ -56,18 +56,16 @@ class BidManager {
    * Send bid request for particular placement.
    */
   sendBidRequest(placementConfig, bidResponseHandler) {
-    consentManagement.getConsentData(consentData => {
-      let defaultBidResponseHandler = bidResponse => {
-        this.handleBidRequestResponse(placementConfig, bidResponse);
-      };
-      bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
+    let defaultBidResponseHandler = bidResponse => {
+      this.handleBidRequestResponse(placementConfig, bidResponse);
+    };
+    bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
 
-      let bidRequest = this.resolveBidRequest(this.bidRequestConfig, placementConfig, consentData);
+    let bidRequest = this.resolveBidRequest(this.bidRequestConfig, placementConfig);
 
-      if (bidRequest) {
-        bidRequest.send(bidResponseHandler);
-      }
-    });
+    if (bidRequest) {
+      bidRequest.send(bidResponseHandler);
+    }
   }
 
   handleBidRequestResponse(placementConfig, response) {
@@ -185,11 +183,11 @@ class BidManager {
     }
   }
 
-  resolveBidRequest(bidRequestConfig, placementConfig, consentData) {
+  resolveBidRequest(bidRequestConfig, placementConfig) {
     if (bidRequestConfig.dcn && placementConfig.pos) {
       return new NexageGetBidRequest(bidRequestConfig, placementConfig);
     } else if (bidRequestConfig.network && placementConfig.placement) {
-      return new MarketplaceBidRequest(bidRequestConfig, placementConfig, consentData);
+      return new MarketplaceBidRequest(bidRequestConfig, placementConfig, this.consentData);
     } else if (this.isNexagePostRequest(placementConfig.openRtbParams)) {
       return new NexagePostBidRequest(bidRequestConfig, placementConfig);
     }
