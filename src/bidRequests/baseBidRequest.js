@@ -19,7 +19,7 @@ class BaseBidRequest {
   isConsentRequired() {
     let consentData = this.consentData;
 
-    return !!(consentData && consentData.consentString && consentData.consentRequired);
+    return !!(consentData && consentData.consentString && consentData.gdprApplies);
   }
 }
 

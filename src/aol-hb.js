@@ -10,10 +10,10 @@ globalContext.queue = globalContext.queue || [];
 globalContext.pixelsDropped = false;
 
 globalContext.init = (bidRequestConfig, placementsConfigs) => {
-  let consentRequired = bidRequestConfig.consentRequired;
+  let gdprApplies = bidRequestConfig.gdprApplies;
   let consentTimeout = bidRequestConfig.consentTimeout;
 
-  consentManagement.init(consentRequired, consentTimeout, consentData => {
+  consentManagement.init(gdprApplies, consentTimeout, consentData => {
     let manager = new BidManager(bidRequestConfig, placementsConfigs, consentData);
     manager.sendBidRequests();
 

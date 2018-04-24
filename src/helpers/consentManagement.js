@@ -3,9 +3,9 @@ const DEFAULT_TIMEOUT = 4000;
 
 export default {
   consentData: null,
-  consentRequired: false,
   consentTimeout: DEFAULT_TIMEOUT,
-  init(consentRequired, consentTimeout, callback) {
+  gdprApplies: true,
+  init(gdprApplies, consentTimeout, callback) {
     let cmpApi = this.getCmpApi();
     let handler = (function() {
       let executed = false;
@@ -17,8 +17,14 @@ export default {
         }
       };
     })();
-    this.consentRequired = !!consentRequired;
-    this.consentTimeout = consentTimeout || DEFAULT_TIMEOUT;
+
+    if (consentTimeout) {
+      this.consentTimeout = consentTimeout;
+    }
+
+    if (gdprApplies === false) {
+      this.gdprApplies = false;
+    }
 
     if (cmpApi && !this.consentData) {
       setTimeout(handler, this.consentTimeout);
@@ -50,16 +56,10 @@ export default {
   },
 
   formatCmpApiResponse(response) {
-    // TODO: Move to utils.
     if (typeof response === 'object') {
       return {
         consentString: response.consentData,
-        consentRequired: response.gdprApplies || this.consentRequired
-      };
-    } else if (typeof response === 'string') {
-      return {
-        consentString: response,
-        consentRequired: this.consentRequired
+        gdprApplies: this.gdprApplies && response.gdprApplies
       };
     }
   }
