@@ -22,11 +22,11 @@ class NexageGetBidRequest extends BaseBidRequest {
 
     if (this.isConsentRequired()) {
       ext.euconsent = this.consentData.consentString;
-      ext.gdpr = true;
+      ext.gdpr = 1;
     }
 
     utils.each(ext, (value, key) => {
-      params += encodeURIComponent(`&${key}=${value}`);
+      params += `&${key}=${encodeURIComponent(value)}`;
     });
 
     return params;

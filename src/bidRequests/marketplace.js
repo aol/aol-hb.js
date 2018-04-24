@@ -34,7 +34,7 @@ class MarketplaceBidRequest extends BaseBidRequest {
   }
 
   formatConsentData() {
-    return this.isConsentRequired() ? `;euconsent=${this.consentData.consentString};gdpr=true` : '';
+    return this.isConsentRequired() ? `;euconsent=${this.consentData.consentString};gdpr=1` : '';
   }
 }
 

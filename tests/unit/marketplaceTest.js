@@ -98,4 +98,30 @@ describe('MarketplaceBidRequest', () => {
       expect(bidRequest.resolveHostName()).to.equal('adserver.adtechus.com');
     });
   });
+
+  describe('formatConsentData()', () => {
+    let consentRequiredStub;
+    let bidRequest;
+    beforeEach(() => {
+      bidRequest = getBidRequest();
+      consentRequiredStub = sinon.stub(bidRequest, 'isConsentRequired');
+    });
+
+    afterEach(() => {
+      consentRequiredStub.restore();
+    });
+
+    it('should return empty string when consent is not required', () => {
+      consentRequiredStub.returns(false);
+      expect(bidRequest.formatConsentData()).to.be.equal('');
+    });
+
+    it('should return formatted consent data when consent is required', () => {
+      consentRequiredStub.returns(true);
+      bidRequest.consentData = {
+        consentString: 'test-consent'
+      };
+      expect(bidRequest.formatConsentData()).to.be.equal(';euconsent=test-consent;gdpr=1');
+    });
+  });
 });
