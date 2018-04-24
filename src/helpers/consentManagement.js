@@ -34,8 +34,6 @@ export default {
 
         handler(this.consentData);
       });
-
-      return;
     } else {
       callback(this.consentData);
     }
@@ -45,11 +43,16 @@ export default {
     let w = window;
 
     for (let i = 0; i < 10; i++) {
-      w = w.parent;
+      try {
+        w = w.parent;
 
-      if (w.__cmp) {
-        return w.__cmp;
+        if (w.__cmp) {
+          return w.__cmp;
+        }
+      } catch (error) {
+        return;
       }
+
     }
 
     return window.__cmp;
