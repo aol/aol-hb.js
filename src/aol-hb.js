@@ -1,6 +1,7 @@
 import 'helpers/polyfills';
 import BidManager from 'bidManager';
 import RenderingManager from 'renderingManager';
+import consentManagement from 'helpers/consentManagement';
 
 let globalContext = window.$$AOLHB_GLOBAL$$ = window.$$AOLHB_GLOBAL$$ || {};
 
@@ -9,30 +10,35 @@ globalContext.queue = globalContext.queue || [];
 globalContext.pixelsDropped = false;
 
 globalContext.init = (bidRequestConfig, placementsConfigs) => {
-  let manager = new BidManager(bidRequestConfig, placementsConfigs);
-  manager.sendBidRequests();
+  let gdprApplies = bidRequestConfig.gdprApplies;
+  let consentTimeout = bidRequestConfig.consentTimeout;
 
-  globalContext.renderAd = (alias) => {
-    let bidResponseConfig = manager.getBidResponseByAlias(alias);
+  consentManagement.init(gdprApplies, consentTimeout, consentData => {
+    let manager = new BidManager(bidRequestConfig, placementsConfigs, consentData);
+    manager.sendBidRequests();
 
-    if (bidResponseConfig) {
-      let renderingManager = new RenderingManager(bidResponseConfig, document);
+    globalContext.renderAd = (alias) => {
+      let bidResponseConfig = manager.getBidResponseByAlias(alias);
 
-      renderingManager.renderAd();
-    }
-  };
+      if (bidResponseConfig) {
+        let renderingManager = new RenderingManager(bidResponseConfig, document);
 
-  globalContext.getBidResponse = (alias) => {
-    return manager.getBidResponseByAlias(alias);
-  };
+        renderingManager.renderAd();
+      }
+    };
 
-  globalContext.refreshAd = (alias) => {
-    manager.refreshAd(alias);
-  };
+    globalContext.getBidResponse = (alias) => {
+      return manager.getBidResponseByAlias(alias);
+    };
 
-  globalContext.addNewAd = (placementConfig) => {
-    manager.addNewAd(placementConfig);
-  };
+    globalContext.refreshAd = (alias) => {
+      manager.refreshAd(alias);
+    };
+
+    globalContext.addNewAd = (placementConfig) => {
+      manager.addNewAd(placementConfig);
+    };
+  });
 };
 
 globalContext.queue.push = (cmd) => {

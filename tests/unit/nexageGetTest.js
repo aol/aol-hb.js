@@ -81,9 +81,8 @@ describe('NexageGetBidRequest', () => {
         mraid: '2',
         sdk: 'ANDROID'
       };
-      let expectedResult = encodeURIComponent('&reserve=0.1&mraid=2&sdk=ANDROID');
 
-      expect(bidRequest.formatDynamicParams()).to.equal(expectedResult);
+      expect(bidRequest.formatDynamicParams()).to.equal('&reserve=0.1&mraid=2&sdk=ANDROID');
     });
 
     it('should encode param when it contains special characters', () => {
@@ -92,9 +91,20 @@ describe('NexageGetBidRequest', () => {
       bidRequest.placementConfig.ext = {
         sdk: 'A@#ND~RO+ID'
       };
-      let expectedResult = encodeURIComponent('&sdk=' + bidRequest.placementConfig.ext.sdk);
+      let expectedResult = '&sdk=' + encodeURIComponent(bidRequest.placementConfig.ext.sdk);
 
       expect(bidRequest.formatDynamicParams()).to.equal(expectedResult);
+    });
+
+    it('should return formatted gdpr params when isConsentRequired returns true', () => {
+      let bidRequest = getBidRequest();
+      sinon.stub(bidRequest, 'isConsentRequired').returns(true);
+
+      bidRequest.consentData = {
+        consentString: 'test-consent'
+      };
+
+      expect(bidRequest.formatDynamicParams()).to.equal('&euconsent=test-consent&gdpr=1');
     });
   });
 });

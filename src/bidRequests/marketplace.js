@@ -8,7 +8,7 @@ class MarketplaceBidRequest extends BaseBidRequest {
   formatUrl() {
     let url = utils.formatTemplateString`${'protocol'}://${'hostName'}/pubapi/3.0/${'network'}/
       ${'placement'}/0/-1/ADTECH;cmd=bid;cors=yes;
-      v=2;alias=${'alias'};${'bidFloorPrice'}`;
+      v=2;alias=${'alias'}${'bidFloorPrice'}${'consentData'}`;
 
     let options = {
       protocol: utils.resolveHttpProtocol(),
@@ -16,7 +16,8 @@ class MarketplaceBidRequest extends BaseBidRequest {
       network: this.bidRequestConfig.network,
       placement: parseInt(this.placementConfig.placement),
       alias: this.placementConfig.alias,
-      bidFloorPrice: this.resolveBidFloorPrice(this.placementConfig.bidFloorPrice)
+      bidFloorPrice: this.resolveBidFloorPrice(this.placementConfig.bidFloorPrice),
+      consentData: this.formatConsentData()
     };
 
     return url(options);
@@ -29,7 +30,11 @@ class MarketplaceBidRequest extends BaseBidRequest {
   }
 
   resolveBidFloorPrice(floorPrice) {
-    return floorPrice ? `bidfloor=${floorPrice.toString()};` : '';
+    return floorPrice ? `;bidfloor=${floorPrice.toString()};` : '';
+  }
+
+  formatConsentData() {
+    return this.isConsentRequired() ? `;euconsent=${this.consentData.consentString};gdpr=1` : '';
   }
 }
 

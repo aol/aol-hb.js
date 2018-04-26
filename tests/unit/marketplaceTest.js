@@ -30,7 +30,7 @@ describe('MarketplaceBidRequest', () => {
       sinon.stub(bidRequest, 'resolveHostName').returns('test.com');
 
       let expectedUrl = 'https://test.com/pubapi/3.0/5404.10/15/0/-1/ADTECH;' +
-        'cmd=bid;cors=yes;v=2;alias=54;';
+        'cmd=bid;cors=yes;v=2;alias=54';
       expect(bidRequest.formatUrl()).to.equal(expectedUrl);
     });
 
@@ -45,7 +45,7 @@ describe('MarketplaceBidRequest', () => {
       };
       let bidRequest = getBidRequest(bidRequestConfig, placementConfig);
       sinon.stub(bidRequest, 'resolveHostName').returns('test2.com');
-      sinon.stub(bidRequest, 'resolveBidFloorPrice').returns('bid-floor-price');
+      sinon.stub(bidRequest, 'resolveBidFloorPrice').returns(';bid-floor-price');
 
       let expectedUrl = 'https://test2.com/pubapi/3.0/5404.10/15/0/-1/ADTECH;' +
         'cmd=bid;cors=yes;v=2;alias=54;bid-floor-price';
@@ -69,7 +69,7 @@ describe('MarketplaceBidRequest', () => {
     it('should be formatted when floor price is defined', () => {
       let bidRequest = getBidRequest();
 
-      expect(bidRequest.resolveBidFloorPrice(29)).to.equal('bidfloor=29;');
+      expect(bidRequest.resolveBidFloorPrice(29)).to.equal(';bidfloor=29;');
     });
   });
 
@@ -96,6 +96,32 @@ describe('MarketplaceBidRequest', () => {
       let bidRequest = getBidRequest({region: 'US'});
 
       expect(bidRequest.resolveHostName()).to.equal('adserver.adtechus.com');
+    });
+  });
+
+  describe('formatConsentData()', () => {
+    let consentRequiredStub;
+    let bidRequest;
+    beforeEach(() => {
+      bidRequest = getBidRequest();
+      consentRequiredStub = sinon.stub(bidRequest, 'isConsentRequired');
+    });
+
+    afterEach(() => {
+      consentRequiredStub.restore();
+    });
+
+    it('should return empty string when consent is not required', () => {
+      consentRequiredStub.returns(false);
+      expect(bidRequest.formatConsentData()).to.be.equal('');
+    });
+
+    it('should return formatted consent data when consent is required', () => {
+      consentRequiredStub.returns(true);
+      bidRequest.consentData = {
+        consentString: 'test-consent'
+      };
+      expect(bidRequest.formatConsentData()).to.be.equal(';euconsent=test-consent;gdpr=1');
     });
   });
 });

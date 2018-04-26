@@ -88,6 +88,11 @@ An open source library for publishers and third party container solution provide
    Params: `placementAlias`
 
 ### Bid request configuration options
+- `network`  
+  **Required** String. Network identifier.
+  Format: 'networkId.subNetworkId'  
+  Sub network part can be missed  
+  Examples: `9544.99`, `9568`
 
 - `region`  
   *Optional* String (defaults to `US`). The region for resolving host server.  
@@ -108,18 +113,9 @@ An open source library for publishers and third party container solution provide
 - `userSyncOn`  
   *Optional*. String (defaults to `bidResponse`).  
   Supported values: `bidResponse`, `adRender` 
-    
-- `network`  
-  **Required** String. Network identifier.
-  Format: 'networkId.subNetworkId'  
-  Sub network part can be missed  
-  Examples: `9544.99`, `9568`
-  
+- `gdprApplies`  
+  *Optional*. Boolean (defaults to `true`). GDPR applies.  
 ### Placement configuration options
-
-- `bidfloor`  
-  *Optional* String. Floor proice for the placement. 
-
 - `placement`  
   **Required** String. Placement identifier.
 
@@ -128,7 +124,9 @@ An open source library for publishers and third party container solution provide
   
 - `adContainerId`  
   **Required** String. Id of element in the DOM where an ad will be rendered.
-
+  
+- `bidfloor`  
+  *Optional* String. Floor proice for the placement.   
 
 ## Contributing
 

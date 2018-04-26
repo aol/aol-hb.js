@@ -8,9 +8,10 @@ import NexagePostBidRequest from 'bidRequests/nexagePost';
  * requests and handling bid responses.
  */
 class BidManager {
-  constructor(bidRequestConfig, placementsConfigs) {
+  constructor(bidRequestConfig, placementsConfigs, consentData) {
     this.bidRequestConfig = bidRequestConfig;
     this.placementsConfigs = placementsConfigs || [];
+    this.consentData = consentData;
     this.bidderKey = bidRequestConfig.bidderKey || 'aolbid';
     this.aliasKey = bidRequestConfig.aliasKey || 'mpalias';
     this.userSyncOn = bidRequestConfig.userSyncOn || BidManager.HEADER_BIDDING_EVENTS.bidResponse;
@@ -55,7 +56,7 @@ class BidManager {
    * Send bid request for particular placement.
    */
   sendBidRequest(placementConfig, bidResponseHandler) {
-    let defaultBidResponseHandler = (bidResponse) => {
+    let defaultBidResponseHandler = bidResponse => {
       this.handleBidRequestResponse(placementConfig, bidResponse);
     };
     bidResponseHandler = bidResponseHandler || defaultBidResponseHandler;
@@ -186,7 +187,7 @@ class BidManager {
     if (bidRequestConfig.dcn && placementConfig.pos) {
       return new NexageGetBidRequest(bidRequestConfig, placementConfig);
     } else if (bidRequestConfig.network && placementConfig.placement) {
-      return new MarketplaceBidRequest(bidRequestConfig, placementConfig);
+      return new MarketplaceBidRequest(bidRequestConfig, placementConfig, this.consentData);
     } else if (this.isNexagePostRequest(placementConfig.openRtbParams)) {
       return new NexagePostBidRequest(bidRequestConfig, placementConfig);
     }

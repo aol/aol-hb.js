@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Consent Manager Tag : Stubbed -->
+  <script type="text/javascript">var gdprAppliesGlobally=!1,frameAdded=!1,addFrame=function(){if(!frameAdded){var e=document.createElement("iframe");e.style="display:none",e.name="_cmp_",document.body.appendChild(e),frameAdded=!0}};document.body?addFrame():document.addEventListener?document.addEventListener("DOMContentLoaded",addFrame):document.attachEvent("onreadystatechange",addFrame),window.__cmp="function"==typeof __cmp?__cmp:function(){var e=arguments;if(!e.length)return __cmp.a;"ping"===e[0]?e[2]({gdprAppliesGlobally:gdprAppliesGlobally,cmpLoaded:!1},!0):(__cmp.a=__cmp.a||[],__cmp.a.push([].slice.apply(e)))};var cmpMsgHandler=function(e){var a="string"==typeof e.data,d=a?JSON.parse(e.data):e.data;if(d.__cmpCall){var n=d.__cmpCall;window.__cmp(n.command,n.parameter,function(d,t){var c={__cmpReturn:{returnValue:d,success:t,callId:n.callId}};e.source.postMessage(a?JSON.stringify(c):c,"*")})}};window.addEventListener?window.addEventListener("message",cmpMsgHandler,!1):window.attachEvent("onmessage",cmpMsgHandler);</script>
+  <!-- End Consent Manager Tag : Stubbed -->
+  <script src="//consent.cmp.oath.com/cmp.js" async></script>
+  <script>
+    window.__cmp('init', {
+      gdprAppliesGlobally: true
+    });
+  </script>
+
+  <script src="/project"></script>
+  <script>
+
+    // Time limit for the bid responses to be returned.
+    var BID_TIMEOUT = 1000;
+
+    var googletag = googletag || {};
+    googletag.cmd = googletag.cmd || [];
+
+    // Object that will contain all the ready flags from the SSP's and the slots.
+    var gptManager = {
+      aolReady: false,
+      slots: {}
+    };
+
+
+    var initAdServerSet;
+
+    /**
+     * Initiates the AdServer integration.
+     *
+     */
+    function initAdserver() {
+      if (initAdServerSet) return;
+      (function() {
+        var gads = document.createElement('script');
+        gads.async = true;
+        gads.type = 'text/javascript';
+        var useSSL = 'https:' == document.location.protocol;
+        gads.src = (useSSL ? 'https:' : 'http:') +
+          '//www.googletagservices.com/tag/js/gpt.js';
+        var node = document.getElementsByTagName('script')[0];
+        node.parentNode.insertBefore(gads, node);
+
+        googletag.cmd.push(function() {
+          googletag.display('div-gpt-ad-1438955597722-1');
+        });
+
+      })();
+      initAdServerSet = true;
+    }
+
+    setTimeout(initAdserver, BID_TIMEOUT);
+
+    // gpt slots definition
+    googletag.cmd.push(function() {
+
+      gptManager.slots['div-gpt-ad-1438955597722-1'] =
+        googletag.defineSlot('/36163640/aol-hb', [[728, 90]],
+          'div-gpt-ad-1438955597722-1').addService(googletag.pubads());
+
+      googletag.pubads().enableAsyncRendering();
+      googletag.enableServices();
+
+    });
+  </script>
+
+  <script>
+    var postMessageApiKey = 'adtech_pub_page::';
+
+    window.addEventListener('message', function (msg) {
+      var data = msg.data;
+
+      if (data.match && data.match(postMessageApiKey)) {
+        var key = data.split(postMessageApiKey)[1];
+
+        window.aolhb.renderAd(key);
+      }
+
+    });
+
+  </script>
+
+  <script>
+    /**
+     * Handles each bid response that is returned.
+     *
+     * @param {Object} response The bid response object.
+     * @param {Number} response.cpm The CPM of the bid.
+     * @param {String} response.alias The alias of the bid.
+     * @param {String} response.bidKey The key of the bid.
+     * @param {String} response.mpAliasKey The key of the alias.
+     * @param {String} response.adContainerId The id of the container associated with the bid in the DOM.
+     */
+    function bidResponseHandler(response) {
+      var slotName = response.adContainerId;
+      googletag.cmd.push(function() {
+        gptManager.slots[slotName].setTargeting(response.bidderCode, response.cpm);
+        gptManager.slots[slotName].setTargeting(response.aliasKey, response.alias);
+      });
+      googletag.cmd.push(function() {
+        googletag.pubads().refresh([gptManager.slots[slotName]]);
+      });
+    }
+
+    var bidRequestConfig = {
+      region: 'US',
+      network: '9599.1',
+      bidderKey: 'aolbid',
+      aliasKey: 'mpalias',
+      userSyncOn: 'bidResponse',
+      dcn: 1234,
+      host: 'medaition-node1.sbx:8080',
+      onBidResponse: bidResponseHandler,
+      gdprApplies: false,
+      onAllBidResponses: function () {
+        console.log('onAllBidResponses');
+      }
+    };
+
+    var placementsConfigs = [{
+      placement: 3675022,
+      alias: '728x90atf',
+      adContainerId: 'div-gpt-ad-1438955597722-1',
+      bidfloor: '0.1'
+    }];
+
+    window.aolhb.init(bidRequestConfig, placementsConfigs);
+  </script>
+
+  <script>
+    function addNewAdHandler() {
+      var placementConfig = {
+        placement: 3675024,
+        alias: "728x90btf",
+        adContainerId: 'div-gpt-ad-1439394117151-1',
+        bidfloor: '0.1'
+      };
+
+      window.aolhb.addNewAd(placementConfig);
+    }
+  </script>
+
+  <style type="text/css">
+    .ads-container {
+      border: 1px solid black;
+    }
+
+    .ad-item {
+      margin: 10px 10px 10px 10px;
+      border: 1px solid black;
+    }
+
+    .inline-block {
+      display: inline-block;
+    }
+
+    .manage-ads-section {
+      padding: 10px 10px 10px 10px;
+      border: 1px solid black;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="manage-ads-section">
+  <button onclick="addNewAdHandler()">
+    Add new ad in runtime
+  </button>
+</div>
+
+<div class="ads-container">
+  <div class="ad-item">
+    <div class="panel">
+      <p class="alias"></p>
+    </div>
+    <div id="div-gpt-ad-1438955597722-1" ></div>
+  </div>
+</div>
+</body>
+</html>
